@@ -8,3 +8,8 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/orderdb?autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: secret
+
+jwt:
+  secret: appsecret
+  expiration:
+    minutes: 5
