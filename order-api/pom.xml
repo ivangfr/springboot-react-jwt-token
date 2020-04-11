@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <springfox.version>2.9.2</springfox.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>0.11.1</jjwt.version>
     </properties>
 
     <dependencies>
@@ -37,8 +37,20 @@
         <!-- JSON Web Token -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <artifactId>jjwt-api</artifactId>
             <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Swagger2 -->

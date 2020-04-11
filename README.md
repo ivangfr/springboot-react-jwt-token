@@ -103,7 +103,7 @@ The gif below shows ...
       "id": 2,
       "username": "user",
       "authorities": [{ "authority": "USER"}],
-      "jwtToken": "eyJhbGciOiJ...."
+      "jwtToken": "eyJhbGciOiJ..."
     }
     ```
 
@@ -113,7 +113,7 @@ The gif below shows ...
   
   - On `Value` input field, paste the copied token prefixed by `Bearer and a space
     ```
-    Bearer eyJhbGciOiJ....
+    Bearer eyJhbGciOiJ...
     ```
   
   - Click on `Authorize` and then on `Close`
@@ -234,5 +234,6 @@ The gif below shows ...
 
 ## References
 
+- https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-2/
 - https://bezkoder.com/spring-boot-jwt-authentication/
-- https://medium.com/rapaduratech/criando-um-token-jwt-para-autentica%C3%A7%C3%A3o-em-spring-boot-371ccb54a093
+- https://dev.to/keysh/spring-security-with-jwt-3j76
