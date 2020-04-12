@@ -26,9 +26,6 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
 
-    @Value("${jwt.issuer}")
-    private String jwtIssuer;
-
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -51,11 +48,13 @@ public class TokenProvider {
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant()))
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .setId(UUID.randomUUID().toString())
-                .setIssuer(jwtIssuer)
+                .setIssuer(TOKEN_ISSUER)
                 .setAudience(TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
-                .claim("azp", TOKEN_ISSUED_TO)
                 .claim("rol", roles)
+                .claim("name", user.getName())
+                .claim("preferred_username", user.getUsername())
+                .claim("email", user.getEmail())
                 .compact();
     }
 
@@ -84,7 +83,7 @@ public class TokenProvider {
     }
 
     public static final String TOKEN_TYPE = "JWT";
+    public static final String TOKEN_ISSUER = "order-api";
     public static final String TOKEN_AUDIENCE = "order-app";
-    public static final String TOKEN_ISSUED_TO = "order-api";
 
 }

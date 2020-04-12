@@ -27,14 +27,17 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        if (!userService.getUsers().isEmpty()) {
+            return;
+        }
         users.forEach(userService::saveUser);
         orders.forEach(orderService::saveOrder);
         log.info("Database initialized");
     }
 
     private final List<User> users = Arrays.asList(
-            new User("admin", "admin", WebSecurityConfig.ADMIN),
-            new User("user", "user", WebSecurityConfig.USER)
+            new User("admin", "admin", "Admin", "admin@mycompany.com", WebSecurityConfig.ADMIN),
+            new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER)
     );
 
     private final List<Order> orders = Collections.singletonList(

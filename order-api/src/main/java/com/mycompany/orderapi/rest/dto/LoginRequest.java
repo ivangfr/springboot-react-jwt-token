@@ -6,13 +6,13 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class CreateUserDto {
+public class LoginRequest {
 
-    @ApiModelProperty(example = "user3")
+    @ApiModelProperty(example = "user")
     @NotBlank
     private String username;
 
-    @ApiModelProperty(example = "user3")
+    @ApiModelProperty(position = 1, example = "user")
     @NotBlank
     private String password;
 

@@ -39,18 +39,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/api/orders/**").hasAuthority(ADMIN)
-                .antMatchers(HttpMethod.POST, "/api/orders").hasAuthority(ADMIN)
-                .antMatchers( "/api/orders", "/api/orders/**").hasAnyAuthority(ADMIN, USER)
+                .antMatchers(HttpMethod.DELETE, "/api/orders/**", "/api/users/**").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.GET, "/api/orders").hasAnyAuthority(ADMIN)
+                .antMatchers("/api/orders", "/api/orders/**").hasAnyAuthority(ADMIN, USER)
+                .antMatchers("/api/users/me").hasAnyAuthority(ADMIN, USER)
                 .antMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
-                .antMatchers("/public/**", "/auth/token").permitAll()
-                .antMatchers("/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers("/public/**", "/auth/**").permitAll()
+                .antMatchers("/", "/csrf", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**").permitAll()
+                .anyRequest().authenticated();
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable();
     }
 

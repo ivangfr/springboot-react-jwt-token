@@ -12,6 +12,10 @@ public interface UserService {
 
     Optional<User> getUserByUsername(String username);
 
+    boolean hasUserWithUsername(String username);
+
+    boolean hasUserWithEmail(String email);
+
     User validateAndGetUserByUsername(String username) throws UserNotFoundException;
 
     User saveUser(User user);

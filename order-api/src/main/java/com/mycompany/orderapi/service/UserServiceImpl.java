@@ -31,6 +31,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean hasUserWithUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean hasUserWithEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
     public User validateAndGetUserByUsername(String username) throws UserNotFoundException {
         return getUserByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User with username %s not found", username)));
