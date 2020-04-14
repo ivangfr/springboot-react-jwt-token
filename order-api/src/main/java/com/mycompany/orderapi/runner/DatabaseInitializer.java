@@ -41,7 +41,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     );
 
     private final List<Order> orders = Collections.singletonList(
-            new Order("abc", "Buy one MacBook Pro")
+            new Order("6ce8cdf5-004d-4511-a6a1-604945246af8", "Buy one MacBook Pro", users.get(0))
     );
 
 }

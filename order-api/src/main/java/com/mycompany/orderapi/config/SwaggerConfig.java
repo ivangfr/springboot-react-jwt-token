@@ -70,6 +70,6 @@ public class SwaggerConfig {
         return Collections.singletonList(new SecurityReference(API_KEY_NAME, authorizationScopes));
     }
 
-    private static final String API_KEY_NAME = "JWT_TOKEN";
+    private static final String API_KEY_NAME = "JWT_ACCESS_TOKEN";
 
 }

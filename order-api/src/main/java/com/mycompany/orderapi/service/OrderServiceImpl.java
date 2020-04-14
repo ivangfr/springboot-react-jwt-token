@@ -22,9 +22,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order validateAndGetOrder(String refr) throws OrderNotFoundException {
-        return orderRepository.findById(refr)
-                .orElseThrow(() -> new OrderNotFoundException(String.format("Order with refr %s not found", refr)));
+    public Order validateAndGetOrder(String id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(String.format("Order with id %s not found", id)));
     }
 
     @Override

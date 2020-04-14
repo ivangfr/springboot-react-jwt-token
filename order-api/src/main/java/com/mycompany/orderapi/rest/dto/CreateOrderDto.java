@@ -8,11 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CreateOrderDto {
 
-    @ApiModelProperty(example = "ghi")
-    @NotBlank
-    private String refr;
-
-    @ApiModelProperty(position = 1, example = "Buy two iPhones")
+    @ApiModelProperty(example = "Buy two iPhones")
     @NotBlank
     private String description;
 

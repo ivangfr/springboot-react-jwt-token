@@ -1,6 +1,5 @@
 package com.mycompany.orderapi.service;
 
-import com.mycompany.orderapi.exception.UserNotFoundException;
 import com.mycompany.orderapi.model.User;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public interface UserService {
 
     boolean hasUserWithEmail(String email);
 
-    User validateAndGetUserByUsername(String username) throws UserNotFoundException;
+    User validateAndGetUserByUsername(String username);
 
     User saveUser(User user);
 
