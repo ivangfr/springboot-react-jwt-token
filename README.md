@@ -1,12 +1,16 @@
 # springboot-react-jwt-token
 
-The goal of this project is to implement an application called `order-app` to create and manage orders. For it, we will implement a back-end application called `order-api` using [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) and a font-end application called `order-ui` using [ReactJS](https://reactjs.org/). Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
+The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end application called `order-api` using [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) and a font-end application called `order-ui` using [ReactJS](https://reactjs.org/). Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
 
 ## Applications
 
 - **order-api**
 
-  `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve and delete orders. If a user has `ADMIN` role he/she can also retrieve information of other users or delete them. The application secured endpoints can just be accessed if a valid JWT access Token is provided. `order-api` stores its data in [`MySQL`](https://www.mysql.com/) database.
+  `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve and delete orders. If a user has `ADMIN` role he/she can also retrieve information of other users or delete them.
+  
+  The application secured endpoints can just be accessed if a valid JWT access token is provided.
+  
+  `order-api` stores its data in [`MySQL`](https://www.mysql.com/) database.
 
   `order-api` has the following endpoints
 
@@ -27,7 +31,11 @@ The goal of this project is to implement an application called `order-app` to cr
 
 - **order-ui**
 
-  `ReactJS` frontend application where a user with role `USER` can create an order and retrieve an order information. On the other hand, a user with role `ADMIN` as access to all secured endpoints. In order to access the application, a `user` or `admin` must login using his/her `username` and `password`. All the requests coming from `order-ui` to secured endpoints in `order-api` have the JWT access token. This token is generated when the `user` or `admin` logins. `order-ui` uses [`Semantic UI React`](https://react.semantic-ui.com/) as CSS-styled framework.
+  `ReactJS` frontend application where a user with role `USER` can create an order and retrieve a specific order. On the other hand, a user with role `ADMIN` as access to all secured endpoints.
+  
+  In order to access the application, a `user` or `admin` must login using his/her `username` and `password`. All the requests coming from `order-ui` to secured endpoints in `order-api` have the JWT access token. This token is generated when the `user` or `admin` logins.
+  
+  `order-ui` uses [`Semantic UI React`](https://react.semantic-ui.com/) as CSS-styled framework.
 
 ## Prerequisites
 
@@ -103,6 +111,7 @@ The gif below shows ...
     { "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9..." }
     ```
     > **Note 1**: You can use the `admin` credentials to access more secured endpoints
+    >
     > **Note 2**: The token will expire in **10 minutes**
 
   - Copy the `accessToken` value (**without** the double quotes)

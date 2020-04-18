@@ -7,6 +7,7 @@ import com.mycompany.orderapi.service.OrderService;
 import com.mycompany.orderapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -19,10 +20,12 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private final UserService userService;
     private final OrderService orderService;
+    private final PasswordEncoder passwordEncoder;
 
-    public DatabaseInitializer(UserService userService, OrderService orderService) {
+    public DatabaseInitializer(UserService userService, OrderService orderService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.orderService = orderService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,7 +33,10 @@ public class DatabaseInitializer implements CommandLineRunner {
         if (!userService.getUsers().isEmpty()) {
             return;
         }
-        users.forEach(userService::saveUser);
+        users.forEach(user -> {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.saveUser(user);
+        });
         orders.forEach(orderService::saveOrder);
         log.info("Database initialized");
     }
