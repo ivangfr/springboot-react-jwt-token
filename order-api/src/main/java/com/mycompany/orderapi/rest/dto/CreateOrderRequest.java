@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class CreateOrderDto {
+public class CreateOrderRequest {
 
     @ApiModelProperty(example = "Buy two iPhones")
     @NotBlank

@@ -2,7 +2,7 @@ package com.mycompany.orderapi.rest;
 
 import com.mycompany.orderapi.model.Order;
 import com.mycompany.orderapi.model.User;
-import com.mycompany.orderapi.rest.dto.CreateOrderDto;
+import com.mycompany.orderapi.rest.dto.CreateOrderRequest;
 import com.mycompany.orderapi.security.CustomUserDetails;
 import com.mycompany.orderapi.service.OrderService;
 import com.mycompany.orderapi.service.UserService;
@@ -39,15 +39,15 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getOrders(@PathVariable UUID id) {
+    public Order getOrder(@PathVariable UUID id) {
         return orderService.validateAndGetOrder(id.toString());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Order createOrder(@AuthenticationPrincipal CustomUserDetails currentUser, @Valid @RequestBody CreateOrderDto createOrderDto) {
+    public Order createOrder(@AuthenticationPrincipal CustomUserDetails currentUser, @Valid @RequestBody CreateOrderRequest createOrderRequest) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        return orderService.saveOrder(new Order(UUID.randomUUID().toString(), createOrderDto.getDescription(), user));
+        return orderService.saveOrder(new Order(UUID.randomUUID().toString(), createOrderRequest.getDescription(), user));
     }
 
     @DeleteMapping("/{id}")

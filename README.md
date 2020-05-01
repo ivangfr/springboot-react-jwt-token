@@ -14,20 +14,20 @@ The goal of this project is to implement an application called `order-app` to ma
 
   `order-api` has the following endpoints
 
-  | Endpoint                                                     | Secured | Roles           |
-  | ------------------------------------------------------------ | ------- | --------------- |
-  | `POST /auth/login -d {"username","password","name","email"}` | No      |                 |
-  | `POST /auth/signup -d {"username","password"}`               | No      |                 |
-  | `GET /public/numberOfUsers`                                  | No      |                 |
-  | `GET /public/numberOfOrders`                                 | No      |                 |
-  | `GET /api/users/me`                                          | Yes     | `ADMIN`, `USER` |
-  | `GET /api/users`                                             | Yes     | `ADMIN`         |
-  | `GET /api/users/{username}`                                  | Yes     | `ADMIN`         |
-  | `DELETE /api/users/{username}`                               | Yes     | `ADMIN`         |
-  | `GET /api/orders`                                            | Yes     | `ADMIN`         |
-  | `GET /api/orders/{id}`                                       | Yes     | `ADMIN`, `USER` |
-  | `POST /api/orders -d {"description"}`                        | Yes     | `ADMIN`, `USER` |
-  | `DELETE /api/orders/{id}`                                    | Yes     | `ADMIN`         |
+  | Endpoint                                                      | Secured | Roles           |
+  | ------------------------------------------------------------- | ------- | --------------- |
+  | `POST /auth/authenticate -d {"username","password"}`          | No      |                 |
+  | `POST /auth/signup -d {"username","password","name","email"}` | No      |                 |
+  | `GET /public/numberOfUsers`                                   | No      |                 |
+  | `GET /public/numberOfOrders`                                  | No      |                 |
+  | `GET /api/users/me`                                           | Yes     | `ADMIN`, `USER` |
+  | `GET /api/users`                                              | Yes     | `ADMIN`         |
+  | `GET /api/users/{username}`                                   | Yes     | `ADMIN`         |
+  | `DELETE /api/users/{username}`                                | Yes     | `ADMIN`         |
+  | `GET /api/orders`                                             | Yes     | `ADMIN`         |
+  | `GET /api/orders/{id}`                                        | Yes     | `ADMIN`, `USER` |
+  | `POST /api/orders -d {"description"}`                         | Yes     | `ADMIN`, `USER` |
+  | `DELETE /api/orders/{id}`                                     | Yes     | `ADMIN`         |
 
 - **order-ui**
 
@@ -99,7 +99,7 @@ The gif below shows ...
   
   - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
 
-  - Click on `auth-controller`, then on `POST /auth/login` and, finally, on `Try it out`
+  - Click on `auth-controller`, then on `POST /auth/authenticate` and, finally, on `Try it out`
   
   - Provide the `user` credentials `username` and `password` and click on `Execute` button
     ```
@@ -164,7 +164,7 @@ The gif below shows ...
     HTTP/1.1 401
     ```
 
-  - Call `GET /auth/login` to get `user` JWT access token
+  - Call `POST /auth/authenticate` to get `user` JWT access token
     ```
     USER_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/login \
       -H 'Content-Type: application/json' \
@@ -204,8 +204,8 @@ The gif below shows ...
     ```
     It should return something like the output below, where it shows the http code for different requests
     ```
-    GET auth/login
-    ==============
+    GET auth/authenticate
+    =====================
     admin access token
     ------------------
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImlhdCI6MTU4Nj..._ha2pM4LSSG3_d4exgA

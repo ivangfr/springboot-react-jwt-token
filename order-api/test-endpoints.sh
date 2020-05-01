@@ -13,8 +13,8 @@ declare -A order_get_order
 declare -A order_create_order
 declare -A order_delete_order
 
-ADMIN_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/login -H 'Content-Type: application/json' -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)
-USER_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/login -H 'Content-Type: application/json' -d '{"username": "user", "password": "user"}' | jq -r .accessToken)
+ADMIN_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)
+USER_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "user", "password": "user"}' | jq -r .accessToken)
 USER2_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/signup -H 'Content-Type: application/json' -d '{"username": "user2", "password": "user2", "name": "User2", "email": "user2@mycompany.com"}' | jq -r .accessToken)
 
 public_number_of_users[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/public/numberOfUsers)
@@ -59,8 +59,8 @@ order_delete_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Author
 order_delete_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
 
 printf "\n"
-printf "%s\n" "POST auth/login"
-printf "%s\n" "==============="
+printf "%s\n" "POST auth/authenticate"
+printf "%s\n" "======================"
 printf "%s\n" "admin access token"
 printf "%s\n" "------------------"
 printf "%s\n" ${ADMIN_ACCESS_TOKEN}
