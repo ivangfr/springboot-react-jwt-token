@@ -18,7 +18,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override
@@ -35,5 +35,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Order order) {
         orderRepository.delete(order);
+    }
+
+    @Override
+    public List<Order> getOrderContainingText(String text) {
+        return orderRepository.findByIdContainingOrDescriptionContainingOrderByCreatedAt(text, text);
     }
 }

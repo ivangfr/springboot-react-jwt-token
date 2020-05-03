@@ -3,6 +3,7 @@ import { NavLink, Redirect } from 'react-router-dom'
 import { Button, Form, Grid, Segment, Message } from 'semantic-ui-react'
 import AuthContext from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
+import { parseJwt } from '../misc/Helpers'
 
 class Login extends Component {
   static contextType = AuthContext
@@ -37,8 +38,9 @@ class Login extends Component {
     orderApi.authenticate(username, password)
       .then(response => {
         if (response.status === 200) {
-          const { id, name, role, accessToken } = response.data
-          const user = { id, name, role, accessToken }
+          const { accessToken } = response.data
+          const data = parseJwt(accessToken)
+          const user = { data, accessToken }
 
           const Auth = this.context
           Auth.userLogin(user)

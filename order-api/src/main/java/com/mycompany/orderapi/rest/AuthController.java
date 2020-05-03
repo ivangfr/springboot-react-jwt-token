@@ -41,8 +41,7 @@ public class AuthController {
     @PostMapping("/authenticate")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
-        User user = userService.validateAndGetUserByUsername(loginRequest.getUsername());
-        return new AuthResponse(user.getId(), user.getName(), user.getRole(), token);
+        return new AuthResponse(token);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,10 +54,10 @@ public class AuthController {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
 
-        User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
+        userService.saveUser(mapSignUpRequestToUser(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        return new AuthResponse(user.getId(), user.getName(), user.getRole(), token);
+        return new AuthResponse(token);
     }
 
     private String authenticateAndGetToken(String username, String password) {

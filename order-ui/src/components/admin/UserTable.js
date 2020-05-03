@@ -46,12 +46,12 @@ function UserTable({ users, userUsernameSearch, handleChange, deleteUser, search
       <Table compact striped selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell />
-            <Table.HeaderCell>id</Table.HeaderCell>
-            <Table.HeaderCell>username</Table.HeaderCell>
-            <Table.HeaderCell>name</Table.HeaderCell>
-            <Table.HeaderCell>email</Table.HeaderCell>
-            <Table.HeaderCell>role</Table.HeaderCell>
+            <Table.HeaderCell width={1}/>
+            <Table.HeaderCell width={1}>ID</Table.HeaderCell>
+            <Table.HeaderCell width={3}>Username</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Name</Table.HeaderCell>
+            <Table.HeaderCell width={5}>Email</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Role</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

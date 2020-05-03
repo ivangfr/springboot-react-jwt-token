@@ -14,4 +14,6 @@ public interface OrderService {
 
     void deleteOrder(Order order);
 
+    List<Order> getOrderContainingText(String text);
+
 }

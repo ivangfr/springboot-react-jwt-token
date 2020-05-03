@@ -1,6 +1,8 @@
 package com.mycompany.orderapi.rest;
 
+import com.mycompany.orderapi.mapper.UserMapper;
 import com.mycompany.orderapi.model.User;
+import com.mycompany.orderapi.rest.dto.UserDto;
 import com.mycompany.orderapi.security.CustomUserDetails;
 import com.mycompany.orderapi.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,37 +13,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("/me")
-    public User getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return userService.validateAndGetUserByUsername(currentUser.getUsername());
+    public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
+        return userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername()));
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<UserDto> getUsers() {
+        return userService.getUsers().stream()
+                .map(user -> userMapper.toUserDto(user))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{username}")
-    public User getUser(@PathVariable String username) {
-        return userService.validateAndGetUserByUsername(username);
+    public UserDto getUser(@PathVariable String username) {
+        return userMapper.toUserDto(userService.validateAndGetUserByUsername(username));
     }
 
     @DeleteMapping("/{username}")
-    public User deleteUser(@PathVariable String username) {
+    public UserDto deleteUser(@PathVariable String username) {
         User user = userService.validateAndGetUserByUsername(username);
         userService.deleteUser(user);
-        return user;
+        return userMapper.toUserDto(user);
     }
 
 }

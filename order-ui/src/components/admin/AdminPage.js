@@ -12,7 +12,7 @@ class AdminPage extends Component {
     users: [],
     orders: [],
     orderDescription: '',
-    textTextSearch: '',
+    orderTextSearch: '',
     userUsernameSearch: '',
     isAdmin: true,
     isUsersLoading: false,
@@ -22,7 +22,7 @@ class AdminPage extends Component {
   componentDidMount() {
     const Auth = this.context
     const user = Auth.getUser()
-    const isAdmin = user.role === 'ADMIN'
+    const isAdmin = user.data.rol[0] === 'ADMIN'
     this.setState({ isAdmin })
 
     this.getUsers()
@@ -127,8 +127,8 @@ class AdminPage extends Component {
     const order = { description: orderDescription }
     orderApi.createOrder(user, order)
       .then(() => {
-        this.clearOrderForm()
         this.getOrders()
+        this.setState({ orderDescription: '' })
       })
       .catch(error => {
         console.log(error)
@@ -139,7 +139,7 @@ class AdminPage extends Component {
     const Auth = this.context
     const user = Auth.getUser()
 
-    const text = this.state.textTextSearch
+    const text = this.state.orderTextSearch
     orderApi.getOrders(user, text)
       .then(response => {
         if (response.status === 200) {
@@ -154,13 +154,6 @@ class AdminPage extends Component {
         console.log(error)
         this.setState({ orders: [] })
       })
-  }
-
-  clearOrderForm = () => {
-    this.setState({
-      orderId: '',
-      orderDescription: ''
-    })
   }
 
   render() {

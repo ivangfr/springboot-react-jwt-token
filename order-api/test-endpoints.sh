@@ -9,7 +9,6 @@ declare -A user_get_user
 declare -A user_delete_user
 
 declare -A order_get_orders
-declare -A order_get_order
 declare -A order_create_order
 declare -A order_delete_order
 
@@ -50,10 +49,6 @@ order_create_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Author
 USER_ORDER_ID=$(curl -s -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users/me | jq -r '.orders[0].id')
 order_create_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X POST localhost:8080/api/orders -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
 
-order_get_order[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/api/orders/${USER_ORDER_ID})
-order_get_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/orders/${USER_ORDER_ID})
-order_get_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders/${USER_ORDER_ID})
-
 order_delete_order[without_creds]=$(curl -w %{http_code} -s -o /dev/null -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
 order_delete_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
 order_delete_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
@@ -89,7 +84,6 @@ printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/users/user2" ${user_delete_u
 printf "%25s + %13s + %11s + %12s |\n" "........................." "............." "..........." "............"
 printf "%25s | %13s | %11s | %12s |\n" "GET /api/orders" ${order_get_orders[without_creds]} ${order_get_orders[user_creds]} ${order_get_orders[admin_creds]}
 printf "%25s | %13s | %11s | %12s |\n" "POST /api/orders" ${order_create_order[without_creds]} ${order_create_order[user_creds]} ${order_create_order[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "GET /api/orders/{id}" ${order_get_order[without_creds]} ${order_get_order[user_creds]} ${order_get_order[admin_creds]}
 printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/orders/{id}" ${order_delete_order[without_creds]} ${order_delete_order[user_creds]} ${order_delete_order[admin_creds]}
 printf "%72s\n" "------------------------------------------------------------------------"
 printf " [200] Success -  [201] Created -  [401] Unauthorized -  [403] Forbidden"

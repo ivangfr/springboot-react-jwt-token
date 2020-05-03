@@ -9,7 +9,8 @@ export const orderApi = {
   deleteUser,
   getOrders,
   deleteOrder,
-  createOrder
+  createOrder,
+  getUserMe
 }
 
 function authenticate(username, password) {
@@ -45,8 +46,9 @@ function deleteUser(user, username) {
   })
 }
 
-function getOrders(user) {
-  return instance.get('/api/orders', {
+function getOrders(user, text) {
+  const url = text ? `/api/orders?text=${text}` : '/api/orders'
+  return instance.get(url, {
     headers: { 'Authorization': bearerAuth(user) }
   })
 }
@@ -63,6 +65,12 @@ function createOrder(user, order) {
       'Content-type': 'application/json',
       'Authorization': bearerAuth(user)
     }
+  })
+}
+
+function getUserMe(user) {
+  return instance.get('/api/users/me', {
+    headers: { 'Authorization': bearerAuth(user) }
   })
 }
 

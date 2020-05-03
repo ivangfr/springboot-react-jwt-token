@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react'
-import { Grid, Form, Icon, Button, Input, Table } from 'semantic-ui-react'
+import { Grid, Form, Button, Input, Table } from 'semantic-ui-react'
+import CreateOrderForm from '../misc/CreateOrderForm'
 
 function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, createOrder, deleteOrder, searchOrder }) {
   let orderList
   if (orders.length === 0) {
     orderList = (
       <Table.Row key='no-order'>
-        <Table.Cell collapsing textAlign='center' colSpan='4'>No order</Table.Cell>
+        <Table.Cell collapsing textAlign='center' colSpan='5'>No order</Table.Cell>
       </Table.Row>
     )
   } else {
@@ -23,6 +24,8 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, c
             />
           </Table.Cell>
           <Table.Cell>{order.id}</Table.Cell>
+          <Table.Cell>{order.user.username}</Table.Cell>
+          <Table.Cell>{order.createdAt}</Table.Cell>
           <Table.Cell>{order.description}</Table.Cell>
         </Table.Row>
       )
@@ -45,28 +48,22 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, c
             </Form>
           </Grid.Column>
           <Grid.Column>
-            <Form onSubmit={createOrder}>
-              <Form.Group>
-                <Form.Input
-                  id='orderDescription'
-                  placeholder='Description'
-                  value={orderDescription}
-                  onChange={handleChange}
-                />
-                <Button icon>
-                  <Icon name='add' />
-                </Button>
-              </Form.Group>
-            </Form>
+            <CreateOrderForm
+              orderDescription={orderDescription}
+              handleChange={handleChange}
+              createOrder={createOrder}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>
       <Table compact striped selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell />
-            <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell width={1}/>
+            <Table.HeaderCell width={5}>ID</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Username</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Created At</Table.HeaderCell>
+            <Table.HeaderCell width={4}>Description</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

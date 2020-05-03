@@ -24,8 +24,7 @@ The goal of this project is to implement an application called `order-app` to ma
   | `GET /api/users`                                              | Yes     | `ADMIN`         |
   | `GET /api/users/{username}`                                   | Yes     | `ADMIN`         |
   | `DELETE /api/users/{username}`                                | Yes     | `ADMIN`         |
-  | `GET /api/orders`                                             | Yes     | `ADMIN`         |
-  | `GET /api/orders/{id}`                                        | Yes     | `ADMIN`, `USER` |
+  | `GET /api/orders [?text]`                                     | Yes     | `ADMIN`         |
   | `POST /api/orders -d {"description"}`                         | Yes     | `ADMIN`, `USER` |
   | `DELETE /api/orders/{id}`                                     | Yes     | `ADMIN`         |
 
@@ -136,8 +135,10 @@ The gif below shows ...
     ```
     Code: 200
     {
-      "id": "ccc4b36d-bda4-4f41-b6c2-f19c77f0243f",
-      "description": "Buy two iPhones"
+      "id": "718c9f40-5c06-4571-bc3e-3f888c52eff2",
+      "description": "Buy two iPhones",
+      "user": { "username": "user" },
+      "createdAt": "..."
     }
     ```
 
@@ -155,42 +156,41 @@ The gif below shows ...
     2
     ```
 
-  - Call `GET /api/orders/{id}` without JWT access token
+  - Call `GET /api/orders` without JWT access token
     ```
-    curl -i localhost:8080/api/orders/6ce8cdf5-004d-4511-a6a1-604945246af8
+    curl -i localhost:8080/api/orders
     ```
     As for this endpoint a valid JWT access token is required, it should return
     ```
     HTTP/1.1 401
     ```
 
-  - Call `POST /auth/authenticate` to get `user` JWT access token
+  - Call `POST /auth/authenticate` to get `admin` JWT access token
     ```
-    USER_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/login \
+    ADMIN_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/authenticate \
       -H 'Content-Type: application/json' \
-      -d '{"username": "user", "password": "user"}' | jq -r .accessToken)"
+      -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)"
     ```
 
-  - Call again `GET /api/orders/{id}`, now with `user` JWT access token
+  - Call again `GET /api/orders`, now with `admin` JWT access token
     ```
-    curl -i -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/orders/6ce8cdf5-004d-4511-a6a1-604945246af8
+    curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders
+    ```
+    It should return an empty array or an array with orders
+    ```
+    HTTP/1.1 200
+    [ ... ]
+    ```
+
+  - Call `GET /api/users/me` to get more information about the `admin`
+    ```
+    curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users/me
     ```
     It should return
     ```
     HTTP/1.1 200
-    { "id":"6ce8cdf5-004d-4511-a6a1-604945246af8", "description":"Buy one MacBook Pro" }
-    ```
-
-  - Call `GET /api/users/me` to get more information about the `user`
-    ```
-    curl -i -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users/me
-    ```
-    It should return
-    ```
-    HTTP/1.1 200
-    {
-      "id": 2, "username": "user", "name": "User", "email": "user@mycompany.com", "role": "USER",
-      "orders": [ ... ]
+    { "id": 1, "username": "admin", "name": "Admin", "email": "admin@mycompany.com", "role": "ADMIN",
+      "orders": []
     }
     ```
 
@@ -234,7 +234,6 @@ The gif below shows ...
     ......................... + ............. + ........... + ............ |
               GET /api/orders |           401 |         403 |          200 |
              POST /api/orders |           401 |         201 |          201 |
-         GET /api/orders/{id} |           401 |         200 |          200 |
       DELETE /api/orders/{id} |           401 |         403 |          200 |
     ------------------------------------------------------------------------
      [200] Success -  [201] Created -  [401] Unauthorized -  [403] Forbidden

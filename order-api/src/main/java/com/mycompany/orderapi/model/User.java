@@ -1,6 +1,5 @@
 package com.mycompany.orderapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,10 +28,7 @@ public class User {
     private Long id;
 
     private String username;
-
-    @JsonIgnore
     private String password;
-
     private String name;
     private String email;
     private String role;
