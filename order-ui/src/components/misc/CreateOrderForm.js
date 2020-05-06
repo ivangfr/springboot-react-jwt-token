@@ -1,15 +1,15 @@
 import React from 'react'
 import { Form, Button, Icon } from 'semantic-ui-react'
 
-function CreateOrderForm({ orderDescription, handleChange, createOrder }) {
+function CreateOrderForm({ orderDescription, handleInputChange, handleCreateOrder }) {
   return (
-    <Form onSubmit={createOrder}>
+    <Form onSubmit={handleCreateOrder}>
       <Form.Group>
         <Form.Input
           id='orderDescription'
           placeholder='Description'
           value={orderDescription}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
         <Button icon labelPosition='right'>
           Create<Icon name='add' />

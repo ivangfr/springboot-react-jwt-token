@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { config } from '../../Constants'
 
 export const orderApi = {
   authenticate,
@@ -77,7 +78,7 @@ function getUserMe(user) {
 // -- Axios
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: config.url.API_URL
 })
 
 // -- Helper functions

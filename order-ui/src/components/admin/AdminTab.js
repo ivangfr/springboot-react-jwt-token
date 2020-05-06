@@ -4,9 +4,9 @@ import UserTable from './UserTable'
 import OrderTable from './OrderTable'
 
 function AdminTab(props) {
-  const { handleChange } = props
-  const { isUsersLoading, users, userUsernameSearch, deleteUser, searchUser } = props
-  const { isOrdersLoading, orders, orderDescription, orderTextSearch, createOrder, deleteOrder, searchOrder } = props
+  const { handleInputChange } = props
+  const { isUsersLoading, users, userUsernameSearch, handleDeleteUser, handleSearchUser } = props
+  const { isOrdersLoading, orders, orderDescription, orderTextSearch, handleCreateOrder, handleDeleteOrder, handleSearchOrder } = props
 
   const panes = [
     {
@@ -16,9 +16,9 @@ function AdminTab(props) {
           <UserTable
             users={users}
             userUsernameSearch={userUsernameSearch}
-            handleChange={handleChange}
-            deleteUser={deleteUser}
-            searchUser={searchUser}
+            handleInputChange={handleInputChange}
+            handleDeleteUser={handleDeleteUser}
+            handleSearchUser={handleSearchUser}
           />
         </Tab.Pane>
       )
@@ -31,10 +31,10 @@ function AdminTab(props) {
             orders={orders}
             orderDescription={orderDescription}
             orderTextSearch={orderTextSearch}
-            handleChange={handleChange}
-            createOrder={createOrder}
-            deleteOrder={deleteOrder}
-            searchOrder={searchOrder}
+            handleInputChange={handleInputChange}
+            handleCreateOrder={handleCreateOrder}
+            handleDeleteOrder={handleDeleteOrder}
+            handleSearchOrder={handleSearchOrder}
           />
         </Tab.Pane>
       )

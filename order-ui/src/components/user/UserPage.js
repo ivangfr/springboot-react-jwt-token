@@ -21,15 +21,15 @@ class UserPage extends Component {
     const isUser = user.data.rol[0] === 'USER'
     this.setState({ isUser })
 
-    this.getUserMe()
+    this.handleGetUserMe()
   }
 
-  handleChange = (e) => {
+  handleInputChange = (e) => {
     const { id, value } = e.target
     this.setState({ [id]: value })
   }
 
-  getUserMe = () => {
+  handleGetUserMe = () => {
     const Auth = this.context
     const user = Auth.getUser()
 
@@ -46,7 +46,7 @@ class UserPage extends Component {
       })
   }
   
-  createOrder = () => {
+  handleCreateOrder = () => {
     const Auth = this.context
     const user = Auth.getUser()
 
@@ -58,7 +58,7 @@ class UserPage extends Component {
     const order = { description: orderDescription }
     orderApi.createOrder(user, order)
       .then(() => {
-        this.getUserMe()
+        this.handleGetUserMe()
         this.setState({ orderDescription: '' })
       })
       .catch(error => {
@@ -77,8 +77,8 @@ class UserPage extends Component {
             orders={userMe && userMe.orders}
             isLoading={isLoading}
             orderDescription={orderDescription}
-            createOrder={this.createOrder}
-            handleChange={this.handleChange}
+            handleCreateOrder={this.handleCreateOrder}
+            handleInputChange={this.handleInputChange}
           />
         </Container>
       )

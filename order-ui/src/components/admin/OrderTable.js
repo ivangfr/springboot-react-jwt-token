@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Grid, Form, Button, Input, Table } from 'semantic-ui-react'
 import CreateOrderForm from '../misc/CreateOrderForm'
 
-function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, createOrder, deleteOrder, searchOrder }) {
+function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChange, handleCreateOrder, handleDeleteOrder, handleSearchOrder }) {
   let orderList
   if (orders.length === 0) {
     orderList = (
@@ -20,7 +20,7 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, c
               color='red'
               size='small'
               icon='trash'
-              onClick={() => deleteOrder(order.id)}
+              onClick={() => handleDeleteOrder(order.id)}
             />
           </Table.Cell>
           <Table.Cell>{order.id}</Table.Cell>
@@ -37,21 +37,21 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleChange, c
       <Grid stackable divided>
         <Grid.Row columns='2'>
           <Grid.Column width='5'>
-            <Form onSubmit={searchOrder}>
+            <Form onSubmit={handleSearchOrder}>
               <Input
                 action={{ icon: 'search' }}
                 id='orderTextSearch'
                 placeholder='Search by Id or Description'
                 value={orderTextSearch}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </Form>
           </Grid.Column>
           <Grid.Column>
             <CreateOrderForm
               orderDescription={orderDescription}
-              handleChange={handleChange}
-              createOrder={createOrder}
+              handleInputChange={handleInputChange}
+              handleCreateOrder={handleCreateOrder}
             />
           </Grid.Column>
         </Grid.Row>

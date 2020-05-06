@@ -11,11 +11,11 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.getNumberOfUsers()
-    this.getNumberOfOrders()
+    this.handleGetNumberOfUsers()
+    this.handleGetNumberOfOrders()
   }
 
-  getNumberOfUsers = () => {
+  handleGetNumberOfUsers = () => {
     this.setState({ isLoadingNumberOfUsers: true })
     orderApi.numberOfUsers()
       .then(response => {
@@ -29,7 +29,7 @@ class Home extends Component {
       })
   }
 
-  getNumberOfOrders = () => {
+  handleGetNumberOfOrders = () => {
     this.setState({ getNumberOfOrders: true })
     orderApi.numberOfOrders()
       .then(response => {

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Grid, Table, Header, Icon } from 'semantic-ui-react'
 import CreateOrderForm from '../misc/CreateOrderForm'
 
-function OrderTable({ orders, orderDescription, handleChange, createOrder }) {
+function OrderTable({ orders, orderDescription, handleInputChange, handleCreateOrder }) {
   let orderList
   if (!orders || orders.length === 0) {
     orderList = (
@@ -35,8 +35,8 @@ function OrderTable({ orders, orderDescription, handleChange, createOrder }) {
           <Grid.Column>
             <CreateOrderForm
               orderDescription={orderDescription}
-              handleChange={handleChange}
-              createOrder={createOrder}
+              handleInputChange={handleInputChange}
+              handleCreateOrder={handleCreateOrder}
             />
           </Grid.Column>
         </Grid.Row>
