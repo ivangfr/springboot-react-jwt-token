@@ -81,16 +81,22 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Applications URLs
 
-| Application | URL                                   | Credentials                  |
-| ----------- | ------------------------------------- | ---------------------------- |
-| order-api   | http://localhost:8080/swagger-ui.html |                              |
-| order-ui    | http://localhost:3000                 | `admin/admin` or `user/user` |
+| Application | URL                                   | Credentials                                         |
+| ----------- | ------------------------------------- | --------------------------------------------------- |
+| order-api   | http://localhost:8080/swagger-ui.html |                                                     |
+| order-ui    | http://localhost:3000                 | `admin/admin`, `user/user` or signing up a new user |
 
 > **Note:** the credentials shown in the table are the ones already pre-defined. You can signup new users
 
 ## Demo
 
-The gif below shows ...
+- The gif below shows a `user` loging in
+
+  ![user-login](images/user-login.gif)
+
+- The gif below shows an `admin` loging in
+
+  ![admin-login](images/admin-login.gif)
 
 ## Testing order-api Endpoints
 
