@@ -39,7 +39,7 @@ class UserPage extends Component {
         this.setState({ userMe: response.data })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
       .finally(() => {
         this.setState({ isLoading: false })
@@ -50,7 +50,8 @@ class UserPage extends Component {
     const Auth = this.context
     const user = Auth.getUser()
 
-    const { orderDescription } = this.state
+    let { orderDescription } = this.state
+    orderDescription = orderDescription.trim()
     if (!orderDescription) {
       return
     }
@@ -62,7 +63,7 @@ class UserPage extends Component {
         this.setState({ orderDescription: '' })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
   }
 

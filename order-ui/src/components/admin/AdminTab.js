@@ -10,7 +10,7 @@ function AdminTab(props) {
 
   const panes = [
     {
-      menuItem: { key: 'users', content: 'Users' },
+      menuItem: { key: 'users', icon: 'users', content: 'Users' },
       render: () => (
         <Tab.Pane loading={isUsersLoading}>
           <UserTable
@@ -24,7 +24,7 @@ function AdminTab(props) {
       )
     },
     {
-      menuItem: { key: 'orders', content: 'Orders' },
+      menuItem: { key: 'orders', icon: 'laptop', content: 'Orders' },
       render: () => (
         <Tab.Pane loading={isOrdersLoading}>
           <OrderTable

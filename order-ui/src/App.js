@@ -21,7 +21,7 @@ function App() {
         <PrivateRoute path='/userpage' component={UserPage} />
       </Router>
     </AuthProvider>
-  );
+  )
 }
 
 export default App

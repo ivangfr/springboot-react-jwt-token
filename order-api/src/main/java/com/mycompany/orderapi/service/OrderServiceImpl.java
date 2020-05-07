@@ -22,6 +22,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersContainingText(String text) {
+        return orderRepository.findByIdContainingOrDescriptionContainingOrderByCreatedAt(text, text);
+    }
+
+    @Override
     public Order validateAndGetOrder(String id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(String.format("Order with id %s not found", id)));
@@ -37,8 +42,4 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(order);
     }
 
-    @Override
-    public List<Order> getOrderContainingText(String text) {
-        return orderRepository.findByIdContainingOrDescriptionContainingOrderByCreatedAt(text, text);
-    }
 }

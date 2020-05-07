@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Grid, Table, Header, Icon } from 'semantic-ui-react'
-import CreateOrderForm from '../misc/CreateOrderForm'
+import OrderForm from '../misc/OrderForm'
 
 function OrderTable({ orders, orderDescription, handleInputChange, handleCreateOrder }) {
   let orderList
@@ -33,7 +33,7 @@ function OrderTable({ orders, orderDescription, handleInputChange, handleCreateO
             </Header>
           </Grid.Column>
           <Grid.Column>
-            <CreateOrderForm
+            <OrderForm
               orderDescription={orderDescription}
               handleInputChange={handleInputChange}
               handleCreateOrder={handleCreateOrder}

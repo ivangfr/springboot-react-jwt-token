@@ -22,7 +22,7 @@ class Home extends Component {
         this.setState({ numberOfUsers: response.data })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
       .finally(() => {
         this.setState({ isLoadingNumberOfUsers: false })
@@ -36,7 +36,7 @@ class Home extends Component {
         this.setState({ numberOfOrders: response.data })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
       .finally(() => {
         this.setState({ getNumberOfOrders: false })

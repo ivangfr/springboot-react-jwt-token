@@ -44,7 +44,7 @@ class AdminPage extends Component {
         this.setState({ users: response.data })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
       .finally(() => {
         this.setState({ isUsersLoading: false })
@@ -60,7 +60,7 @@ class AdminPage extends Component {
         this.getUsers()
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
   }
 
@@ -71,16 +71,12 @@ class AdminPage extends Component {
     const username = this.state.userUsernameSearch
     orderApi.getUsers(user, username)
       .then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          const users = data instanceof Array ? data : [data]
-          this.setState({ users })
-        } else {
-          this.setState({ users: [] })
-        }
+        const data = response.data
+        const users = data instanceof Array ? data : [data]
+        this.setState({ users })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
         this.setState({ users: [] })
       })
   }
@@ -95,7 +91,7 @@ class AdminPage extends Component {
         this.setState({ orders: response.data })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
       .finally(() => {
         this.setState({ isOrdersLoading: false })
@@ -111,7 +107,7 @@ class AdminPage extends Component {
         this.handleGetOrders()
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
   }
 
@@ -119,7 +115,8 @@ class AdminPage extends Component {
     const Auth = this.context
     const user = Auth.getUser()
 
-    const { orderDescription } = this.state
+    let { orderDescription } = this.state
+    orderDescription = orderDescription.trim()
     if (!orderDescription) {
       return
     }
@@ -131,7 +128,7 @@ class AdminPage extends Component {
         this.setState({ orderDescription: '' })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
       })
   }
 
@@ -142,16 +139,11 @@ class AdminPage extends Component {
     const text = this.state.orderTextSearch
     orderApi.getOrders(user, text)
       .then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          const orders = data instanceof Array ? data : [data]
-          this.setState({ orders })
-        } else {
-          this.setState({ orders: [] })
-        }
+        const orders = response.data
+        this.setState({ orders })
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.message)
         this.setState({ orders: [] })
       })
   }

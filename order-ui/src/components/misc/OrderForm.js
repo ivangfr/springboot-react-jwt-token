@@ -1,17 +1,18 @@
 import React from 'react'
 import { Form, Button, Icon } from 'semantic-ui-react'
 
-function CreateOrderForm({ orderDescription, handleInputChange, handleCreateOrder }) {
+function OrderForm({ orderDescription, handleInputChange, handleCreateOrder }) {
+  const createBtnDisabled = orderDescription.trim() === ''
   return (
     <Form onSubmit={handleCreateOrder}>
       <Form.Group>
         <Form.Input
           id='orderDescription'
-          placeholder='Description'
+          placeholder='Description *'
           value={orderDescription}
           onChange={handleInputChange}
         />
-        <Button icon labelPosition='right'>
+        <Button icon labelPosition='right' disabled={createBtnDisabled}>
           Create<Icon name='add' />
         </Button>
       </Form.Group>
@@ -19,4 +20,4 @@ function CreateOrderForm({ orderDescription, handleInputChange, handleCreateOrde
   )
 }
 
-export default CreateOrderForm
+export default OrderForm

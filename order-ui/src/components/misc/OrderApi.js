@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { config } from '../../Constants'
+import { parseJwt } from './Helpers'
 
 export const orderApi = {
   authenticate,
@@ -27,11 +28,11 @@ function signup(user) {
 }
 
 function numberOfUsers() {
-  return instance.get('/public/numberOfUsers');
+  return instance.get('/public/numberOfUsers')
 }
 
 function numberOfOrders() {
-  return instance.get('/public/numberOfOrders');
+  return instance.get('/public/numberOfOrders')
 }
 
 function getUsers(user, username) {
@@ -78,7 +79,21 @@ function getUserMe(user) {
 // -- Axios
 
 const instance = axios.create({
-  baseURL: config.url.API_URL
+  baseURL: config.url.API_BASE_URL
+})
+
+instance.interceptors.request.use(function (config) {
+  // If token is expired, redirect user to login
+  if (config.headers.Authorization) {
+    const token = config.headers.Authorization.split(' ')[1]
+    const data = parseJwt(token)
+    if (Date.now() > data.exp * 1000) {
+      window.location.href = "/login"
+    }
+  }
+  return config
+}, function (error) {
+  return Promise.reject(error)
 })
 
 // -- Helper functions

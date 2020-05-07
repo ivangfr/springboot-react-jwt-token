@@ -1,9 +1,6 @@
 package com.mycompany.orderapi.model;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.ZonedDateTime;
 
 import javax.persistence.Entity;
