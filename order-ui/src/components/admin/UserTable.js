@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Form, Button, Input, Table } from 'semantic-ui-react'
 
 function UserTable({ users, userUsernameSearch, handleInputChange, handleDeleteUser, handleSearchUser }) {
@@ -33,11 +33,11 @@ function UserTable({ users, userUsernameSearch, handleInputChange, handleDeleteU
   }
 
   return (
-    <Fragment>
+    <>
       <Form onSubmit={handleSearchUser}>
         <Input
           action={{ icon: 'search' }}
-          id='userUsernameSearch'
+          name='userUsernameSearch'
           placeholder='Search by Username'
           value={userUsernameSearch}
           onChange={handleInputChange}
@@ -46,7 +46,7 @@ function UserTable({ users, userUsernameSearch, handleInputChange, handleDeleteU
       <Table compact striped selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell width={1}/>
+            <Table.HeaderCell width={1} />
             <Table.HeaderCell width={1}>ID</Table.HeaderCell>
             <Table.HeaderCell width={3}>Username</Table.HeaderCell>
             <Table.HeaderCell width={4}>Name</Table.HeaderCell>
@@ -58,7 +58,7 @@ function UserTable({ users, userUsernameSearch, handleInputChange, handleDeleteU
           {userList}
         </Table.Body>
       </Table>
-    </Fragment>
+    </>
   )
 }
 

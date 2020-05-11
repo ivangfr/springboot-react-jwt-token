@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Grid, Form, Button, Input, Table } from 'semantic-ui-react'
 import OrderForm from '../misc/OrderForm'
 
@@ -33,14 +33,14 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChan
   }
 
   return (
-    <Fragment>
+    <>
       <Grid stackable divided>
         <Grid.Row columns='2'>
           <Grid.Column width='5'>
             <Form onSubmit={handleSearchOrder}>
               <Input
                 action={{ icon: 'search' }}
-                id='orderTextSearch'
+                name='orderTextSearch'
                 placeholder='Search by Id or Description'
                 value={orderTextSearch}
                 onChange={handleInputChange}
@@ -70,7 +70,7 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChan
           {orderList}
         </Table.Body>
       </Table>
-    </Fragment>
+    </>
   )
 }
 

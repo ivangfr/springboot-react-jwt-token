@@ -7,7 +7,7 @@ function OrderForm({ orderDescription, handleInputChange, handleCreateOrder }) {
     <Form onSubmit={handleCreateOrder}>
       <Form.Group>
         <Form.Input
-          id='orderDescription'
+          name='orderDescription'
           placeholder='Description *'
           value={orderDescription}
           onChange={handleInputChange}

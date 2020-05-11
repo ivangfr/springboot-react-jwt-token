@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Grid, Table, Header, Icon } from 'semantic-ui-react'
 import OrderForm from '../misc/OrderForm'
 
@@ -23,7 +23,7 @@ function OrderTable({ orders, orderDescription, handleInputChange, handleCreateO
   }
 
   return (
-    <Fragment>
+    <>
       <Grid stackable divided>
         <Grid.Row columns='2'>
           <Grid.Column width='3'>
@@ -54,7 +54,7 @@ function OrderTable({ orders, orderDescription, handleInputChange, handleCreateO
           {orderList}
         </Table.Body>
       </Table>
-    </Fragment>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import { Container } from 'semantic-ui-react'
 import OrderTable from './OrderTable'
 import AuthContext from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
+import { handleLogError } from '../misc/Helpers'
 
 class UserPage extends Component {
   static contextType = AuthContext
@@ -24,9 +25,8 @@ class UserPage extends Component {
     this.handleGetUserMe()
   }
 
-  handleInputChange = (e) => {
-    const { id, value } = e.target
-    this.setState({ [id]: value })
+  handleInputChange = (e, {name, value}) => {
+    this.setState({ [name]: value })
   }
 
   handleGetUserMe = () => {
@@ -39,7 +39,7 @@ class UserPage extends Component {
         this.setState({ userMe: response.data })
       })
       .catch(error => {
-        console.log(error.message)
+        handleLogError(error)
       })
       .finally(() => {
         this.setState({ isLoading: false })
@@ -63,7 +63,7 @@ class UserPage extends Component {
         this.setState({ orderDescription: '' })
       })
       .catch(error => {
-        console.log(error.message)
+        handleLogError(error)
       })
   }
 
