@@ -1,5 +1,6 @@
 package com.mycompany.orderapi.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,17 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-
-    public WebSecurityConfig(UserDetailsService userDetailsService, TokenAuthenticationFilter tokenAuthenticationFilter) {
-        this.userDetailsService = userDetailsService;
-        this.tokenAuthenticationFilter = tokenAuthenticationFilter;
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
                 .antMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
                 .antMatchers("/public/**", "/auth/**").permitAll()
-                .antMatchers("/", "/error", "/favicon.ico", "/csrf", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**").permitAll()
+                .antMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));

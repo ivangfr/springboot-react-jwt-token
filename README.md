@@ -38,9 +38,10 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Prerequisites
 
-- **jq**
-
-  In order to run some commands/scripts, you must have [`jq`](https://stedolan.github.io/jq) installed on you machine
+- `Java 11+`
+- `Docker`
+- `Docker-Compose`
+- [`jq`](https://stedolan.github.io/jq)
 
 ## Start Environment
 

@@ -7,15 +7,9 @@ import com.mycompany.orderapi.rest.dto.OrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.context.annotation.Configuration;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
 
 @Configuration
-@Mapper(
-  componentModel = "spring",
-  unmappedTargetPolicy = ReportingPolicy.IGNORE,
-  nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
+@Mapper(componentModel = "spring")
 public interface OrderMapper {
 
   Order toOrder(CreateOrderRequest createOrderRequest);

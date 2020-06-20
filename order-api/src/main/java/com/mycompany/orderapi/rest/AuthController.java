@@ -8,6 +8,7 @@ import com.mycompany.orderapi.rest.dto.SignUpRequest;
 import com.mycompany.orderapi.security.TokenProvider;
 import com.mycompany.orderapi.security.WebSecurityConfig;
 import com.mycompany.orderapi.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,14 +31,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
-
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder,
-                          AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.tokenProvider = tokenProvider;
-    }
 
     @PostMapping("/authenticate")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {

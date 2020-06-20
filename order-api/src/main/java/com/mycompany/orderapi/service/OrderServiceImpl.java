@@ -3,18 +3,16 @@ package com.mycompany.orderapi.service;
 import com.mycompany.orderapi.exception.OrderNotFoundException;
 import com.mycompany.orderapi.model.Order;
 import com.mycompany.orderapi.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-
-    public OrderServiceImpl(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
 
     @Override
     public List<Order> getOrders() {

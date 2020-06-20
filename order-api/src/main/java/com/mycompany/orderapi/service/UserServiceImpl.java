@@ -3,19 +3,17 @@ package com.mycompany.orderapi.service;
 import com.mycompany.orderapi.exception.UserNotFoundException;
 import com.mycompany.orderapi.model.User;
 import com.mycompany.orderapi.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public List<User> getUsers() {
