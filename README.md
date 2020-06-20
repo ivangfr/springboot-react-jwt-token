@@ -124,14 +124,11 @@ The goal of this project is to implement an application called `order-app` to ma
   
   - Click on the `Authorize` button on the top of the page
   
-  - On `Value` input field, paste the copied token prefixed by `Bearer` and a space
-    ```
-    Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9...
-    ```
+  - On `Value` input field, paste the copied token
   
   - Click on `Authorize` and then on `Close`
   
-  - To create an order, click on `order-controller`, then, click on `POST /api/orders` and on `Try it out`
+  - To create an order, click on `order-controller`. Then, click on `POST /api/orders` and on `Try it out`
 
   - Provide the `description` of the order
     ```
