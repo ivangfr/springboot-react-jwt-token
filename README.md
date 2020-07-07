@@ -38,9 +38,10 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Prerequisites
 
-- `Java 11+`
-- `Docker`
-- `Docker-Compose`
+- [`npm`](https://www.npmjs.com/get-npm)
+- [`Java 11+`](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [`Docker`](https://www.docker.com/)
+- [`Docker-Compose`](https://docs.docker.com/compose/install/)
 - [`jq`](https://stedolan.github.io/jq)
 
 ## Start Environment
@@ -70,7 +71,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
   - Open another terminal and navigate to `springboot-react-jwt-token/order-ui` folder
 
-  - \[Optional\] Run the command below if you are running the application for the first time
+  - Run the command below if you are running the application for the first time
     ```
     npm install
     ```
