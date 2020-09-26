@@ -7,8 +7,7 @@ import org.mapstruct.Mapper;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Mapper(componentModel = "spring"
-)
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
   UserDto toUserDto(User user);

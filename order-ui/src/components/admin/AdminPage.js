@@ -57,7 +57,7 @@ class AdminPage extends Component {
 
     orderApi.deleteUser(user, username)
       .then(() => {
-        this.getUsers()
+        this.handleGetUsers()
       })
       .catch(error => {
         handleLogError(error)
