@@ -4,7 +4,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Applications
 
-- **order-api**
+- ### order-api
 
   `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve and delete orders. If a user has `ADMIN` role he/she can also retrieve information of other users or delete them.
   
@@ -28,7 +28,7 @@ The goal of this project is to implement an application called `order-app` to ma
   | `POST /api/orders -d {"description"}`                         | Yes     | `ADMIN`, `USER` |
   | `DELETE /api/orders/{id}`                                     | Yes     | `ADMIN`         |
 
-- **order-ui**
+- ### order-ui
 
   `ReactJS` frontend application where a user with role `USER` can create an order and retrieve a specific order. On the other hand, a user with role `ADMIN` as access to all secured endpoints.
   
