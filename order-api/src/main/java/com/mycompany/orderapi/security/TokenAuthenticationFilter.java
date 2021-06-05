@@ -39,14 +39,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     });
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            log.error("Cannot set user authentication: {}", e);
         }
         chain.doFilter(request, response);
     }
 
     private Optional<String> getJwtFromRequest(HttpServletRequest request) {
         String tokenHeader = request.getHeader(TOKEN_HEADER);
-        if (!StringUtils.isEmpty(tokenHeader) && tokenHeader.startsWith(TOKEN_PREFIX)) {
+        if (StringUtils.hasText(tokenHeader) && tokenHeader.startsWith(TOKEN_PREFIX)) {
             return Optional.of(tokenHeader.replace(TOKEN_PREFIX, ""));
         }
         return Optional.empty();

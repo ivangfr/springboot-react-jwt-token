@@ -106,13 +106,14 @@ The goal of this project is to implement an application called `order-app` to ma
   
   - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
 
-  - Click on `auth-controller`, then on `POST /auth/authenticate` and, finally, on `Try it out`
+  - Click `POST /auth/authenticate` and then, click `Try it out` button
   
-  - Provide the `user` credentials `username` and `password` and click on `Execute` button
+  - Provide the `user` credentials `username` and `password`
     ```
     { "password": "user", "username": "user" }
     ```
-    It should return something like
+  
+  - Click `Execute` button. It should return something like
     ```
     Code: 200
     { "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9..." }
@@ -123,20 +124,20 @@ The goal of this project is to implement an application called `order-app` to ma
 
   - Copy the `accessToken` value (**without** the double quotes)
   
-  - Click on the `Authorize` button on the top of the page
+  - Click the `Authorize` button at the top of the page
   
-  - On `Value` input field, paste the copied token
+  - In `Value` input field, paste the copied token
   
-  - Click on `Authorize` and then on `Close`
+  - Click `Authorize` button and then, click `Close` button
   
-  - To create an order, click on `order-controller`. Then, click on `POST /api/orders` and on `Try it out`
+  - To create an order, click `POST /api/orders` and then, click `Try it out` button
 
   - Provide the `description` of the order
     ```
     { "description": "Buy two iPhones" }
     ```
 
-  - Click on `Execute` button. It should return something like
+  - Click `Execute` button. It should return something like
     ```
     Code: 200
     {
@@ -209,8 +210,8 @@ The goal of this project is to implement an application called `order-app` to ma
     ```
     It should return something like the output below, where it shows the http code for different requests
     ```
-    GET auth/authenticate
-    =====================
+    POST auth/authenticate
+    ======================
     admin access token
     ------------------
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImlhdCI6MTU4Nj..._ha2pM4LSSG3_d4exgA
@@ -219,8 +220,8 @@ The goal of this project is to implement an application called `order-app` to ma
     -----------------
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImlhdCIyOSwian...Y3z9uwhuW_nwaGX3cc5A
     
-    GET auth/signup
-    ===============
+    POST auth/signup
+    ================
     user2 access token
     ------------------
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImanRpIjoiYTMw...KvhQbsMGAlFov1Q480qg
@@ -258,9 +259,9 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Shutdown
 
-- Go to `order-api` and `order-ui` terminals and press `Ctrl+C` on each one
+- Go to `order-api` and `order-ui` terminals and press `Ctrl+C`
 
-- To stop and remove docker-compose containers, networks and volumes, run the command below in `springboot-react-jwt-token` root folder
+- To stop and remove docker-compose containers, network and volumes, run the command below in `springboot-react-jwt-token` root folder
   ```
   docker-compose down -v
   ```
