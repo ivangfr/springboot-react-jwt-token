@@ -259,9 +259,9 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Shutdown
 
-- Go to `order-api` and `order-ui` terminals and press `Ctrl+C`
+- To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`
 
-- To stop and remove docker-compose containers, network and volumes, run the command below in `springboot-react-jwt-token` root folder
+- To stop and remove docker-compose containers, network and volumes, go to a terminal and, inside `springboot-react-jwt-token` root folder, run the command below
   ```
   docker-compose down -v
   ```
