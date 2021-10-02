@@ -51,7 +51,7 @@ The goal of this project is to implement an application called `order-app` to ma
   docker-compose up -d
   ```
   
-- Wait a little bit until `mysql` container is Up (healthy). You can check their status running
+- Wait for `mysql` container to be with status `running (healthy)`. To check it, run
   ```
   docker-compose ps
   ```
@@ -195,7 +195,8 @@ The goal of this project is to implement an application called `order-app` to ma
     It should return
     ```
     HTTP/1.1 200
-    { "id": 1, "username": "admin", "name": "Admin", "email": "admin@mycompany.com", "role": "ADMIN",
+    {
+      "id": 1, "username": "admin", "name": "Admin", "email": "admin@mycompany.com", "role": "ADMIN",
       "orders": []
     }
     ```
