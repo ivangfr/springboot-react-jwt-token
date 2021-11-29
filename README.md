@@ -38,8 +38,8 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/get-npm)
-- [`Java 11+`](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+- [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [`Java 11+`](https://www.oracle.com/java/technologies/downloads/#java11)
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 - [`jq`](https://stedolan.github.io/jq)
@@ -51,7 +51,7 @@ The goal of this project is to implement an application called `order-app` to ma
   docker-compose up -d
   ```
   
-- Wait for `mysql` container to be with status `running (healthy)`. To check it, run
+- Wait for `mysql` Docker container to be up and running. To check it, run
   ```
   docker-compose ps
   ```
@@ -94,11 +94,11 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - The gif below shows a `user` loging in
 
-  ![user-login](images/user-login.gif)
+  ![user-login](documentation/user-login.gif)
 
 - The gif below shows an `admin` loging in
 
-  ![admin-login](images/admin-login.gif)
+  ![admin-login](documentation/admin-login.gif)
 
 ## Testing order-api Endpoints
 

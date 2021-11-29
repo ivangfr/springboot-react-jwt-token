@@ -39,5 +39,4 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Order order) {
         orderRepository.delete(order);
     }
-
 }

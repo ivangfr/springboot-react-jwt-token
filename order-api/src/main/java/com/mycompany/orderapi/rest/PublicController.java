@@ -24,5 +24,4 @@ public class PublicController {
     public Integer getNumberOfOrders() {
         return orderService.getOrders().size();
     }
-
 }

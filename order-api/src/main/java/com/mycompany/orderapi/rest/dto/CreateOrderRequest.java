@@ -12,5 +12,4 @@ public class CreateOrderRequest {
     @Schema(example = "Buy two iPhones")
     @NotBlank
     private String description;
-
 }

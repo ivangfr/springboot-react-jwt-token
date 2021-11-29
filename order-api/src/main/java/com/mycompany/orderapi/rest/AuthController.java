@@ -68,5 +68,4 @@ public class AuthController {
         user.setRole(WebSecurityConfig.USER);
         return user;
     }
-
 }

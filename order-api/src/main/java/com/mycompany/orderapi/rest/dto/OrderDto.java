@@ -16,5 +16,4 @@ public class OrderDto {
   public static final class UserDto {
     private String username;
   }
-
 }

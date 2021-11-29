@@ -67,5 +67,4 @@ public class OrderController {
         orderService.deleteOrder(order);
         return orderMapper.toOrderDto(order);
     }
-
 }

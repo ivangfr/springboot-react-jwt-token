@@ -11,5 +11,4 @@ import org.springframework.context.annotation.Configuration;
 public interface UserMapper {
 
   UserDto toUserDto(User user);
-
 }

@@ -16,5 +16,4 @@ public interface OrderMapper {
 
   @Mapping(target = "createdAt", dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
   OrderDto toOrderDto(Order order);
-
 }
