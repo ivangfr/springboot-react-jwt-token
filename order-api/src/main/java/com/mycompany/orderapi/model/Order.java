@@ -1,7 +1,7 @@
 package com.mycompany.orderapi.model;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.ZonedDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor

@@ -1,18 +1,16 @@
 package com.mycompany.orderapi.runner;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.mycompany.orderapi.model.User;
 import com.mycompany.orderapi.security.WebSecurityConfig;
 import com.mycompany.orderapi.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor

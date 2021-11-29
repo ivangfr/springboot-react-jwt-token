@@ -39,7 +39,7 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
 
-    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
     public List<OrderDto> getOrders(@RequestParam(value = "text", required = false) String text) {
         List<Order> orders = (text == null) ? orderService.getOrders() : orderService.getOrdersContainingText(text);
@@ -48,11 +48,11 @@ public class OrderController {
                 .collect(Collectors.toList());
     }
 
-    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public OrderDto createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
-            @Valid @RequestBody CreateOrderRequest createOrderRequest) {
+                                @Valid @RequestBody CreateOrderRequest createOrderRequest) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         Order order = orderMapper.toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
@@ -60,7 +60,7 @@ public class OrderController {
         return orderMapper.toOrderDto(orderService.saveOrder(order));
     }
 
-    @Operation(security = { @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME) })
+    @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{id}")
     public OrderDto deleteOrders(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
