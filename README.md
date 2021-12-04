@@ -273,6 +273,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - Run the following commands
   ```
+  npm upgrade
   npm i -g npm-check-updates
   ncu -u
   npm install
