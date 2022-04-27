@@ -250,7 +250,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - **MySQL**
   ```
-  docker exec -it mysql mysql -uroot -psecret --database=orderdb
+  docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database orderdb
   show tables;
   ```
 
