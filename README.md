@@ -83,12 +83,12 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Applications URLs
 
-| Application | URL                                   | Credentials                                         |
-| ----------- | ------------------------------------- | --------------------------------------------------- |
-| order-api   | http://localhost:8080/swagger-ui.html |                                                     |
-| order-ui    | http://localhost:3000                 | `admin/admin`, `user/user` or signing up a new user |
+| Application | URL                                         | Credentials                                         |
+| ----------- | ------------------------------------------- | --------------------------------------------------- |
+| order-api   | http://localhost:8080/swagger-ui/index.html |                                                     |
+| order-ui    | http://localhost:3000                       | `admin/admin`, `user/user` or signing up a new user |
 
-> **Note:** the credentials shown in the table are the ones already pre-defined. You can signup new users
+> **Note**: the credentials shown in the table are the ones already pre-defined. You can signup new users
 
 ## Demo
 
@@ -104,7 +104,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - **Manual Endpoints Test using Swagger**
   
-  - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
+  - Open a browser and access http://localhost:8080/swagger-ui/index.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
 
   - Click `POST /auth/authenticate` and then, click `Try it out` button
   
