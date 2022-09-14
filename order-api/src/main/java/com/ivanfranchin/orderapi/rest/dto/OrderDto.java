@@ -1,19 +1,10 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
-import lombok.Data;
-
 import java.time.ZonedDateTime;
 
-@Data
-public class OrderDto {
+public record OrderDto(String id, String description, com.ivanfranchin.orderapi.rest.dto.OrderDto.UserDto user,
+                       ZonedDateTime createdAt) {
 
-    private String id;
-    private String description;
-    private UserDto user;
-    private ZonedDateTime createdAt;
-
-    @Data
-    public static final class UserDto {
-        private String username;
+    public record UserDto(String username) {
     }
 }

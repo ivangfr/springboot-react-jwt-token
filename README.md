@@ -39,7 +39,7 @@ The goal of this project is to implement an application called `order-app` to ma
 ## Prerequisites
 
 - [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [`Java 11+`](https://www.oracle.com/java/technologies/downloads/#java11)
+- [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
 - [`Docker`](https://www.docker.com/)
 - [`Docker-Compose`](https://docs.docker.com/compose/install/)
 - [`jq`](https://stedolan.github.io/jq)
@@ -83,10 +83,10 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Applications URLs
 
-| Application | URL                                         | Credentials                                         |
-| ----------- | ------------------------------------------- | --------------------------------------------------- |
-| order-api   | http://localhost:8080/swagger-ui/index.html |                                                     |
-| order-ui    | http://localhost:3000                       | `admin/admin`, `user/user` or signing up a new user |
+| Application | URL                                   | Credentials                                         |
+| ----------- | ------------------------------------- | --------------------------------------------------- |
+| order-api   | http://localhost:8080/swagger-ui.html |                                                     |
+| order-ui    | http://localhost:3000                 | `admin/admin`, `user/user` or signing up a new user |
 
 > **Note**: the credentials shown in the table are the ones already pre-defined. You can signup new users
 
@@ -104,7 +104,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - **Manual Endpoints Test using Swagger**
   
-  - Open a browser and access http://localhost:8080/swagger-ui/index.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
+  - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
 
   - Click `POST /auth/authenticate` and then, click `Try it out` button
   
