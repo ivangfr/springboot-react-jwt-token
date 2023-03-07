@@ -11,5 +11,5 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     List<Order> findAllByOrderByCreatedAtDesc();
 
-    List<Order> findByIdContainingOrDescriptionContainingOrderByCreatedAt(String id, String description);
+    List<Order> findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(String id, String description);
 }

@@ -1,6 +1,6 @@
 # springboot-react-jwt-token
 
-The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end application called `order-api` using [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) and a font-end application called `order-ui` using [ReactJS](https://reactjs.org/). Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
+The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application called `order-api` and a font-end [ReactJS](https://reactjs.org/) application called `order-ui`. Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
 
 ## Applications
 
@@ -10,7 +10,7 @@ The goal of this project is to implement an application called `order-app` to ma
   
   The application secured endpoints can just be accessed if a valid JWT access token is provided.
   
-  `order-api` stores its data in [`MySQL`](https://www.mysql.com/) database.
+  `order-api` stores its data in [`Postgres`](https://www.postgresql.org/) database.
 
   `order-api` has the following endpoints
 
@@ -46,14 +46,11 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Start Environment
 
-- Open a terminal and inside `springboot-react-jwt-token` root folder run
+- In a terminal, make sure you are inside `springboot-react-jwt-token` root folder
+
+- Run the following command to start docker-compose containers
   ```
   docker-compose up -d
-  ```
-  
-- Wait for `mysql` Docker container to be up and running. To check it, run
-  ```
-  docker-compose ps
   ```
 
 ## Running order-app using Maven & Npm
@@ -248,10 +245,10 @@ The goal of this project is to implement an application called `order-app` to ma
 
 ## Util Commands
 
-- **MySQL**
+- **Postgres**
   ```
-  docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database orderdb
-  show tables;
+  docker exec -it postgres psql -U postgres -d moviedb
+  \dt
   ```
 
 - **jwt.io**
