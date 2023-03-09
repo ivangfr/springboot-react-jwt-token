@@ -2,6 +2,10 @@
 
 The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) application called `order-api` and a font-end [ReactJS](https://reactjs.org/) application called `order-ui`. Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
 
+## Project Diagram
+
+![project-diagram](documentation/project-diagram.png)
+
 ## Applications
 
 - ### order-api
