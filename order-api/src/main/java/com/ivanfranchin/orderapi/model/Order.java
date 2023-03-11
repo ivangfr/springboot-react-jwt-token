@@ -29,10 +29,8 @@ public class Order {
 
     private ZonedDateTime createdAt;
 
-    public Order(String id, String description, User user) {
-        this.id = id;
+    public Order(String description) {
         this.description = description;
-        this.user = user;
     }
 
     @PrePersist
