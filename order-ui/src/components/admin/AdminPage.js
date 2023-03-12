@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 import AuthContext from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
@@ -150,7 +150,7 @@ class AdminPage extends Component {
 
   render() {
     if (!this.state.isAdmin) {
-      return <Redirect to='/' />
+      return <Navigate to='/' />
     } else {
       const { isUsersLoading, users, userUsernameSearch, isOrdersLoading, orders, orderDescription, orderTextSearch } = this.state
       return (

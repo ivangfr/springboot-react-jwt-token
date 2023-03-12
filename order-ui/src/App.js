@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './components/context/AuthContext'
 import PrivateRoute from './components/misc/PrivateRoute'
 import Navbar from './components/misc/Navbar'
@@ -14,11 +14,14 @@ function App() {
     <AuthProvider>
       <Router>
         <Navbar />
-        <Route path='/' exact component={Home} />
-        <Route path='/login' component={Login} />
-        <Route path='/signup' component={Signup} />
-        <PrivateRoute path='/adminpage' component={AdminPage} />
-        <PrivateRoute path='/userpage' component={UserPage} />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path="/adminpage" element={<PrivateRoute><AdminPage /></PrivateRoute>}/>
+          <Route path="/userpage" element={<PrivateRoute><UserPage /></PrivateRoute>}/>
+          <Route path="*" element={<Navigate to="/" />}/>
+        </Routes>
       </Router>
     </AuthProvider>
   )

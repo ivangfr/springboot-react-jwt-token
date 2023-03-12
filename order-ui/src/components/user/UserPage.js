@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 import OrderTable from './OrderTable'
 import AuthContext from '../context/AuthContext'
@@ -69,7 +69,7 @@ class UserPage extends Component {
 
   render() {
     if (!this.state.isUser) {
-      return <Redirect to='/' />
+      return <Navigate to='/' />
     } else {
       const { userMe, isLoading, orderDescription } = this.state
       return (
