@@ -251,7 +251,7 @@ The goal of this project is to implement an application called `order-app` to ma
 
 - **Postgres**
   ```
-  docker exec -it postgres psql -U postgres -d moviedb
+  docker exec -it postgres psql -U postgres -d orderdb
   \dt
   ```
 
