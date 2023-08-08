@@ -25,7 +25,7 @@ class UserPage extends Component {
     this.handleGetUserMe()
   }
 
-  handleInputChange = (e, {name, value}) => {
+  handleInputChange = (e, { name, value }) => {
     this.setState({ [name]: value })
   }
 
@@ -45,7 +45,7 @@ class UserPage extends Component {
         this.setState({ isLoading: false })
       })
   }
-  
+
   handleCreateOrder = () => {
     const Auth = this.context
     const user = Auth.getUser()
@@ -70,20 +70,20 @@ class UserPage extends Component {
   render() {
     if (!this.state.isUser) {
       return <Navigate to='/' />
-    } else {
-      const { userMe, isLoading, orderDescription } = this.state
-      return (
-        <Container>
-          <OrderTable
-            orders={userMe && userMe.orders}
-            isLoading={isLoading}
-            orderDescription={orderDescription}
-            handleCreateOrder={this.handleCreateOrder}
-            handleInputChange={this.handleInputChange}
-          />
-        </Container>
-      )
     }
+    
+    const { userMe, isLoading, orderDescription } = this.state
+    return (
+      <Container>
+        <OrderTable
+          orders={userMe && userMe.orders}
+          isLoading={isLoading}
+          orderDescription={orderDescription}
+          handleCreateOrder={this.handleCreateOrder}
+          handleInputChange={this.handleInputChange}
+        />
+      </Container>
+    )
   }
 }
 

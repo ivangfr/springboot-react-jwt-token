@@ -30,7 +30,7 @@ class AdminPage extends Component {
     this.handleGetOrders()
   }
 
-  handleInputChange = (e, {name, value}) => {
+  handleInputChange = (e, { name, value }) => {
     this.setState({ [name]: value })
   }
 
@@ -151,28 +151,28 @@ class AdminPage extends Component {
   render() {
     if (!this.state.isAdmin) {
       return <Navigate to='/' />
-    } else {
-      const { isUsersLoading, users, userUsernameSearch, isOrdersLoading, orders, orderDescription, orderTextSearch } = this.state
-      return (
-        <Container>
-          <AdminTab
-            isUsersLoading={isUsersLoading}
-            users={users}
-            userUsernameSearch={userUsernameSearch}
-            handleDeleteUser={this.handleDeleteUser}
-            handleSearchUser={this.handleSearchUser}
-            isOrdersLoading={isOrdersLoading}
-            orders={orders}
-            orderDescription={orderDescription}
-            orderTextSearch={orderTextSearch}
-            handleCreateOrder={this.handleCreateOrder}
-            handleDeleteOrder={this.handleDeleteOrder}
-            handleSearchOrder={this.handleSearchOrder}
-            handleInputChange={this.handleInputChange}
-          />
-        </Container>
-      )
     }
+    
+    const { isUsersLoading, users, userUsernameSearch, isOrdersLoading, orders, orderDescription, orderTextSearch } = this.state
+    return (
+      <Container>
+        <AdminTab
+          isUsersLoading={isUsersLoading}
+          users={users}
+          userUsernameSearch={userUsernameSearch}
+          handleDeleteUser={this.handleDeleteUser}
+          handleSearchUser={this.handleSearchUser}
+          isOrdersLoading={isOrdersLoading}
+          orders={orders}
+          orderDescription={orderDescription}
+          orderTextSearch={orderTextSearch}
+          handleCreateOrder={this.handleCreateOrder}
+          handleDeleteOrder={this.handleDeleteOrder}
+          handleSearchOrder={this.handleSearchOrder}
+          handleInputChange={this.handleInputChange}
+        />
+      </Container>
+    )
   }
 }
 

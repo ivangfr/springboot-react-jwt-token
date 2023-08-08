@@ -59,7 +59,7 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChan
       <Table compact striped selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell width={1}/>
+            <Table.HeaderCell width={1} />
             <Table.HeaderCell width={5}>ID</Table.HeaderCell>
             <Table.HeaderCell width={2}>Username</Table.HeaderCell>
             <Table.HeaderCell width={4}>Created At</Table.HeaderCell>

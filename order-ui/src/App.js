@@ -18,9 +18,9 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path="/adminpage" element={<PrivateRoute><AdminPage /></PrivateRoute>}/>
-          <Route path="/userpage" element={<PrivateRoute><UserPage /></PrivateRoute>}/>
-          <Route path="*" element={<Navigate to="/" />}/>
+          <Route path="/adminpage" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+          <Route path="/userpage" element={<PrivateRoute><UserPage /></PrivateRoute>} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </AuthProvider>
