@@ -56,16 +56,15 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
 - [`Docker`](https://www.docker.com/)
-- [`Docker-Compose`](https://docs.docker.com/compose/install/)
 - [`jq`](https://stedolan.github.io/jq)
 
 ## Start Environment
 
 - In a terminal, make sure you are inside `springboot-react-jwt-token` root folder
 
-- Run the following command to start docker-compose containers
+- Run the following command to start docker compose containers
   ```
-  docker-compose up -d
+  docker compose up -d
   ```
 
 ## Running order-app using Maven & Npm
@@ -274,9 +273,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`
 
-- To stop and remove docker-compose containers, network and volumes, go to a terminal and, inside `springboot-react-jwt-token` root folder, run the command below
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-react-jwt-token` root folder, run the command below
   ```
-  docker-compose down -v
+  docker compose down -v
   ```
 
 ## How to upgrade order-ui dependencies to latest version
