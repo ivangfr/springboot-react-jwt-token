@@ -34,86 +34,73 @@ class AdminPage extends Component {
     this.setState({ [name]: value })
   }
 
-  handleGetUsers = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleGetUsers = async () => {
+    const user = this.context.getUser()
 
     this.setState({ isUsersLoading: true })
-    orderApi.getUsers(user)
-      .then(response => {
-        this.setState({ users: response.data })
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
-      .finally(() => {
-        this.setState({ isUsersLoading: false })
-      })
+    try {
+      const response = await orderApi.getUsers(user)
+      this.setState({ users: response.data })
+    } catch (error) {
+      handleLogError(error)
+    } finally {
+      this.setState({ isUsersLoading: false })
+    }
   }
 
-  handleDeleteUser = (username) => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleDeleteUser = async (username) => {
+    const user = this.context.getUser()
 
-    orderApi.deleteUser(user, username)
-      .then(() => {
-        this.handleGetUsers()
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
+    try {
+      await orderApi.deleteUser(user, username)
+      await this.handleGetUsers()
+    } catch (error) {
+      handleLogError(error)
+    }
   }
 
-  handleSearchUser = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleSearchUser = async () => {
+    const user = this.context.getUser()
 
     const username = this.state.userUsernameSearch
-    orderApi.getUsers(user, username)
-      .then(response => {
-        const data = response.data
-        const users = data instanceof Array ? data : [data]
-        this.setState({ users })
-      })
-      .catch(error => {
-        handleLogError(error)
-        this.setState({ users: [] })
-      })
+    try {
+      const response = await orderApi.getUsers(user, username)
+      const data = response.data
+      const users = data instanceof Array ? data : [data]
+      this.setState({ users })
+    } catch (error) {
+      handleLogError(error)
+      this.setState({ users: [] })
+    }
   }
 
-  handleGetOrders = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleGetOrders = async () => {
+    const user = this.context.getUser()
 
     this.setState({ isOrdersLoading: true })
-    orderApi.getOrders(user)
-      .then(response => {
-        this.setState({ orders: response.data })
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
-      .finally(() => {
-        this.setState({ isOrdersLoading: false })
-      })
+    try {
+      const response = await orderApi.getOrders(user)
+      this.setState({ orders: response.data })
+    } catch (error) {
+      handleLogError(error)
+    } finally {
+      this.setState({ isOrdersLoading: false })
+    }
   }
 
-  handleDeleteOrder = (isbn) => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleDeleteOrder = async (isbn) => {
+    const user = this.context.getUser()
 
-    orderApi.deleteOrder(user, isbn)
-      .then(() => {
-        this.handleGetOrders()
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
+    try {
+      await orderApi.deleteOrder(user, isbn)
+      await this.handleGetOrders()
+    } catch (error) {
+      handleLogError(error)
+    }
   }
 
-  handleCreateOrder = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleCreateOrder = async () => {
+    const user = this.context.getUser()
 
     let { orderDescription } = this.state
     orderDescription = orderDescription.trim()
@@ -122,37 +109,34 @@ class AdminPage extends Component {
     }
 
     const order = { description: orderDescription }
-    orderApi.createOrder(user, order)
-      .then(() => {
-        this.handleGetOrders()
-        this.setState({ orderDescription: '' })
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
+    try {
+      await orderApi.createOrder(user, order)
+      await this.handleGetOrders()
+      this.setState({ orderDescription: '' })
+    } catch (error) {
+      handleLogError(error)
+    }
   }
 
-  handleSearchOrder = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
+  handleSearchOrder = async () => {
+    const user = this.context.getUser()
 
     const text = this.state.orderTextSearch
-    orderApi.getOrders(user, text)
-      .then(response => {
-        const orders = response.data
-        this.setState({ orders })
-      })
-      .catch(error => {
-        handleLogError(error)
-        this.setState({ orders: [] })
-      })
+    try {
+      const response = await orderApi.getOrders(user, text)
+      const orders = response.data
+      this.setState({ orders })
+    } catch (error) {
+      handleLogError(error)
+      this.setState({ orders: [] })
+    }
   }
 
   render() {
     if (!this.state.isAdmin) {
       return <Navigate to='/' />
     }
-    
+
     const { isUsersLoading, users, userUsernameSearch, isOrdersLoading, orders, orderDescription, orderTextSearch } = this.state
     return (
       <Container>

@@ -28,9 +28,9 @@ class Signup extends Component {
     this.setState({ [name]: value })
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
-
+  
     const { username, password, name, email } = this.state
     if (!(username && password && name && email)) {
       this.setState({
@@ -39,41 +39,41 @@ class Signup extends Component {
       })
       return
     }
-
+  
     const user = { username, password, name, email }
-    orderApi.signup(user)
-      .then(response => {
-        const { accessToken } = response.data
-        const data = parseJwt(accessToken)
-        const user = { data, accessToken }
-
-        const Auth = this.context
-        Auth.userLogin(user)
-
-        this.setState({
-          username: '',
-          password: '',
-          isLoggedIn: true,
-          isError: false,
-          errorMessage: ''
-        })
+  
+    try {
+      const response = await orderApi.signup(user)
+      const { accessToken } = response.data
+      const data = parseJwt(accessToken)
+      const authenticatedUser = { data, accessToken }
+  
+      const Auth = this.context
+      Auth.userLogin(authenticatedUser)
+  
+      this.setState({
+        username: '',
+        password: '',
+        isLoggedIn: true,
+        isError: false,
+        errorMessage: ''
       })
-      .catch(error => {
-        handleLogError(error)
-        if (error.response && error.response.data) {
-          const errorData = error.response.data
-          let errorMessage = 'Invalid fields'
-          if (errorData.status === 409) {
-            errorMessage = errorData.message
-          } else if (errorData.status === 400) {
-            errorMessage = errorData.errors[0].defaultMessage
-          }
-          this.setState({
-            isError: true,
-            errorMessage
-          })
+    } catch (error) {
+      handleLogError(error)
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        let errorMessage = 'Invalid fields'
+        if (errorData.status === 409) {
+          errorMessage = errorData.message
+        } else if (errorData.status === 400) {
+          errorMessage = errorData.errors[0].defaultMessage
         }
-      })
+        this.setState({
+          isError: true,
+          errorMessage
+        })
+      }
+    }
   }
 
   render() {

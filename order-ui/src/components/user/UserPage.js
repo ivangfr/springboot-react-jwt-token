@@ -29,42 +29,38 @@ class UserPage extends Component {
     this.setState({ [name]: value })
   }
 
-  handleGetUserMe = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
-
+  handleGetUserMe = async () => {
+    const user = this.context.getUser()
+  
     this.setState({ isLoading: true })
-    orderApi.getUserMe(user)
-      .then(response => {
-        this.setState({ userMe: response.data })
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
-      .finally(() => {
-        this.setState({ isLoading: false })
-      })
+  
+    try {
+      const response = await orderApi.getUserMe(user)
+      this.setState({ userMe: response.data })
+    } catch (error) {
+      handleLogError(error)
+    } finally {
+      this.setState({ isLoading: false })
+    }
   }
 
-  handleCreateOrder = () => {
-    const Auth = this.context
-    const user = Auth.getUser()
-
+  handleCreateOrder = async () => {
+    const user = this.context.getUser()
+  
     let { orderDescription } = this.state
     orderDescription = orderDescription.trim()
     if (!orderDescription) {
       return
     }
-
+  
     const order = { description: orderDescription }
-    orderApi.createOrder(user, order)
-      .then(() => {
-        this.handleGetUserMe()
-        this.setState({ orderDescription: '' })
-      })
-      .catch(error => {
-        handleLogError(error)
-      })
+    try {
+      await orderApi.createOrder(user, order)
+      await this.handleGetUserMe()
+      this.setState({ orderDescription: '' })
+    } catch (error) {
+      handleLogError(error)
+    }
   }
 
   render() {
