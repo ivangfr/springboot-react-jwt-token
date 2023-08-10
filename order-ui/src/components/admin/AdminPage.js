@@ -1,163 +1,145 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
-import AuthContext from '../context/AuthContext'
-import { orderApi } from '../misc/OrderApi'
+import { useAuth } from '../context/AuthContext'
 import AdminTab from './AdminTab'
+import { orderApi } from '../misc/OrderApi'
 import { handleLogError } from '../misc/Helpers'
 
-class AdminPage extends Component {
-  static contextType = AuthContext
+function AdminPage() {
+  const Auth = useAuth()
+  const user = Auth.getUser()
 
-  state = {
-    users: [],
-    orders: [],
-    orderDescription: '',
-    orderTextSearch: '',
-    userUsernameSearch: '',
-    isAdmin: true,
-    isUsersLoading: false,
-    isOrdersLoading: false,
+  const [users, setUsers] = useState([])
+  const [orders, setOrders] = useState([])
+  const [orderDescription, setOrderDescription] = useState('')
+  const [orderTextSearch, setOrderTextSearch] = useState('')
+  const [userUsernameSearch, setUserUsernameSearch] = useState('')
+  const [isAdmin, setIsAdmin] = useState(true)
+  const [isUsersLoading, setIsUsersLoading] = useState(false)
+  const [isOrdersLoading, setIsOrdersLoading] = useState(false)
+
+  useEffect(() => {
+    setIsAdmin(user.data.rol[0] === 'ADMIN')
+    handleGetUsers()
+    handleGetOrders()
+  }, [])
+
+  const handleInputChange = (e, { name, value }) => {
+    if (name === 'userUsernameSearch') {
+      setUserUsernameSearch(value)
+    } else if (name === 'orderDescription') {
+      setOrderDescription(value)
+    } else if (name === 'orderTextSearch') {
+      setOrderTextSearch(value)
+    }
   }
 
-  componentDidMount() {
-    const Auth = this.context
-    const user = Auth.getUser()
-    const isAdmin = user.data.rol[0] === 'ADMIN'
-    this.setState({ isAdmin })
-
-    this.handleGetUsers()
-    this.handleGetOrders()
-  }
-
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
-  }
-
-  handleGetUsers = async () => {
-    const user = this.context.getUser()
-
-    this.setState({ isUsersLoading: true })
+  const handleGetUsers = async () => {
+    setIsUsersLoading(true)
     try {
       const response = await orderApi.getUsers(user)
-      this.setState({ users: response.data })
+      setUsers(response.data)
     } catch (error) {
       handleLogError(error)
     } finally {
-      this.setState({ isUsersLoading: false })
+      setIsUsersLoading(false)
     }
   }
 
-  handleDeleteUser = async (username) => {
-    const user = this.context.getUser()
-
+  const handleDeleteUser = async (username) => {
     try {
       await orderApi.deleteUser(user, username)
-      await this.handleGetUsers()
+      handleGetUsers()
     } catch (error) {
       handleLogError(error)
     }
   }
 
-  handleSearchUser = async () => {
-    const user = this.context.getUser()
-
-    const username = this.state.userUsernameSearch
+  const handleSearchUser = async () => {
+    const username = userUsernameSearch
     try {
       const response = await orderApi.getUsers(user, username)
       const data = response.data
       const users = data instanceof Array ? data : [data]
-      this.setState({ users })
+      setUsers(users)
     } catch (error) {
       handleLogError(error)
-      this.setState({ users: [] })
+      setUsers([])
     }
   }
 
-  handleGetOrders = async () => {
-    const user = this.context.getUser()
-
-    this.setState({ isOrdersLoading: true })
+  const handleGetOrders = async () => {
+    setIsOrdersLoading(true)
     try {
       const response = await orderApi.getOrders(user)
-      this.setState({ orders: response.data })
+      setOrders(response.data)
     } catch (error) {
       handleLogError(error)
     } finally {
-      this.setState({ isOrdersLoading: false })
+      setIsOrdersLoading(false)
     }
   }
 
-  handleDeleteOrder = async (isbn) => {
-    const user = this.context.getUser()
-
+  const handleDeleteOrder = async (isbn) => {
     try {
       await orderApi.deleteOrder(user, isbn)
-      await this.handleGetOrders()
+      handleGetOrders()
     } catch (error) {
       handleLogError(error)
     }
   }
 
-  handleCreateOrder = async () => {
-    const user = this.context.getUser()
-
-    let { orderDescription } = this.state
-    orderDescription = orderDescription.trim()
-    if (!orderDescription) {
+  const handleCreateOrder = async () => {
+    let description = orderDescription.trim()
+    if (!description) {
       return
     }
 
-    const order = { description: orderDescription }
+    const order = { description }
     try {
       await orderApi.createOrder(user, order)
-      await this.handleGetOrders()
-      this.setState({ orderDescription: '' })
+      handleGetOrders()
+      setOrderDescription('')
     } catch (error) {
       handleLogError(error)
     }
   }
 
-  handleSearchOrder = async () => {
-    const user = this.context.getUser()
-
-    const text = this.state.orderTextSearch
+  const handleSearchOrder = async () => {
+    const text = orderTextSearch
     try {
       const response = await orderApi.getOrders(user, text)
-      const orders = response.data
-      this.setState({ orders })
+      setOrders(response.data)
     } catch (error) {
       handleLogError(error)
-      this.setState({ orders: [] })
+      setOrders([])
     }
   }
 
-  render() {
-    if (!this.state.isAdmin) {
-      return <Navigate to='/' />
-    }
-
-    const { isUsersLoading, users, userUsernameSearch, isOrdersLoading, orders, orderDescription, orderTextSearch } = this.state
-    return (
-      <Container>
-        <AdminTab
-          isUsersLoading={isUsersLoading}
-          users={users}
-          userUsernameSearch={userUsernameSearch}
-          handleDeleteUser={this.handleDeleteUser}
-          handleSearchUser={this.handleSearchUser}
-          isOrdersLoading={isOrdersLoading}
-          orders={orders}
-          orderDescription={orderDescription}
-          orderTextSearch={orderTextSearch}
-          handleCreateOrder={this.handleCreateOrder}
-          handleDeleteOrder={this.handleDeleteOrder}
-          handleSearchOrder={this.handleSearchOrder}
-          handleInputChange={this.handleInputChange}
-        />
-      </Container>
-    )
+  if (!isAdmin) {
+    return <Navigate to='/' />
   }
+
+  return (
+    <Container>
+      <AdminTab
+        isUsersLoading={isUsersLoading}
+        users={users}
+        userUsernameSearch={userUsernameSearch}
+        handleDeleteUser={handleDeleteUser}
+        handleSearchUser={handleSearchUser}
+        isOrdersLoading={isOrdersLoading}
+        orders={orders}
+        orderDescription={orderDescription}
+        orderTextSearch={orderTextSearch}
+        handleCreateOrder={handleCreateOrder}
+        handleDeleteOrder={handleDeleteOrder}
+        handleSearchOrder={handleSearchOrder}
+        handleInputChange={handleInputChange}
+      />
+    </Container>
+  )
 }
 
 export default AdminPage

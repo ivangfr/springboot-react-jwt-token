@@ -1,86 +1,87 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 import OrderTable from './OrderTable'
-import AuthContext from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
 import { handleLogError } from '../misc/Helpers'
 
-class UserPage extends Component {
-  static contextType = AuthContext
+function UserPage() {
+  const Auth = useAuth()
+  const user = Auth.getUser()
+  const isUser = user.data.rol[0] === 'USER'
 
-  state = {
-    userMe: null,
-    isUser: true,
-    isLoading: false,
-    orderDescription: ''
+  const [userMe, setUserMe] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [orderDescription, setOrderDescription] = useState('')
+
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true)
+
+      try {
+        const response = await orderApi.getUserMe(user)
+        setUserMe(response.data)
+      } catch (error) {
+        handleLogError(error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [user])
+
+  const handleInputChange = (e, { name, value }) => {
+    if (name === 'orderDescription') {
+      setOrderDescription(value)
+    }
   }
 
-  componentDidMount() {
-    const Auth = this.context
-    const user = Auth.getUser()
-    const isUser = user.data.rol[0] === 'USER'
-    this.setState({ isUser })
+  const handleCreateOrder = async () => {
+    let trimmedDescription = orderDescription.trim()
+    if (!trimmedDescription) {
+      return
+    }
 
-    this.handleGetUserMe()
+    const order = { description: trimmedDescription }
+    try {
+      await orderApi.createOrder(user, order)
+      await fetchUserMeData()
+      setOrderDescription('')
+    } catch (error) {
+      handleLogError(error)
+    }
   }
 
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
-  }
+  const fetchUserMeData = async () => {
+    setIsLoading(true)
 
-  handleGetUserMe = async () => {
-    const user = this.context.getUser()
-  
-    this.setState({ isLoading: true })
-  
     try {
       const response = await orderApi.getUserMe(user)
-      this.setState({ userMe: response.data })
+      setUserMe(response.data)
     } catch (error) {
       handleLogError(error)
     } finally {
-      this.setState({ isLoading: false })
+      setIsLoading(false)
     }
   }
 
-  handleCreateOrder = async () => {
-    const user = this.context.getUser()
-  
-    let { orderDescription } = this.state
-    orderDescription = orderDescription.trim()
-    if (!orderDescription) {
-      return
-    }
-  
-    const order = { description: orderDescription }
-    try {
-      await orderApi.createOrder(user, order)
-      await this.handleGetUserMe()
-      this.setState({ orderDescription: '' })
-    } catch (error) {
-      handleLogError(error)
-    }
+  if (!isUser) {
+    return <Navigate to='/' />
   }
 
-  render() {
-    if (!this.state.isUser) {
-      return <Navigate to='/' />
-    }
-    
-    const { userMe, isLoading, orderDescription } = this.state
-    return (
-      <Container>
-        <OrderTable
-          orders={userMe && userMe.orders}
-          isLoading={isLoading}
-          orderDescription={orderDescription}
-          handleCreateOrder={this.handleCreateOrder}
-          handleInputChange={this.handleInputChange}
-        />
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      <OrderTable
+        orders={userMe && userMe.orders}
+        isLoading={isLoading}
+        orderDescription={orderDescription}
+        handleCreateOrder={handleCreateOrder}
+        handleInputChange={handleInputChange}
+      />
+    </Container>
+  )
 }
 
 export default UserPage

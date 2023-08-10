@@ -1,36 +1,31 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
 import { Button, Form, Grid, Segment, Message } from 'semantic-ui-react'
-import AuthContext from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
 import { parseJwt, handleLogError } from '../misc/Helpers'
 
-class Login extends Component {
-  static contextType = AuthContext
+function Login() {
+  const Auth = useAuth()
+  const isLoggedIn = Auth.userIsAuthenticated()
 
-  state = {
-    username: '',
-    password: '',
-    isLoggedIn: false,
-    isError: false
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [isError, setIsError] = useState(false)
+
+  const handleInputChange = (e, { name, value }) => {
+    if (name === 'username') {
+      setUsername(value)
+    } else if (name === 'password') {
+      setPassword(value)
+    }
   }
 
-  componentDidMount() {
-    const Auth = this.context
-    const isLoggedIn = Auth.userIsAuthenticated()
-    this.setState({ isLoggedIn })
-  }
-
-  handleInputChange = (e, { name, value }) => {
-    this.setState({ [name]: value })
-  }
-
-  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const { username, password } = this.state
     if (!(username && password)) {
-      this.setState({ isError: true })
+      setIsError(true)
       return
     }
 
@@ -40,61 +35,56 @@ class Login extends Component {
       const data = parseJwt(accessToken)
       const authenticatedUser = { data, accessToken }
 
-      const Auth = this.context
       Auth.userLogin(authenticatedUser)
 
-      this.setState({
-        username: '',
-        password: '',
-        isLoggedIn: true,
-        isError: false
-      })
+      setUsername('')
+      setPassword('')
+      setIsError(false)
     } catch (error) {
       handleLogError(error)
-      this.setState({ isError: true })
+      setIsError(true)
     }
   }
 
-  render() {
-    const { isLoggedIn, isError } = this.state
-    if (isLoggedIn) {
-      return <Navigate to={'/'} />
-    }
-
-    return (
-      <Grid textAlign='center'>
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Form size='large' onSubmit={this.handleSubmit}>
-            <Segment>
-              <Form.Input
-                fluid
-                autoFocus
-                name='username'
-                icon='user'
-                iconPosition='left'
-                placeholder='Username'
-                onChange={this.handleInputChange}
-              />
-              <Form.Input
-                fluid
-                name='password'
-                icon='lock'
-                iconPosition='left'
-                placeholder='Password'
-                type='password'
-                onChange={this.handleInputChange}
-              />
-              <Button color='violet' fluid size='large'>Login</Button>
-            </Segment>
-          </Form>
-          <Message>{`Don't have already an account? `}
-            <a href='/signup' color='violet' as={NavLink} to="/signup">Sign Up</a>
-          </Message>
-          {isError && <Message negative>The username or password provided are incorrect!</Message>}
-        </Grid.Column>
-      </Grid>
-    )
+  if (isLoggedIn) {
+    return <Navigate to={'/'} />
   }
+
+  return (
+    <Grid textAlign='center'>
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Form size='large' onSubmit={handleSubmit}>
+          <Segment>
+            <Form.Input
+              fluid
+              autoFocus
+              name='username'
+              icon='user'
+              iconPosition='left'
+              placeholder='Username'
+              value={username}
+              onChange={handleInputChange}
+            />
+            <Form.Input
+              fluid
+              name='password'
+              icon='lock'
+              iconPosition='left'
+              placeholder='Password'
+              type='password'
+              value={password}
+              onChange={handleInputChange}
+            />
+            <Button color='violet' fluid size='large'>Login</Button>
+          </Segment>
+        </Form>
+        <Message>{`Don't have already an account? `}
+          <NavLink to="/signup" color='violet' as={NavLink}>Sign Up</NavLink>
+        </Message>
+        {isError && <Message negative>The username or password provided are incorrect!</Message>}
+      </Grid.Column>
+    </Grid>
+  )
 }
 
 export default Login
