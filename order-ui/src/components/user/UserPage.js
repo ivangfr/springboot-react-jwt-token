@@ -17,20 +17,20 @@ function UserPage() {
 
   useEffect(() => {
     async function fetchData() {
-      setIsLoading(true)
+      setIsLoading(true);
 
       try {
-        const response = await orderApi.getUserMe(user)
-        setUserMe(response.data)
+        const response = await orderApi.getUserMe(user);
+        setUserMe(response.data);
       } catch (error) {
-        handleLogError(error)
+        handleLogError(error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchData()
-  }, [user])
+    fetchData();
+  }, []); 
 
   const handleInputChange = (e, { name, value }) => {
     if (name === 'orderDescription') {
