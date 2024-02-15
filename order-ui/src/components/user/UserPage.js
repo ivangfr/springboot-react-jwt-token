@@ -30,7 +30,7 @@ function UserPage() {
     }
 
     fetchData()
-  }, [user])
+  }, [])
 
   const handleInputChange = (e, { name, value }) => {
     if (name === 'orderDescription') {
