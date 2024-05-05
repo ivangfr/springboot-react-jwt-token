@@ -27,7 +27,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   
   `order-api` stores its data in [`Postgres`](https://www.postgresql.org/) database.
 
-  `order-api` has the following endpoints
+  `order-api` has the following endpoints:
 
   | Endpoint                                                      | Secured | Roles           |
   | ------------------------------------------------------------- | ------- | --------------- |
@@ -60,9 +60,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Start Environment
 
-- In a terminal, make sure you are inside `springboot-react-jwt-token` root folder
+- In a terminal, make sure you are inside `springboot-react-jwt-token` root folder;
 
-- Run the following command to start docker compose containers
+- Run the following command to start docker compose services:
   ```
   docker compose up -d
   ```
@@ -71,23 +71,23 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **order-api**
 
-  - Open a terminal and navigate to `springboot-react-jwt-token/order-api` folder
+  - Open a terminal and navigate to `springboot-react-jwt-token/order-api` folder;
 
-  - Run the following `Maven` command to start the application
+  - Run the following `Maven` command to start the application:
     ```
     ./mvnw clean spring-boot:run
     ```
 
 - **order-ui**
 
-  - Open another terminal and navigate to `springboot-react-jwt-token/order-ui` folder
+  - Open another terminal and navigate to `springboot-react-jwt-token/order-ui` folder;
 
-  - Run the command below if you are running the application for the first time
+  - Run the command below if you are running the application for the first time:
     ```
     npm install
     ```
 
-  - Run the `npm` command below to start the application
+  - Run the `npm` command below to start the application:
     ```
     npm start
     ```
@@ -99,15 +99,15 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 | order-api   | http://localhost:8080/swagger-ui.html |                                                     |
 | order-ui    | http://localhost:3000                 | `admin/admin`, `user/user` or signing up a new user |
 
-> **Note**: the credentials shown in the table are the ones already pre-defined. You can signup new users
+> **Note**: the credentials shown in the table are the ones already pre-defined. You can signup new users.
 
 ## Demo
 
-- The gif below shows a `user` loging in
+- The gif below shows a `user` loging in:
 
   ![user-login](documentation/user-login.gif)
 
-- The gif below shows an `admin` loging in
+- The gif below shows an `admin` loging in:
 
   ![admin-login](documentation/admin-login.gif)
 
@@ -115,40 +115,40 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **Manual Endpoints Test using Swagger**
   
-  - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token.
+  - Open a browser and access http://localhost:8080/swagger-ui.html. All endpoints with the lock sign are secured. In order to access them, you need a valid JWT access token;
 
-  - Click `POST /auth/authenticate` and then, click `Try it out` button
+  - Click `POST /auth/authenticate` and then, click `Try it out` button;
   
-  - Provide the `user` credentials `username` and `password`
+  - Provide the `user` credentials `username` and `password`:
     ```
     { "password": "user", "username": "user" }
     ```
   
-  - Click `Execute` button. It should return something like
+  - Click `Execute` button. It should return something like:
     ```
     Code: 200
     { "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9..." }
     ```
-    > **Note 1**: You can use the `admin` credentials to access more secured endpoints
+    > **Note 1**: You can use the `admin` credentials to access more secured endpoints.
     >
-    > **Note 2**: The token will expire in **10 minutes**
+    > **Note 2**: The token will expire in **10 minutes**.
 
-  - Copy the `accessToken` value (**without** the double quotes)
+  - Copy the `accessToken` value (**without** the double quotes);
   
-  - Click the `Authorize` button at the top of the page
+  - Click the `Authorize` button at the top of the page;
   
-  - In `Value` input field, paste the copied token
+  - In `Value` input field, paste the copied token;
   
-  - Click `Authorize` button and then, click `Close` button
+  - Click `Authorize` button and then, click `Close` button;
   
-  - To create an order, click `POST /api/orders` and then, click `Try it out` button
+  - To create an order, click `POST /api/orders` and then, click `Try it out` button;
 
-  - Provide the `description` of the order
+  - Provide the `description` of the order:
     ```
     { "description": "Buy two iPhones" }
     ```
 
-  - Click `Execute` button. It should return something like
+  - Click `Execute` button. It should return something like:
     ```
     Code: 200
     {
@@ -161,49 +161,49 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **Manual Endpoints Test using curl**
 
-  - Open a terminal
+  - Open a terminal;
   
-  - Call `GET /public/numberOfUsers`
+  - Call `GET /public/numberOfUsers`:
     ```
     curl -i localhost:8080/public/numberOfUsers
     ```
-    It should return
+    It should return:
     ```
     HTTP/1.1 200
     2
     ```
 
-  - Call `GET /api/orders` without JWT access token
+  - Call `GET /api/orders` without JWT access token:
     ```
     curl -i localhost:8080/api/orders
     ```
-    As for this endpoint a valid JWT access token is required, it should return
+    As for this endpoint a valid JWT access token is required, it should return:
     ```
     HTTP/1.1 401
     ```
 
-  - Call `POST /auth/authenticate` to get `admin` JWT access token
+  - Call `POST /auth/authenticate` to get `admin` JWT access token:
     ```
     ADMIN_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/authenticate \
       -H 'Content-Type: application/json' \
       -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)"
     ```
 
-  - Call again `GET /api/orders`, now with `admin` JWT access token
+  - Call again `GET /api/orders`, now with `admin` JWT access token:
     ```
     curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders
     ```
-    It should return an empty array or an array with orders
+    It should return an empty array or an array with orders:
     ```
     HTTP/1.1 200
     [ ... ]
     ```
 
-  - Call `GET /api/users/me` to get more information about the `admin`
+  - Call `GET /api/users/me` to get more information about the `admin`:
     ```
     curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users/me
     ```
-    It should return
+    It should return:
     ```
     HTTP/1.1 200
     {
@@ -214,13 +214,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **Automatic Endpoints Test**
 
-  - Open a terminal and make sure you are in `springboot-react-jwt-token` root folder
+  - Open a terminal and make sure you are in `springboot-react-jwt-token` root folder;
 
-  - Run the following script
+  - Run the following script:
     ```
     ./order-api/test-endpoints.sh
     ```
-    It should return something like the output below, where it shows the http code for different requests
+    It should return something like the output below, where it shows the http code for different requests:
     ```
     POST auth/authenticate
     ======================
@@ -271,18 +271,18 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Shutdown
 
-- To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`
+- To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`;
 
-- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside `springboot-react-jwt-token` root folder, run the command below
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside: `springboot-react-jwt-token` root folder, run the command below
   ```
   docker compose down -v
   ```
 
 ## How to upgrade order-ui dependencies to latest version
 
-- In a terminal, make sure you are in `springboot-react-jwt-token/order-ui` folder
+- In a terminal, make sure you are in `springboot-react-jwt-token/order-ui` folder;
 
-- Run the following commands
+- Run the following commands:
   ```
   npm upgrade
   npm i -g npm-check-updates
