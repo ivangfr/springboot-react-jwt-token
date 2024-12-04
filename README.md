@@ -187,6 +187,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ADMIN_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/authenticate \
       -H 'Content-Type: application/json' \
       -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)"
+    echo $ADMIN_ACCESS_TOKEN
     ```
 
   - Call again `GET /api/orders`, now with `admin` JWT access token:
