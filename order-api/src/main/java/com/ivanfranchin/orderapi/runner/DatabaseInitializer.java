@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.runner;
 
 import com.ivanfranchin.orderapi.model.User;
-import com.ivanfranchin.orderapi.security.WebSecurityConfig;
+import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private static final List<User> USERS = Arrays.asList(
-            new User("admin", "admin", "Admin", "admin@mycompany.com", WebSecurityConfig.ADMIN),
-            new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER)
+            new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
+            new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER)
     );
 }

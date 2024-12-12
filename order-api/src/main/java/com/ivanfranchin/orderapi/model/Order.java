@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +27,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 
     public Order(String description) {
         this.description = description;
@@ -35,6 +35,6 @@ public class Order {
 
     @PrePersist
     public void onPrePersist() {
-        createdAt = ZonedDateTime.now();
+        createdAt = Instant.now();
     }
 }

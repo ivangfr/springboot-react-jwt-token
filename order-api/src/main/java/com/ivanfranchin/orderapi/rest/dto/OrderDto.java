@@ -1,8 +1,8 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
-public record OrderDto(String id, String description, OrderDto.UserDto user, ZonedDateTime createdAt) {
+public record OrderDto(String id, String description, OrderDto.UserDto user, Instant createdAt) {
 
     public record UserDto(String username) {
     }

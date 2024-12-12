@@ -6,7 +6,7 @@ import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
 import com.ivanfranchin.orderapi.security.TokenProvider;
-import com.ivanfranchin.orderapi.security.WebSecurityConfig;
+import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
-        user.setRole(WebSecurityConfig.USER);
+        user.setRole(SecurityConfig.USER);
         return user;
     }
 }

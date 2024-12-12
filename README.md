@@ -60,7 +60,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Start Environment
 
-- In a terminal, make sure you are inside `springboot-react-jwt-token` root folder;
+- In a terminal, make sure you are inside the `springboot-react-jwt-token` root folder;
 
 - Run the following command to start docker compose containers:
   ```
@@ -71,7 +71,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **order-api**
 
-  - Open a terminal and navigate to `springboot-react-jwt-token/order-api` folder;
+  - Open a terminal and navigate to the `springboot-react-jwt-token/order-api` folder;
 
   - Run the following `Maven` command to start the application:
     ```
@@ -80,7 +80,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **order-ui**
 
-  - Open another terminal and navigate to `springboot-react-jwt-token/order-ui` folder;
+  - Open another terminal and navigate to the `springboot-react-jwt-token/order-ui` folder;
 
   - Run the command below if you are running the application for the first time:
     ```
@@ -215,7 +215,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **Automatic Endpoints Test**
 
-  - Open a terminal and make sure you are in `springboot-react-jwt-token` root folder;
+  - Open a terminal and make sure you are in the `springboot-react-jwt-token` root folder;
 
   - Run the following script:
     ```
@@ -274,14 +274,14 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`;
 
-- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside: `springboot-react-jwt-token` root folder, run the command below
+- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside the `springboot-react-jwt-token` root folder, run the command below:
   ```
   docker compose down -v
   ```
 
 ## How to upgrade order-ui dependencies to latest version
 
-- In a terminal, make sure you are in `springboot-react-jwt-token/order-ui` folder;
+- In a terminal, make sure you are in the `springboot-react-jwt-token/order-ui` folder;
 
 - Run the following commands:
   ```
