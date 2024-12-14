@@ -1,10 +1,10 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.mapper.UserMapper;
-import com.ivanfranchin.orderapi.security.CustomUserDetails;
-import com.ivanfranchin.orderapi.service.UserService;
+import com.ivanfranchin.orderapi.model.Order;
 import com.ivanfranchin.orderapi.model.User;
 import com.ivanfranchin.orderapi.rest.dto.UserDto;
+import com.ivanfranchin.orderapi.security.CustomUserDetails;
+import com.ivanfranchin.orderapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -26,26 +26,25 @@ import static com.ivanfranchin.orderapi.config.SwaggerConfig.BEARER_KEY_SECURITY
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
     public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername()));
+        return toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername()));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.getUsers().stream()
-                .map(userMapper::toUserDto)
+                .map(this::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/{username}")
     public UserDto getUser(@PathVariable String username) {
-        return userMapper.toUserDto(userService.validateAndGetUserByUsername(username));
+        return toUserDto(userService.validateAndGetUserByUsername(username));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -53,6 +52,15 @@ public class UserController {
     public UserDto deleteUser(@PathVariable String username) {
         User user = userService.validateAndGetUserByUsername(username);
         userService.deleteUser(user);
-        return userMapper.toUserDto(user);
+        return toUserDto(user);
+    }
+
+    private UserDto toUserDto(User user) {
+        List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
+        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders);
+    }
+
+    private UserDto.OrderDto toUserDtoOrderDto(Order order) {
+        return new UserDto.OrderDto(order.getId(), order.getDescription(), order.getCreatedAt());
     }
 }

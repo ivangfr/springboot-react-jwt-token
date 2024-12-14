@@ -1,6 +1,5 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.mapper.OrderMapper;
 import com.ivanfranchin.orderapi.model.Order;
 import com.ivanfranchin.orderapi.model.User;
 import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
@@ -37,14 +36,13 @@ public class OrderController {
 
     private final UserService userService;
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
     public List<OrderDto> getOrders(@RequestParam(value = "text", required = false) String text) {
         List<Order> orders = (text == null) ? orderService.getOrders() : orderService.getOrdersContainingText(text);
         return orders.stream()
-                .map(orderMapper::toOrderDto)
+                .map(this::toOrderDto)
                 .collect(Collectors.toList());
     }
 
@@ -54,10 +52,10 @@ public class OrderController {
     public OrderDto createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
                                 @Valid @RequestBody CreateOrderRequest createOrderRequest) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        Order order = orderMapper.toOrder(createOrderRequest);
+        Order order = toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order.setUser(user);
-        return orderMapper.toOrderDto(orderService.saveOrder(order));
+        return toOrderDto(orderService.saveOrder(order));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -65,6 +63,15 @@ public class OrderController {
     public OrderDto deleteOrders(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
         orderService.deleteOrder(order);
-        return orderMapper.toOrderDto(order);
+        return toOrderDto(order);
+    }
+
+    private Order toOrder(CreateOrderRequest createOrderRequest) {
+        return new Order(createOrderRequest.description());
+    }
+
+    private OrderDto toOrderDto(Order order) {
+        OrderDto.UserDto userDto = new OrderDto.UserDto(order.getUser().getUsername());
+        return new OrderDto(order.getId(), order.getDescription(), userDto, order.getCreatedAt());
     }
 }
