@@ -32,6 +32,6 @@ jobs:
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update Dependency Graph
-        run:|
-          cd order-api
-          mvn dependency:tree
+      run: |
+        cd order-api
+        mvn dependency:tree

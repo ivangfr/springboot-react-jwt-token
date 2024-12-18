@@ -1,0 +1,82 @@
+# CI Pipeline for the project
+
+name: CI
+
+on:
+    push: 
+        branches: [ "master" ]
+    pull_request: 
+        branches: [ "master" ]
+
+jobs:
+    super-lint:
+        runs-on: ubuntu-latest
+        
+        permissions:
+            contents: read
+            packages: read
+            statuses: write
+        
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: Super-linter
+              uses: super-linter/super-linter@v7.2.1
+              env: 
+                GITHUB_TOKEN: ${{ Secrets.GITHUB_TOKEN }}
+
+    build:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16.3
+                ports:
+                    - 5432:5432
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: orderdb
+                options: >-
+                    --health-cmd "pg_isready -U postgres -d orderdb"
+
+        steps:
+            - uses: action/checkout@v4
+
+            - name: Setup JDK 17
+              uses: action/setup-java@v4
+              with:
+                java-version: '17'
+                distributer: 'temurin'
+                cache: 'maven'
+
+            - name: Build with maven
+              run: |
+                cd order-api
+                mvn -B clean package -f pom.xml
+
+            - name: Update dependency graph
+              uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with: 
+                node-version: '18'
+
+            - name: Install frontend dependencies
+              run: |
+                cd order-ui
+                npm install
+
+            - name: Build Frontend
+              run: |
+                cd order-ui
+                npm run build
+
+            - name: Start frontend for verification
+              run: |
+                cd order-ui
+                npm start &
+                sleep 10
