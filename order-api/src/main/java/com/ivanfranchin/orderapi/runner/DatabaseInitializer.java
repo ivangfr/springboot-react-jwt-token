@@ -1,8 +1,8 @@
 package com.ivanfranchin.orderapi.runner;
 
-import com.ivanfranchin.orderapi.model.User;
+import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
-import com.ivanfranchin.orderapi.service.UserService;
+import com.ivanfranchin.orderapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

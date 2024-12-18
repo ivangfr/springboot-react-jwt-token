@@ -1,12 +1,12 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.model.Order;
-import com.ivanfranchin.orderapi.model.User;
+import com.ivanfranchin.orderapi.order.Order;
+import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
 import com.ivanfranchin.orderapi.rest.dto.OrderDto;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
-import com.ivanfranchin.orderapi.service.OrderService;
-import com.ivanfranchin.orderapi.service.UserService;
+import com.ivanfranchin.orderapi.order.OrderService;
+import com.ivanfranchin.orderapi.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

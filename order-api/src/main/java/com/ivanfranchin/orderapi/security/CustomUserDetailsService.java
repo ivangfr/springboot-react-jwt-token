@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.security;
 
-import com.ivanfranchin.orderapi.service.UserService;
-import com.ivanfranchin.orderapi.model.User;
+import com.ivanfranchin.orderapi.user.UserService;
+import com.ivanfranchin.orderapi.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

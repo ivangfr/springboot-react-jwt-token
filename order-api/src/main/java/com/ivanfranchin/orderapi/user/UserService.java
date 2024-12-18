@@ -1,6 +1,4 @@
-package com.ivanfranchin.orderapi.service;
-
-import com.ivanfranchin.orderapi.model.User;
+package com.ivanfranchin.orderapi.user;
 
 import java.util.List;
 import java.util.Optional;

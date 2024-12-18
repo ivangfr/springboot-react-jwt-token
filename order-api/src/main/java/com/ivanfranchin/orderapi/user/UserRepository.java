@@ -1,6 +1,5 @@
-package com.ivanfranchin.orderapi.repository;
+package com.ivanfranchin.orderapi.user;
 
-import com.ivanfranchin.orderapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

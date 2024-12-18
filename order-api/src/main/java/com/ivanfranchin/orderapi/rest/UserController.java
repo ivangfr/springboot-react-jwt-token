@@ -1,9 +1,9 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.model.User;
+import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.rest.dto.UserDto;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
-import com.ivanfranchin.orderapi.service.UserService;
+import com.ivanfranchin.orderapi.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,13 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.exception.DuplicatedUserInfoException;
-import com.ivanfranchin.orderapi.model.User;
 import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
+import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
-import com.ivanfranchin.orderapi.service.UserService;
+import com.ivanfranchin.orderapi.user.DuplicatedUserInfoException;
+import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class AuthController {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.email()));
         }
 
-        userService.saveUser(User.from(signUpRequest));
+        userService.saveUser(this.mapSignUpRequestToUser(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.username(), signUpRequest.password());
         return new AuthResponse(token);
@@ -55,5 +56,15 @@ public class AuthController {
     private String authenticateAndGetToken(String username, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication);
+    }
+
+    private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {
+        User user = new User();
+        user.setUsername(signUpRequest.username());
+        user.setPassword(passwordEncoder.encode(signUpRequest.password()));
+        user.setName(signUpRequest.name());
+        user.setEmail(signUpRequest.email());
+        user.setRole(SecurityConfig.USER);
+        return user;
     }
 }

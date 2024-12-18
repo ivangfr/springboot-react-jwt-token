@@ -1,6 +1,6 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
-import com.ivanfranchin.orderapi.model.Order;
+import com.ivanfranchin.orderapi.order.Order;
 
 import java.time.Instant;
 

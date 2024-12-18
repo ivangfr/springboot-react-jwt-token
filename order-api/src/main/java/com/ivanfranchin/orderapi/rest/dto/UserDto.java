@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
-import com.ivanfranchin.orderapi.model.Order;
-import com.ivanfranchin.orderapi.model.User;
+import com.ivanfranchin.orderapi.order.Order;
+import com.ivanfranchin.orderapi.user.User;
 
 import java.time.Instant;
 import java.util.List;

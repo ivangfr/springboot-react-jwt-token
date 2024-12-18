@@ -1,6 +1,4 @@
-package com.ivanfranchin.orderapi.service;
-
-import com.ivanfranchin.orderapi.model.Order;
+package com.ivanfranchin.orderapi.order;
 
 import java.util.List;
 

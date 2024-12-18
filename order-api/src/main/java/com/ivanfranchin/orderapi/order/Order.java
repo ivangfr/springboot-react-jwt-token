@@ -1,5 +1,6 @@
-package com.ivanfranchin.orderapi.model;
+package com.ivanfranchin.orderapi.order;
 
+import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
