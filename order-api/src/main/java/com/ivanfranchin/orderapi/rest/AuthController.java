@@ -5,7 +5,6 @@ import com.ivanfranchin.orderapi.model.User;
 import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.service.UserService;
 import jakarta.validation.Valid;
@@ -47,7 +46,7 @@ public class AuthController {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.email()));
         }
 
-        userService.saveUser(mapSignUpRequestToUser(signUpRequest));
+        userService.saveUser(User.from(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.username(), signUpRequest.password());
         return new AuthResponse(token);
@@ -56,15 +55,5 @@ public class AuthController {
     private String authenticateAndGetToken(String username, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication);
-    }
-
-    private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {
-        User user = new User();
-        user.setUsername(signUpRequest.username());
-        user.setPassword(passwordEncoder.encode(signUpRequest.password()));
-        user.setName(signUpRequest.name());
-        user.setEmail(signUpRequest.email());
-        user.setRole(SecurityConfig.USER);
-        return user;
     }
 }

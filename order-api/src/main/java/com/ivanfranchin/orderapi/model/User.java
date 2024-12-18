@@ -1,5 +1,7 @@
 package com.ivanfranchin.orderapi.model;
 
+import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
+import com.ivanfranchin.orderapi.security.SecurityConfig;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,5 +44,15 @@ public class User {
         this.name = name;
         this.email = email;
         this.role = role;
+    }
+
+    public static User from(SignUpRequest signUpRequest) {
+        return new User(
+                signUpRequest.username(),
+                signUpRequest.password(),
+                signUpRequest.name(),
+                signUpRequest.email(),
+                SecurityConfig.USER
+        );
     }
 }

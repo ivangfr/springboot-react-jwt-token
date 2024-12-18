@@ -1,6 +1,5 @@
 package com.ivanfranchin.orderapi.rest;
 
-import com.ivanfranchin.orderapi.model.Order;
 import com.ivanfranchin.orderapi.model.User;
 import com.ivanfranchin.orderapi.rest.dto.UserDto;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
@@ -30,21 +29,21 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
     public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername()));
+        return UserDto.from(userService.validateAndGetUserByUsername(currentUser.getUsername()));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.getUsers().stream()
-                .map(this::toUserDto)
+                .map(UserDto::from)
                 .collect(Collectors.toList());
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/{username}")
     public UserDto getUser(@PathVariable String username) {
-        return toUserDto(userService.validateAndGetUserByUsername(username));
+        return UserDto.from(userService.validateAndGetUserByUsername(username));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -52,15 +51,6 @@ public class UserController {
     public UserDto deleteUser(@PathVariable String username) {
         User user = userService.validateAndGetUserByUsername(username);
         userService.deleteUser(user);
-        return toUserDto(user);
-    }
-
-    private UserDto toUserDto(User user) {
-        List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
-        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders);
-    }
-
-    private UserDto.OrderDto toUserDtoOrderDto(Order order) {
-        return new UserDto.OrderDto(order.getId(), order.getDescription(), order.getCreatedAt());
+        return UserDto.from(user);
     }
 }
