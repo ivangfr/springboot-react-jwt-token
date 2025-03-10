@@ -21,9 +21,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - ### order-api
 
-  `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve and delete orders. If a user has `ADMIN` role he/she can also retrieve information of other users or delete them.
+  `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve, and delete orders. If a user has the `ADMIN` role, he/she can also retrieve information of other users or delete them.
   
-  The application secured endpoints can just be accessed if a valid JWT access token is provided.
+  The application's secured endpoints can only be accessed if a valid JWT access token is provided.
   
   `order-api` stores its data in [`Postgres`](https://www.postgresql.org/) database.
 
@@ -47,9 +47,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
   `React` frontend application where a user with role `USER` can create an order and retrieve a specific order. On the other hand, a user with role `ADMIN` as access to all secured endpoints.
   
-  In order to access the application, a `user` or `admin` must login using his/her `username` and `password`. All the requests coming from `order-ui` to secured endpoints in `order-api` have the JWT access token. This token is generated when the `user` or `admin` logins.
+  In order to access the application, a `user` or `admin` must log in using his/her `username` and `password`. All the requests coming from `order-ui` to secured endpoints in `order-api` include the JWT access token. This token is generated when the `user` or `admin` logs in.
   
-  `order-ui` uses [`Semantic UI React`](https://react.semantic-ui.com/) as CSS-styled framework.
+  `order-ui` uses [`Semantic UI React`](https://react.semantic-ui.com/) as a CSS-styled framework.
 
 ## Prerequisites
 
@@ -62,7 +62,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - In a terminal, make sure you are inside the `springboot-react-jwt-token` root folder;
 
-- Run the following command to start docker compose containers:
+- Run the following command to start Docker Compose containers:
   ```
   docker compose up -d
   ```
@@ -124,7 +124,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     { "password": "user", "username": "user" }
     ```
   
-  - Click `Execute` button. It should return something like:
+  - Click the `Execute` button. It should return something like:
     ```
     Code: 200
     { "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9..." }
@@ -139,16 +139,16 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   
   - In `Value` input field, paste the copied token;
   
-  - Click `Authorize` button and then, click `Close` button;
+  - Click the `Authorize` button and then, click the `Close` button;
   
-  - To create an order, click `POST /api/orders` and then, click `Try it out` button;
+  - To create an order, click `POST /api/orders` and then, click the `Try it out` button;
 
   - Provide the `description` of the order:
     ```
     { "description": "Buy two iPhones" }
     ```
 
-  - Click `Execute` button. It should return something like:
+  - Click the `Execute` button. It should return something like:
     ```
     Code: 200
     {
@@ -182,7 +182,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     HTTP/1.1 401
     ```
 
-  - Call `POST /auth/authenticate` to get `admin` JWT access token:
+  - Call `POST /auth/authenticate` to get the `admin` JWT access token:
     ```
     ADMIN_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/authenticate \
       -H 'Content-Type: application/json' \
@@ -190,7 +190,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     echo $ADMIN_ACCESS_TOKEN
     ```
 
-  - Call again `GET /api/orders`, now with `admin` JWT access token:
+  - Call `GET /api/orders` again, now with the `admin` JWT access token:
     ```
     curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders
     ```
@@ -268,13 +268,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 - **jwt.io**
 
-  With [jwt.io](https://jwt.io) you can inform the JWT token and the online tool decodes the token, showing its header and payload.
+  With [jwt.io](https://jwt.io), you can input the JWT token, and the online tool decodes the token, showing its header and payload.
 
 ## Shutdown
 
 - To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`;
 
-- To stop and remove docker compose containers, network and volumes, go to a terminal and, inside the `springboot-react-jwt-token` root folder, run the command below:
+- To stop and remove Docker Compose containers, network, and volumes, go to a terminal and, inside the `springboot-react-jwt-token` root folder, run the command below:
   ```
   docker compose down -v
   ```
