@@ -54,8 +54,8 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 ## Prerequisites
 
 - [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [`Java 21+`](https://www.oracle.com/java/technologies/downloads/#java21)
-- Some containerization tool [`Docker`](https://www.docker.com/), [`Podman`](https://podman.io/), etc.
+- [`Java 21`](https://www.oracle.com/java/technologies/downloads/#java21) or higher;
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
 - [`jq`](https://jqlang.github.io/jq/)
 
 ## Start Environment
@@ -63,7 +63,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - In a terminal, make sure you are inside the `springboot-react-jwt-token` root folder;
 
 - Run the following command to start Docker Compose containers:
-  ```
+  ```bash
   docker compose up -d
   ```
 
@@ -74,7 +74,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Open a terminal and navigate to the `springboot-react-jwt-token/order-api` folder;
 
   - Run the following `Maven` command to start the application:
-    ```
+    ```bash
     ./mvnw clean spring-boot:run
     ```
 
@@ -83,12 +83,12 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Open another terminal and navigate to the `springboot-react-jwt-token/order-ui` folder;
 
   - Run the command below if you are running the application for the first time:
-    ```
+    ```bash
     npm install
     ```
 
   - Run the `npm` command below to start the application:
-    ```
+    ```bash
     npm start
     ```
 
@@ -120,12 +120,12 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Click `POST /auth/authenticate` and then, click `Try it out` button;
   
   - Provide the `user` credentials `username` and `password`:
-    ```
+    ```json
     { "password": "user", "username": "user" }
     ```
   
   - Click the `Execute` button. It should return something like:
-    ```
+    ```text
     Code: 200
     { "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9..." }
     ```
@@ -144,12 +144,12 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - To create an order, click `POST /api/orders` and then, click the `Try it out` button;
 
   - Provide the `description` of the order:
-    ```
+    ```json
     { "description": "Buy two iPhones" }
     ```
 
   - Click the `Execute` button. It should return something like:
-    ```
+    ```text
     Code: 200
     {
       "id": "718c9f40-5c06-4571-bc3e-3f888c52eff2",
@@ -164,26 +164,26 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Open a terminal;
   
   - Call `GET /public/numberOfUsers`:
-    ```
+    ```bash
     curl -i localhost:8080/public/numberOfUsers
     ```
     It should return:
-    ```
+    ```text
     HTTP/1.1 200
     2
     ```
 
   - Call `GET /api/orders` without JWT access token:
-    ```
+    ```bash
     curl -i localhost:8080/api/orders
     ```
     As for this endpoint a valid JWT access token is required, it should return:
-    ```
+    ```text
     HTTP/1.1 401
     ```
 
   - Call `POST /auth/authenticate` to get the `admin` JWT access token:
-    ```
+    ```bash
     ADMIN_ACCESS_TOKEN="$(curl -s -X POST http://localhost:8080/auth/authenticate \
       -H 'Content-Type: application/json' \
       -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)"
@@ -191,21 +191,21 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
     ```
 
   - Call `GET /api/orders` again, now with the `admin` JWT access token:
-    ```
+    ```bash
     curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders
     ```
     It should return an empty array or an array with orders:
-    ```
+    ```text
     HTTP/1.1 200
     [ ... ]
     ```
 
   - Call `GET /api/users/me` to get more information about the `admin`:
-    ```
+    ```bash
     curl -i -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users/me
     ```
     It should return:
-    ```
+    ```text
     HTTP/1.1 200
     {
       "id": 1, "username": "admin", "name": "Admin", "email": "admin@mycompany.com", "role": "ADMIN",
@@ -218,11 +218,11 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Open a terminal and make sure you are in the `springboot-react-jwt-token` root folder;
 
   - Run the following script:
-    ```
+    ```bash
     ./order-api/test-endpoints.sh
     ```
     It should return something like the output below, where it shows the http code for different requests:
-    ```
+    ```text
     POST auth/authenticate
     ======================
     admin access token
@@ -261,7 +261,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 ## Util Commands
 
 - **Postgres**
-  ```
+  ```bash
   docker exec -it postgres psql -U postgres -d orderdb
   \dt
   ```
@@ -275,7 +275,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - To stop `order-api` and `order-ui`, go to the terminals where they are running and press `Ctrl+C`;
 
 - To stop and remove Docker Compose containers, network, and volumes, go to a terminal and, inside the `springboot-react-jwt-token` root folder, run the command below:
-  ```
+  ```bash
   docker compose down -v
   ```
 
@@ -284,7 +284,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - In a terminal, make sure you are in the `springboot-react-jwt-token/order-ui` folder;
 
 - Run the following commands:
-  ```
+  ```bash
   npm upgrade
   npm i -g npm-check-updates
   ncu -u
