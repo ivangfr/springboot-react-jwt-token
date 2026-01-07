@@ -1,16 +1,16 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-declare -A public_number_of_users
-declare -A public_number_of_orders
+typeset -A public_number_of_users
+typeset -A public_number_of_orders
 
-declare -A user_get_me
-declare -A user_get_users
-declare -A user_get_user
-declare -A user_delete_user
+typeset -A user_get_me
+typeset -A user_get_users
+typeset -A user_get_user
+typeset -A user_delete_user
 
-declare -A order_get_orders
-declare -A order_create_order
-declare -A order_delete_order
+typeset -A order_get_orders
+typeset -A order_create_order
+typeset -A order_delete_order
 
 ADMIN_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)
 USER_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "user", "password": "user"}' | jq -r .accessToken)
