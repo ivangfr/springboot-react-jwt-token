@@ -18,7 +18,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Project Diagram
 
-![project-diagram](documentation/project-diagram.jpeg)
+![project-diagram](documentation/project-diagram.png)
 
 ## Applications
 
@@ -126,13 +126,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Demo
 
-- The gif below shows a `user` loging in:
-
-  ![user-login](documentation/user-login.gif)
-
 - The gif below shows an `admin` loging in:
 
   ![admin-login](documentation/admin-login.gif)
+
+- The gif below shows a `user` loging in:
+
+  ![user-login](documentation/user-login.gif)
 
 ## Testing order-api Endpoints
 
@@ -314,9 +314,9 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   npm install
   ```
 
-## How to upgrade GIFs
+## How to optimize GIFs and PNGs in documentation folder
 
-TODO - Add Medium article about how to record and optimize GIFs.
+\[**Medium**\] [**How I Reduce GIF and Screenshot Sizes for My Technical Articles on macOS**](https://medium.com/itnext/how-i-reduce-gif-and-screenshot-sizes-for-my-technical-articles-on-macos-7fea331afc68)
 
 ## Support
 
