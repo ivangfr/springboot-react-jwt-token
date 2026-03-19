@@ -1,9 +1,8 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { render, makeRegularUser, seedLocalStorage } from '../../test-utils'
+import { render, makeRegularUser, seedLocalStorage, makeToken } from '../../test-utils'
 import Login from './Login'
 import { orderApi } from '../misc/OrderApi'
-import { makeToken } from '../../test-utils'
 
 vi.mock('../misc/OrderApi')
 
