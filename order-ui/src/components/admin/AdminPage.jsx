@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Container } from 'semantic-ui-react'
+import { Container } from '@mantine/core'
 import { useAuth } from '../context/AuthContext'
 import AdminTab from './AdminTab'
 import { orderApi } from '../misc/OrderApi'
@@ -23,9 +23,10 @@ function AdminPage() {
     setIsAdmin(user.data.rol[0] === 'ADMIN')
     handleGetUsers()
     handleGetOrders()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleInputChange = (e, { name, value }) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
     if (name === 'userUsernameSearch') {
       setUserUsernameSearch(value)
     } else if (name === 'orderDescription') {
@@ -56,7 +57,8 @@ function AdminPage() {
     }
   }
 
-  const handleSearchUser = async () => {
+  const handleSearchUser = async (e) => {
+    e.preventDefault()
     const username = userUsernameSearch
     try {
       const response = await orderApi.getUsers(user, username)
@@ -81,17 +83,18 @@ function AdminPage() {
     }
   }
 
-  const handleDeleteOrder = async (isbn) => {
+  const handleDeleteOrder = async (orderId) => {
     try {
-      await orderApi.deleteOrder(user, isbn)
+      await orderApi.deleteOrder(user, orderId)
       handleGetOrders()
     } catch (error) {
       handleLogError(error)
     }
   }
 
-  const handleCreateOrder = async () => {
-    let description = orderDescription.trim()
+  const handleCreateOrder = async (e) => {
+    e.preventDefault()
+    const description = orderDescription.trim()
     if (!description) {
       return
     }
@@ -106,7 +109,8 @@ function AdminPage() {
     }
   }
 
-  const handleSearchOrder = async () => {
+  const handleSearchOrder = async (e) => {
+    e.preventDefault()
     const text = orderTextSearch
     try {
       const response = await orderApi.getOrders(user, text)

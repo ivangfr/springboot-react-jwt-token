@@ -1,0 +1,115 @@
+import React, { useState } from 'react'
+import { NavLink, Navigate } from 'react-router-dom'
+import { TextInput, PasswordInput, Button, Paper, Stack, Alert, Anchor, Center, Box } from '@mantine/core'
+import { IconInfoCircle } from '@tabler/icons-react'
+import { useAuth } from '../context/AuthContext'
+import { orderApi } from '../misc/OrderApi'
+import { parseJwt, handleLogError } from '../misc/Helpers'
+
+function Signup() {
+  const Auth = useAuth()
+  const isLoggedIn = Auth.userIsAuthenticated()
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!(username && password && name && email)) {
+      setIsError(true)
+      setErrorMessage('Please, inform all fields!')
+      return
+    }
+
+    const user = { username, password, name, email }
+
+    try {
+      const response = await orderApi.signup(user)
+      const { accessToken } = response.data
+      const data = parseJwt(accessToken)
+      const authenticatedUser = { data, accessToken }
+
+      Auth.userLogin(authenticatedUser)
+
+      setUsername('')
+      setPassword('')
+      setName('')
+      setEmail('')
+      setIsError(false)
+      setErrorMessage('')
+    } catch (error) {
+      handleLogError(error)
+      let errorMessage = 'An unexpected error occurred. Please try again.'
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        errorMessage = 'Invalid fields'
+        if (errorData.status === 409) {
+          errorMessage = errorData.message
+        } else if (errorData.status === 400) {
+          errorMessage = errorData.errors[0].defaultMessage
+        }
+      }
+      setIsError(true)
+      setErrorMessage(errorMessage)
+    }
+  }
+
+  if (isLoggedIn) {
+    return <Navigate to='/' />
+  }
+
+  return (
+    <Center mt='xl'>
+      <Box w={450}>
+        <form onSubmit={handleSubmit}>
+          <Paper withBorder p='xl' radius='md'>
+            <Stack>
+              <TextInput
+                autoFocus
+                name='username'
+                placeholder='Username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <PasswordInput
+                name='password'
+                placeholder='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <TextInput
+                name='name'
+                placeholder='Name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <TextInput
+                name='email'
+                placeholder='Email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button type='submit' color='violet' fullWidth>Sign Up</Button>
+            </Stack>
+          </Paper>
+        </form>
+        <Paper withBorder p='sm' radius='md' mt='sm' ta='center'>
+          Already have an account?{' '}
+          <Anchor component={NavLink} to='/login' c='violet'>Login</Anchor>
+        </Paper>
+        {isError && (
+          <Alert color='red' variant='light' mt='sm' icon={<IconInfoCircle />}>
+            {errorMessage}
+          </Alert>
+        )}
+      </Box>
+    </Center>
+  )
+}
+
+export default Signup

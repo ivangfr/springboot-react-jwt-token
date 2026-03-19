@@ -10,4 +10,4 @@ const dev = {
   }
 }
 
-export const config = process.env.NODE_ENV === 'development' ? dev : prod
+export const config = import.meta.env.DEV ? dev : prod
