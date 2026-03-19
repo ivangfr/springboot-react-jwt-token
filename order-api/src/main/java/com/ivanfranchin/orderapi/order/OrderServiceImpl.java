@@ -17,6 +17,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public long countOrders() {
+        return orderRepository.count();
+    }
+
+    @Override
     public List<Order> getOrdersContainingText(String text) {
         return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(text, text);
     }

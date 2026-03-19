@@ -4,7 +4,7 @@
 
 Full-stack monorepo with:
 - **`order-api/`** — Spring Boot 4.0.1 REST API (Java 25, PostgreSQL, JWT auth)
-- **`order-ui/`** — React 18 SPA (JavaScript, CRA 5, Axios, Semantic UI React)
+- **`order-ui/`** — React 19 SPA (JavaScript, Vite 6, Axios, Mantine)
 
 Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backend uses domain-grouped packaging; the frontend uses feature-grouped folders.
 
@@ -50,20 +50,17 @@ npm start
 # Production build
 npm run build
 
-# Run all tests (watch mode)
+# Run all tests (CI mode — runs once and exits)
 npm test
 
-# Run tests once (CI mode)
-npm test -- --watchAll=false
-
 # Run a single test file by path pattern
-npm test -- --testPathPattern="src/components/home/Login"
+npm test -- src/components/home/Login
 
-# Run a single test by name
-npm test -- --testNamePattern="renders login"
+# Run tests matching a name pattern
+npm test -- -t "renders login"
 ```
 
-> **Note:** There are no frontend test spec files yet. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` already imports `@testing-library/jest-dom`.
+> **Note:** There are no frontend test spec files yet. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` registers `@testing-library/jest-dom` matchers via `expect.extend()` and mocks `matchMedia` and `localStorage` for Mantine compatibility.
 
 ### Integration Tests
 
@@ -154,7 +151,7 @@ npm test -- --testNamePattern="renders login"
 **Imports (order by convention):**
 1. React (`import React from 'react'`)
 2. React ecosystem (`react-router-dom`, context hooks)
-3. Semantic UI React components
+3. Mantine / Tabler Icons components
 4. Local utilities (`OrderApi`, `Helpers`)
 5. CSS files last
 
@@ -187,12 +184,12 @@ npm test -- --testNamePattern="renders login"
 - Mock dependencies with `@MockitoBean` (Spring Boot 4+ replacement for `@MockBean`)
 - Use `@WithMockUser` from Spring Security Test for authenticated endpoint tests
 
-### Frontend (Jest + React Testing Library)
+### Frontend (Vitest + React Testing Library)
 - Place test files as `ComponentName.test.js` co-located with the component
 - Use `@testing-library/user-event` for simulating user interactions
 - Use `@testing-library/jest-dom` matchers (`toBeInTheDocument`, `toHaveValue`, etc.)
-- Mock `OrderApi.js` calls with `jest.mock('../misc/OrderApi')`
-- Run a single test: `npm test -- --testPathPattern="ComponentName"`
+- Mock `OrderApi.js` calls with `vi.mock('../misc/OrderApi')`
+- Run a single test: `npm test -- src/components/path/ComponentName`
 
 ---
 

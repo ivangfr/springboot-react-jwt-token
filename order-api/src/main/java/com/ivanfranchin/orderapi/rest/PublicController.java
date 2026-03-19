@@ -16,12 +16,12 @@ public class PublicController {
     private final OrderService orderService;
 
     @GetMapping("/numberOfUsers")
-    public Integer getNumberOfUsers() {
-        return userService.getUsers().size();
+    public long getNumberOfUsers() {
+        return userService.countUsers();
     }
 
     @GetMapping("/numberOfOrders")
-    public Integer getNumberOfOrders() {
-        return orderService.getOrders().size();
+    public long getNumberOfOrders() {
+        return orderService.countOrders();
     }
 }

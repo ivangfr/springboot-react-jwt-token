@@ -1,5 +1,7 @@
 package com.ivanfranchin.orderapi.user;
 
+import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
+import com.ivanfranchin.orderapi.security.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public long countUsers() {
+        return userRepository.count();
     }
 
     @Override
@@ -40,6 +47,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createUser(SignUpRequest request, String encodedPassword) {
+        User user = new User(
+                request.username(),
+                encodedPassword,
+                request.name(),
+                request.email(),
+                SecurityConfig.USER
+        );
         return userRepository.save(user);
     }
 

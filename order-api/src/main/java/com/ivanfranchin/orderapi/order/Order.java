@@ -1,7 +1,6 @@
 package com.ivanfranchin.orderapi.order;
 
 import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -38,9 +37,5 @@ public class Order {
     @PrePersist
     public void onPrePersist() {
         createdAt = Instant.now();
-    }
-
-    public static Order from(CreateOrderRequest createOrderRequest) {
-        return new Order(createOrderRequest.description());
     }
 }

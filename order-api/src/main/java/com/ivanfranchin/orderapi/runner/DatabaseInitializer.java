@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         log.info("Database initialized");
     }
 
-    private static final List<User> USERS = Arrays.asList(
+    private static final List<User> USERS = List.of(
             new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
             new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER)
     );

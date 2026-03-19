@@ -3,10 +3,8 @@ package com.ivanfranchin.orderapi.rest;
 import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.DuplicatedUserInfoException;
-import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/authenticate")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
@@ -41,13 +39,13 @@ public class AuthController {
     @PostMapping("/signup")
     public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.username())) {
-            throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.username()));
+            throw new DuplicatedUserInfoException(String.format("Username %s is already in use", signUpRequest.username()));
         }
         if (userService.hasUserWithEmail(signUpRequest.email())) {
-            throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.email()));
+            throw new DuplicatedUserInfoException(String.format("Email %s is already in use", signUpRequest.email()));
         }
 
-        userService.saveUser(this.mapSignUpRequestToUser(signUpRequest));
+        userService.createUser(signUpRequest, passwordEncoder.encode(signUpRequest.password()));
 
         String token = authenticateAndGetToken(signUpRequest.username(), signUpRequest.password());
         return new AuthResponse(token);
@@ -56,15 +54,5 @@ public class AuthController {
     private String authenticateAndGetToken(String username, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication);
-    }
-
-    private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {
-        User user = new User();
-        user.setUsername(signUpRequest.username());
-        user.setPassword(passwordEncoder.encode(signUpRequest.password()));
-        user.setName(signUpRequest.name());
-        user.setEmail(signUpRequest.email());
-        user.setRole(SecurityConfig.USER);
-        return user;
     }
 }
