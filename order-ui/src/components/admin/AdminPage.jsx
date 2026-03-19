@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Container } from '@mantine/core'
 import { useAuth } from '../context/AuthContext'

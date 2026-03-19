@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen } from '@testing-library/react'
 import { render, makeRegularUser, makeExpiredUser, seedLocalStorage } from '../../test-utils'
 import PrivateRoute from './PrivateRoute'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Group, TextInput, Button } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 

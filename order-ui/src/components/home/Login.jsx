@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
 import { TextInput, PasswordInput, Button, Paper, Stack, Alert, Anchor, Center, Box } from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
@@ -52,12 +52,14 @@ function Login() {
               <TextInput
                 autoFocus
                 name='username'
+                label='Username'
                 placeholder='Username'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
               <PasswordInput
                 name='password'
+                label='Password'
                 placeholder='Password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

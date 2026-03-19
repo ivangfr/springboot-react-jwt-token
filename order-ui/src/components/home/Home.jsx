@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SimpleGrid, Paper, Text, Container, Box, LoadingOverlay } from '@mantine/core'
 import { IconUsers, IconDeviceLaptop } from '@tabler/icons-react'
 import { orderApi } from '../misc/OrderApi'

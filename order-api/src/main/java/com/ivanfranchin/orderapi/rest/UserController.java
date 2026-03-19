@@ -28,7 +28,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
     public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return UserDto.from(currentUser);
+        return UserDto.from(userService.validateAndGetUserByUsername(currentUser.getUsername()));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})

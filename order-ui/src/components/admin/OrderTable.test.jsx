@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen, fireEvent, within } from '@testing-library/react'
 import { render } from '../../test-utils'
 import OrderTable from './OrderTable'

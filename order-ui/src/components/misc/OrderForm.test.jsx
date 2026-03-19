@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen, fireEvent } from '@testing-library/react'
 import { render } from '../../test-utils'
 import OrderForm from './OrderForm'

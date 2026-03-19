@@ -63,6 +63,8 @@ class UserControllerTest {
     @Test
     void getMe_returns200AsUser() throws Exception {
         CustomUserDetails userDetails = buildCustomUserDetails("user", "USER");
+        User user = buildUser("user", "USER");
+        when(userService.validateAndGetUserByUsername("user")).thenReturn(user);
 
         mockMvc.perform(get("/api/users/me").with(user(userDetails)))
                 .andExpect(status().isOk())
@@ -72,6 +74,8 @@ class UserControllerTest {
     @Test
     void getMe_returns200AsAdmin() throws Exception {
         CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
+        User admin = buildUser("admin", "ADMIN");
+        when(userService.validateAndGetUserByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(get("/api/users/me").with(user(adminDetails)))
                 .andExpect(status().isOk())

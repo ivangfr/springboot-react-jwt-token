@@ -1,13 +1,10 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
 import com.ivanfranchin.orderapi.order.Order;
-import com.ivanfranchin.orderapi.security.CustomUserDetails;
 import com.ivanfranchin.orderapi.user.User;
 
 import java.time.Instant;
 import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
 
 public record UserDto(Long id, String username, String name, String email, String role, List<OrderDto> orders) {
 
@@ -30,22 +27,6 @@ public record UserDto(Long id, String username, String name, String email, Strin
                 user.getEmail(),
                 user.getRole(),
                 orders
-        );
-    }
-
-    public static UserDto from(CustomUserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse(null);
-
-        return new UserDto(
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getName(),
-                userDetails.getEmail(),
-                role,
-                List.of()
         );
     }
 }

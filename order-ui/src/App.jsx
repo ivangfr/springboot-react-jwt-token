@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AppShell } from '@mantine/core'
 import { AuthProvider } from './components/context/AuthContext'

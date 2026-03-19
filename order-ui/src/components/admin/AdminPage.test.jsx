@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import { render, makeAdminUser, makeToken, seedLocalStorage } from '../../test-utils'
 import AdminPage from './AdminPage'

@@ -1,6 +1,4 @@
-import React from 'react'
-import { render } from '@testing-library/react'
-import { screen, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import { makeAdminUser, makeRegularUser, makeExpiredUser, seedLocalStorage } from '../../test-utils'
 import { AuthProvider, useAuth } from './AuthContext'
 import { MantineProvider } from '@mantine/core'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Grid, Group, TextInput, ActionIcon, Table } from '@mantine/core'
 import { IconSearch, IconTrash } from '@tabler/icons-react'
 import OrderForm from '../misc/OrderForm'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen, fireEvent } from '@testing-library/react'
 import { render, makeAdminUser, makeRegularUser, seedLocalStorage } from '../../test-utils'
 import { AppShell } from '@mantine/core'
