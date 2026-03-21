@@ -52,14 +52,13 @@ public class OrderController {
                                 @Valid @RequestBody CreateOrderRequest createOrderRequest) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         Order order = createOrderRequest.toDomain();
-        order.setId(UUID.randomUUID().toString());
         order.setUser(user);
         return OrderDto.from(orderService.saveOrder(order));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{id}")
-    public OrderDto deleteOrders(@PathVariable UUID id) {
+    public OrderDto deleteOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
         orderService.deleteOrder(order);
         return OrderDto.from(order);

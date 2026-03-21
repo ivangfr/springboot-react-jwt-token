@@ -1,6 +1,7 @@
 package com.ivanfranchin.orderapi.order;
 
 import com.ivanfranchin.orderapi.user.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class Order {
     @Id
     private String id;
 
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +39,9 @@ public class Order {
 
     @PrePersist
     public void onPrePersist() {
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+        }
         createdAt = Instant.now();
     }
 }

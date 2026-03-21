@@ -24,15 +24,16 @@ public class DatabaseInitializer implements CommandLineRunner {
         if (!userService.getUsers().isEmpty()) {
             return;
         }
-        USERS.forEach(user -> {
+        getUsers().forEach(user -> {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
         });
         log.info("Database initialized");
     }
 
-    private static final List<User> USERS = List.of(
-            new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
-            new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER)
-    );
+    private List<User> getUsers() {
+        return List.of(
+                new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
+                new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER));
+    }
 }

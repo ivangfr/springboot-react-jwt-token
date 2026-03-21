@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +39,9 @@ class AuthControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private PasswordEncoder passwordEncoder;
 
     @MockitoBean
     private AuthenticationManager authenticationManager;
@@ -91,7 +95,7 @@ class AuthControllerTest {
         SignUpRequest request = new SignUpRequest("newuser", "password", "New User", "new@example.com");
         when(userService.hasUserWithUsername("newuser")).thenReturn(false);
         when(userService.hasUserWithEmail("new@example.com")).thenReturn(false);
-        when(userService.createUser(any(SignUpRequest.class), any(String.class))).thenAnswer(inv -> new User("newuser", "encoded", "New User", "new@example.com", "USER"));
+        when(userService.saveUser(any(User.class))).thenReturn(new User("newuser", "encoded", "New User", "new@example.com", "USER"));
         Authentication auth = new UsernamePasswordAuthenticationToken("newuser", "password", List.of());
         when(authenticationManager.authenticate(any())).thenReturn(auth);
         when(tokenProvider.generate(any(Authentication.class))).thenReturn("new-jwt-token");
