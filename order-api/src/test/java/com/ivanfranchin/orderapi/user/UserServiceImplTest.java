@@ -29,7 +29,7 @@ class UserServiceImplTest {
     void getUsers_returnsAllUsers() {
         User user1 = new User("alice", "pass", "Alice", "alice@example.com", "USER");
         User user2 = new User("bob", "pass", "Bob", "bob@example.com", "ADMIN");
-        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+        when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(List.of(user1, user2));
 
         List<User> result = userService.getUsers();
 
@@ -38,7 +38,7 @@ class UserServiceImplTest {
 
     @Test
     void getUsers_returnsEmptyListWhenNoUsers() {
-        when(userRepository.findAll()).thenReturn(List.of());
+        when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(List.of());
 
         List<User> result = userService.getUsers();
 

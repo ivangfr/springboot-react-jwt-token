@@ -36,7 +36,7 @@ docker compose up -d               # start Postgres 18.0
 ./mvnw test -Dtest="*Controller*"
 ```
 
-> **Note:** The only existing test (`OrderApiApplicationTests`) is `@Disabled` and requires a live Postgres. New tests should use `@WebMvcTest` or `@DataJpaTest` with an embedded/test-container DB to avoid this dependency.
+> **Note:** `OrderApiApplicationTests` uses `@MockitoBean` to mock all infrastructure and runs without a live Postgres. New tests should use `@WebMvcTest` for controllers, `@DataJpaTest` for repositories, and `@ExtendWith(MockitoExtension.class)` for service unit tests.
 
 ### Frontend (`order-ui/`)
 
@@ -60,7 +60,7 @@ npm test -- src/components/home/Login
 npm test -- -t "renders login"
 ```
 
-> **Note:** There are no frontend test spec files yet. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` registers `@testing-library/jest-dom` matchers via `expect.extend()` and mocks `matchMedia` and `localStorage` for Mantine compatibility.
+> **Note:** Test files (`ComponentName.test.js` / `ComponentName.test.jsx`) are co-located with every component. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` registers `@testing-library/jest-dom` matchers via `expect.extend()` and mocks `matchMedia` and `localStorage` for Mantine compatibility.
 
 ### Integration Tests
 
@@ -86,6 +86,7 @@ npm test -- -t "renders login"
   ```
 - **Service layer** always has an interface + `ServiceImpl` implementation (`UserService` / `UserServiceImpl`)
 - **Optional<T>** used for nullable service lookups; `validateAndGet{Entity}By{Key}()` methods throw on empty
+- **Ordered repository queries**: use Spring Data derived query methods for deterministic ordering — e.g., `findAllByOrderByUsernameAsc()` in `UserRepository`, `findAllByOrderByCreatedAtDesc()` in `OrderRepository`. Do not rely on `findAll()` where order matters.
 - **JWT errors**: each exception type caught individually, logged with `@Slf4j`, returns `Optional.empty()`
 
 ### Frontend
