@@ -86,5 +86,5 @@ printf "%25s | %13s | %11s | %12s |\n" "GET /api/orders" ${order_get_orders[with
 printf "%25s | %13s | %11s | %12s |\n" "POST /api/orders" ${order_create_order[without_creds]} ${order_create_order[user_creds]} ${order_create_order[admin_creds]}
 printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/orders/{id}" ${order_delete_order[without_creds]} ${order_delete_order[user_creds]} ${order_delete_order[admin_creds]}
 printf "%72s\n" "------------------------------------------------------------------------"
-printf " [200] Success -  [201] Created -  [401] Unauthorized -  [403] Forbidden"
+printf " [200] Success -  [201] Created -  [204] No Content -  [401] Unauthorized -  [403] Forbidden"
 printf "\n"

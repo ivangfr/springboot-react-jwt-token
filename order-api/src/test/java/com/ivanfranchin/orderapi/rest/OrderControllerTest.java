@@ -183,15 +183,14 @@ class OrderControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
-    void deleteOrder_returns200WhenFoundAsAdmin() throws Exception {
+    void deleteOrder_returns204WhenFoundAsAdmin() throws Exception {
         User user = buildUser("admin", "ADMIN");
         String id = UUID.randomUUID().toString();
         Order order = buildOrder(id, "Buy iPhone", user);
         when(orderService.validateAndGetOrder(id)).thenReturn(order);
 
         mockMvc.perform(delete("/api/orders/" + id))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.description").value("Buy iPhone"));
+                .andExpect(status().isNoContent());
     }
 
     @Test

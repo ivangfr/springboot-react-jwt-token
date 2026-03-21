@@ -57,10 +57,10 @@ public class OrderController {
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public OrderDto deleteOrder(@PathVariable UUID id) {
+    public void deleteOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
         orderService.deleteOrder(order);
-        return OrderDto.from(order);
     }
 }
