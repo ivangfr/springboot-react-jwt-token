@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -123,6 +124,19 @@ class AuthControllerTest {
         SignUpRequest request = new SignUpRequest("newuser", "password", "New User", "existing@example.com");
         when(userService.hasUserWithUsername("newuser")).thenReturn(false);
         when(userService.hasUserWithEmail("existing@example.com")).thenReturn(true);
+
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void signUp_returns409WhenSaveUserThrowsDataIntegrityViolation() throws Exception {
+        SignUpRequest request = new SignUpRequest("newuser", "password", "New User", "new@example.com");
+        when(userService.hasUserWithUsername("newuser")).thenReturn(false);
+        when(userService.hasUserWithEmail("new@example.com")).thenReturn(false);
+        when(userService.saveUser(any(User.class))).thenThrow(new DataIntegrityViolationException("unique constraint violation"));
 
         mockMvc.perform(post("/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
