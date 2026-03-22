@@ -16,7 +16,7 @@ describe('Login', () => {
     seedLocalStorage(makeRegularUser())
     // Navigate replaces content; the form should not be visible
     render(<Login />, { initialRoute: '/login' })
-    expect(screen.queryByPlaceholderText('Username')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Username')).not.toBeInTheDocument()
   })
 
   it('shows error alert when submitting with empty fields', async () => {
@@ -29,8 +29,8 @@ describe('Login', () => {
     orderApi.authenticate.mockRejectedValue({ message: 'Unauthorized' })
     render(<Login />)
 
-    await userEvent.type(screen.getByPlaceholderText('Username'), 'alice')
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'wrong')
+    await userEvent.type(screen.getByLabelText('Username'), 'alice')
+    await userEvent.type(screen.getByLabelText('Password'), 'wrong')
     await userEvent.click(screen.getByRole('button', { name: /login/i }))
 
     await waitFor(() => {
@@ -45,8 +45,8 @@ describe('Login', () => {
 
     render(<Login />)
 
-    await userEvent.type(screen.getByPlaceholderText('Username'), 'alice')
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'secret')
+    await userEvent.type(screen.getByLabelText('Username'), 'alice')
+    await userEvent.type(screen.getByLabelText('Password'), 'secret')
     await userEvent.click(screen.getByRole('button', { name: /login/i }))
 
     await waitFor(() => {

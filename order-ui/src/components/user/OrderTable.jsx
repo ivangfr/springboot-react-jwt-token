@@ -35,6 +35,7 @@ function OrderTable({ orders, isLoading, orderDescription, handleInputChange, ha
             orderDescription={orderDescription}
             handleInputChange={handleInputChange}
             handleCreateOrder={handleCreateOrder}
+            isLoading={isLoading}
           />
         </Grid.Col>
       </Grid>

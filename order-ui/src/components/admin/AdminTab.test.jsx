@@ -50,4 +50,15 @@ describe('AdminTab', () => {
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
     expect(screen.getByText('Test order')).toBeInTheDocument()
   })
+
+  it('shows the users loading overlay when isUsersLoading is true', () => {
+    const { container } = render(<AdminTab {...makeProps({ isUsersLoading: true })} />)
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+  })
+
+  it('shows the orders loading overlay when isOrdersLoading is true', () => {
+    const { container } = render(<AdminTab {...makeProps({ isOrdersLoading: true })} />)
+    fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+  })
 })

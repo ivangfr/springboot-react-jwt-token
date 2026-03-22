@@ -12,23 +12,23 @@ beforeEach(() => {
 })
 
 async function fillForm({ username = 'alice', password = 'secret', name = 'Alice', email = 'alice@example.com' } = {}) {
-  if (username) await userEvent.type(screen.getByPlaceholderText('Username'), username)
-  if (password) await userEvent.type(screen.getByPlaceholderText('Password'), password)
-  if (name)     await userEvent.type(screen.getByPlaceholderText('Name'), name)
-  if (email)    await userEvent.type(screen.getByPlaceholderText('Email'), email)
+  if (username) await userEvent.type(screen.getByLabelText('Username'), username)
+  if (password) await userEvent.type(screen.getByLabelText('Password'), password)
+  if (name)     await userEvent.type(screen.getByLabelText('Name'), name)
+  if (email)    await userEvent.type(screen.getByLabelText('Email'), email)
 }
 
 describe('Signup', () => {
   it('redirects to / when already logged in', () => {
     seedLocalStorage(makeRegularUser())
     render(<Signup />, { initialRoute: '/signup' })
-    expect(screen.queryByPlaceholderText('Username')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Username')).not.toBeInTheDocument()
   })
 
   it('shows error alert when any required field is missing', async () => {
     render(<Signup />)
     // Submit with only username filled — other fields empty
-    await userEvent.type(screen.getByPlaceholderText('Username'), 'alice')
+    await userEvent.type(screen.getByLabelText('Username'), 'alice')
     await userEvent.click(screen.getByRole('button', { name: /sign up/i }))
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })

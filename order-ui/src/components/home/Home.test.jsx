@@ -38,4 +38,21 @@ describe('Home', () => {
       expect(zeros.length).toBeGreaterThanOrEqual(2)
     })
   })
+
+  it('shows the loading overlay while fetching and hides it after', async () => {
+    let resolveUsers, resolveOrders
+    orderApi.numberOfUsers.mockReturnValue(new Promise(r => { resolveUsers = r }))
+    orderApi.numberOfOrders.mockReturnValue(new Promise(r => { resolveOrders = r }))
+
+    const { container } = render(<Home />)
+
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+
+    resolveUsers({ data: 5 })
+    resolveOrders({ data: 12 })
+    await waitFor(() => expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument())
+
+    expect(screen.getByText('5')).toBeInTheDocument()
+    expect(screen.getByText('12')).toBeInTheDocument()
+  })
 })

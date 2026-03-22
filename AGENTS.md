@@ -93,7 +93,7 @@ npm test -- -t "renders login"
 
 - **Function components with hooks only** — no class components anywhere
 - **Centralized API layer**: all Axios calls live in `src/components/misc/OrderApi.js`
-- **Auth state** managed via React Context in `src/components/context/AuthContext.js` (use `useAuth()` hook)
+- **Auth state** managed via React Context in `src/components/context/AuthContext.jsx` (use `useAuth()` hook)
 - **Error handling**: always call `handleLogError(error)` from `src/components/misc/Helpers.js` in catch blocks; set `isError` state for UI feedback
 - **Token expiry** checked client-side in `AuthContext.userIsAuthenticated()` and in the Axios interceptor before each request
 
@@ -191,6 +191,7 @@ npm test -- -t "renders login"
 - Use `@testing-library/jest-dom` matchers (`toBeInTheDocument`, `toHaveValue`, etc.)
 - Mock `OrderApi.js` calls with `vi.mock('../misc/OrderApi')`
 - Run a single test: `npm test -- src/components/path/ComponentName`
+- **Query strategy for form inputs:** use `getByLabelText` for inputs with a `label=` prop (e.g. login/signup forms); use `getByPlaceholderText` for search or action inputs that have only a `placeholder=` prop and no label (e.g. `OrderForm`, `OrderTable`, `UserTable`). Never use `getByPlaceholderText` on an input that has `label=`.
 
 ---
 

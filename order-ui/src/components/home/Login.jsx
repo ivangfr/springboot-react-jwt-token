@@ -47,20 +47,18 @@ function Login() {
     <Center mt='xl'>
       <Box w={450}>
         <form onSubmit={handleSubmit}>
-          <Paper withBorder p='xl' radius='md'>
-            <Stack>
+          <Paper withBorder p='xl' shadow='sm' radius='md'>
+            <Stack gap='sm'>
               <TextInput
                 autoFocus
                 name='username'
                 label='Username'
-                placeholder='Username'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
               <PasswordInput
                 name='password'
                 label='Password'
-                placeholder='Password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -68,7 +66,7 @@ function Login() {
             </Stack>
           </Paper>
         </form>
-        <Paper withBorder p='sm' radius='md' mt='sm' ta='center'>
+        <Paper withBorder p='sm' radius='md' mt='sm' ta='center' shadow='sm'>
           Don't have an account?{' '}
           <Anchor component={NavLink} to='/signup' c='violet'>Sign Up</Anchor>
         </Paper>

@@ -16,8 +16,8 @@ function AdminPage() {
   const [orderTextSearch, setOrderTextSearch] = useState('')
   const [userUsernameSearch, setUserUsernameSearch] = useState('')
   const [isAdmin, setIsAdmin] = useState(true)
-  const [isUsersLoading, setIsUsersLoading] = useState(false)
-  const [isOrdersLoading, setIsOrdersLoading] = useState(false)
+  const [isUsersLoading, setIsUsersLoading] = useState(true)
+  const [isOrdersLoading, setIsOrdersLoading] = useState(true)
 
   useEffect(() => {
     setIsAdmin(user.data.rol[0] === 'ADMIN')
@@ -49,17 +49,20 @@ function AdminPage() {
   }
 
   const handleDeleteUser = async (username) => {
+    setIsUsersLoading(true)
     try {
       await orderApi.deleteUser(user, username)
       handleGetUsers()
     } catch (error) {
       handleLogError(error)
+      setIsUsersLoading(false)
     }
   }
 
   const handleSearchUser = async (e) => {
     e.preventDefault()
     const username = userUsernameSearch
+    setIsUsersLoading(true)
     try {
       const response = await orderApi.getUsers(user, username)
       const data = response.data
@@ -68,6 +71,8 @@ function AdminPage() {
     } catch (error) {
       handleLogError(error)
       setUsers([])
+    } finally {
+      setIsUsersLoading(false)
     }
   }
 
@@ -84,11 +89,13 @@ function AdminPage() {
   }
 
   const handleDeleteOrder = async (orderId) => {
+    setIsOrdersLoading(true)
     try {
       await orderApi.deleteOrder(user, orderId)
       handleGetOrders()
     } catch (error) {
       handleLogError(error)
+      setIsOrdersLoading(false)
     }
   }
 
@@ -112,12 +119,15 @@ function AdminPage() {
   const handleSearchOrder = async (e) => {
     e.preventDefault()
     const text = orderTextSearch
+    setIsOrdersLoading(true)
     try {
       const response = await orderApi.getOrders(user, text)
       setOrders(response.data)
     } catch (error) {
       handleLogError(error)
       setOrders([])
+    } finally {
+      setIsOrdersLoading(false)
     }
   }
 

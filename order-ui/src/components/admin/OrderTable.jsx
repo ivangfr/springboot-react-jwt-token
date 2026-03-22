@@ -2,7 +2,7 @@ import { Grid, Group, TextInput, ActionIcon, Table } from '@mantine/core'
 import { IconSearch, IconTrash } from '@tabler/icons-react'
 import OrderForm from '../misc/OrderForm'
 
-function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChange, handleCreateOrder, handleDeleteOrder, handleSearchOrder }) {
+function OrderTable({ orders, isOrdersLoading, orderDescription, orderTextSearch, handleInputChange, handleCreateOrder, handleDeleteOrder, handleSearchOrder }) {
   let orderList
   if (orders.length === 0) {
     orderList = (
@@ -49,6 +49,7 @@ function OrderTable({ orders, orderDescription, orderTextSearch, handleInputChan
             orderDescription={orderDescription}
             handleInputChange={handleInputChange}
             handleCreateOrder={handleCreateOrder}
+            isLoading={isOrdersLoading}
           />
         </Grid.Col>
       </Grid>

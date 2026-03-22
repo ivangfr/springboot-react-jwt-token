@@ -58,4 +58,19 @@ describe('UserPage', () => {
       expect(orderApi.getUserMe).toHaveBeenCalledTimes(2)
     })
   })
+
+  it('shows the loading overlay while fetching and hides it after', async () => {
+    seedLocalStorage(makeRegularUser())
+    let resolve
+    orderApi.getUserMe.mockReturnValue(new Promise(r => { resolve = r }))
+
+    const { container } = render(<UserPage />)
+
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+
+    resolve({ data: userMeResponse })
+    await waitFor(() => expect(screen.getByText('Buy coffee')).toBeInTheDocument())
+
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument()
+  })
 })

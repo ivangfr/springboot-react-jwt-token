@@ -46,4 +46,14 @@ describe('user/OrderTable', () => {
     render(<OrderTable {...makeProps()} />)
     expect(screen.getByText('Orders')).toBeInTheDocument()
   })
+
+  it('shows the loading overlay when isLoading is true', () => {
+    const { container } = render(<OrderTable {...makeProps({ isLoading: true })} />)
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+  })
+
+  it('does not show the loading overlay when isLoading is false', () => {
+    const { container } = render(<OrderTable {...makeProps({ isLoading: false })} />)
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument()
+  })
 })

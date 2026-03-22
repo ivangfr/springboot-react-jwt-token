@@ -12,7 +12,7 @@ function UserPage() {
   const isUser = user.data.rol[0] === 'USER'
 
   const [userMe, setUserMe] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [orderDescription, setOrderDescription] = useState('')
 
   useEffect(() => {

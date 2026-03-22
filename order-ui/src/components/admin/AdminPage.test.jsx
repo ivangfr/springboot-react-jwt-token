@@ -53,4 +53,19 @@ describe('AdminPage', () => {
       expect(screen.getByText('alice')).toBeInTheDocument()
     })
   })
+
+  it('shows loading overlays while fetching and hides them after', async () => {
+    seedLocalStorage(makeAdminUser())
+    let resolveUsers, resolveOrders
+    orderApi.getUsers.mockReturnValue(new Promise(r => { resolveUsers = r }))
+    orderApi.getOrders.mockReturnValue(new Promise(r => { resolveOrders = r }))
+
+    const { container } = render(<AdminPage />)
+
+    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+
+    resolveUsers({ data: [] })
+    resolveOrders({ data: [] })
+    await waitFor(() => expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument())
+  })
 })

@@ -33,6 +33,7 @@ function AdminTab(props) {
           <LoadingOverlay visible={isOrdersLoading} />
           <OrderTable
             orders={orders}
+            isOrdersLoading={isOrdersLoading}
             orderDescription={orderDescription}
             orderTextSearch={orderTextSearch}
             handleInputChange={handleInputChange}
