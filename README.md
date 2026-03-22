@@ -126,13 +126,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Demo
 
-- The gif below shows an `admin` loging in:
-
-  ![admin-login](documentation/admin-login.gif)
-
 - The gif below shows a `user` loging in:
 
   ![user-login](documentation/user-login.gif)
+
+- The gif below shows an `admin` loging in:
+
+  ![admin-login](documentation/admin-login.gif)
 
 ## Testing order-api Endpoints
 
