@@ -58,7 +58,16 @@ npm test -- src/components/home/Login
 
 # Run tests matching a name pattern
 npm test -- -t "renders login"
+
+# Lint source files
+npm run lint
+
+# Lint and auto-fix safe issues
+npm run lint -- --fix
 ```
+
+> ESLint is configured via `eslint.config.js` (flat config) using `@eslint/js` recommended as a base,
+> plus `eslint-plugin-react` and `eslint-plugin-react-hooks`. No Prettier config exists.
 
 > **Note:** Test files (`ComponentName.test.js` / `ComponentName.test.jsx`) are co-located with every component. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` registers `@testing-library/jest-dom` matchers via `expect.extend()` and mocks `matchMedia` and `localStorage` for Mantine compatibility.
 
