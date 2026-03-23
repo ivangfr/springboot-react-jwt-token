@@ -3,8 +3,8 @@
 ## Project Overview
 
 Full-stack monorepo with:
-- **`order-api/`** — Spring Boot 4.0.1 REST API (Java 25, PostgreSQL, JWT auth)
-- **`order-ui/`** — React 19 SPA (JavaScript, Vite 6, Axios, Mantine)
+- **`order-api/`** — Spring Boot 4.0.3 REST API (Java 25, PostgreSQL, JWT auth)
+- **`order-ui/`** — React 19 SPA (JavaScript, Vite 8, Axios, Mantine)
 
 Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backend uses domain-grouped packaging; the frontend uses feature-grouped folders.
 
@@ -75,7 +75,8 @@ npm test -- -t "renders login"
 
 ### Backend
 
-- **Domain-grouped packages**, not layered: `order/`, `user/`, `security/`, `rest/`, `config/`, `runner/`
+- **Domain-grouped packages**, not layered: `order/`, `user/`, `security/`, `rest/`, `rest/dto`, `config/`, `runner/`
+- **Four REST controllers**: `AuthController` (`/auth/**`), `OrderController` (`/api/orders/**`), `UserController` (`/api/users/**`), `PublicController` (`/public/**`)
 - **DTOs are Java records**: `record LoginRequest(String username, String password) {}`
 - **Entities use Lombok**: `@Data`, `@NoArgsConstructor` on JPA entities — no manual getters/setters
 - **`@RequiredArgsConstructor`** on all Spring beans instead of `@Autowired`
@@ -84,14 +85,22 @@ npm test -- -t "renders login"
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public class UserNotFoundException extends RuntimeException { ... }
   ```
+  All domain exceptions follow this pattern:
+  - `UserNotFoundException` (`404 NOT_FOUND`)
+  - `DuplicatedUserInfoException` (`409 CONFLICT`)
+  - `UserDeletionNotAllowedException` (`400 BAD_REQUEST`) — guards self-deletion and last-admin deletion
+  - `OrderNotFoundException` (`404 NOT_FOUND`)
 - **Service layer** always has an interface + `ServiceImpl` implementation (`UserService` / `UserServiceImpl`)
 - **Optional<T>** used for nullable service lookups; `validateAndGet{Entity}By{Key}()` methods throw on empty
 - **Ordered repository queries**: use Spring Data derived query methods for deterministic ordering — e.g., `findAllByOrderByUsernameAsc()` in `UserRepository`, `findAllByOrderByCreatedAtDesc()` in `OrderRepository`. Do not rely on `findAll()` where order matters.
 - **JWT errors**: each exception type caught individually, logged with `@Slf4j`, returns `Optional.empty()`
+- **`DatabaseInitializer`** (`CommandLineRunner` in `runner/`) seeds two default users on first startup if the DB is empty: `admin`/`admin` (`ADMIN` role) and `user`/`user` (`USER` role). The schema is recreated on every startup (`ddl-auto: create`).
 
 ### Frontend
 
 - **Function components with hooks only** — no class components anywhere
+- **Routing**: React Router v7 (`react-router-dom ^7`) with `<BrowserRouter>`, `<Routes>/<Route>`, and `<Navigate>`; unmatched paths redirect to `/`
+- **UI library**: Mantine v8 (`@mantine/core`, `@mantine/hooks`) — requires `matchMedia` mock in tests (provided by `setupTests.js`)
 - **Centralized API layer**: all Axios calls live in `src/components/misc/OrderApi.js`
 - **Auth state** managed via React Context in `src/components/context/AuthContext.jsx` (use `useAuth()` hook)
 - **Error handling**: always call `handleLogError(error)` from `src/components/misc/Helpers.js` in catch blocks; set `isError` state for UI feedback
@@ -191,16 +200,17 @@ npm test -- -t "renders login"
 - Use `@testing-library/jest-dom` matchers (`toBeInTheDocument`, `toHaveValue`, etc.)
 - Mock `OrderApi.js` calls with `vi.mock('../misc/OrderApi')`
 - Run a single test: `npm test -- src/components/path/ComponentName`
+- **Shared test utilities** live in `src/test-utils.jsx` — use `renderWithProviders(ui, { initialRoute })` instead of bare `render`; it wraps the component in `MantineProvider > MemoryRouter > AuthProvider`. Fixtures available: `makeAdminUser()`, `makeRegularUser()`, `makeExpiredUser()`, `makeToken(payload)`, `seedLocalStorage(user)`.
 - **Query strategy for form inputs:** use `getByLabelText` for inputs with a `label=` prop (e.g. login/signup forms); use `getByPlaceholderText` for search or action inputs that have only a `placeholder=` prop and no label (e.g. `OrderForm`, `OrderTable`, `UserTable`). Never use `getByPlaceholderText` on an input that has `label=`.
 
 ---
 
 ## Configuration
 
-- **API base URL**: `order-ui/src/Constants.js` — `config.url.API_BASE_URL`
+- **API base URL**: `order-ui/src/Constants.js` — `config.url.API_BASE_URL`; uses `import.meta.env.DEV` to switch between `http://localhost:8080` (dev) and a production URL (prod)
 - **JWT secret & expiry**: `order-api/src/main/resources/application.yml` — `app.jwt.*`
 - **Postgres connection**: `application.yml` — `spring.datasource.*`; matches the `docker-compose.yml` service
-- **CORS**: `order-api/.../security/CorsConfig.java` — add new allowed origins here
+- **CORS**: `order-api/.../security/CorsConfig.java` — add new allowed origins to `app.cors.allowed-origins` in `application.yml`; `CorsConfig.java` reads this value at startup via `@Value`
 - **Swagger UI**: available at `http://localhost:8080/swagger-ui.html` when running locally
 - **Security routes**: `SecurityConfig.java` — add new public/protected endpoint matchers here
 - **Role constants**: `SecurityConfig.ADMIN` and `SecurityConfig.USER` — reuse these strings; do not hardcode `"ADMIN"` or `"USER"` inline
