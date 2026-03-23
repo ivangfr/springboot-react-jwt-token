@@ -4,6 +4,7 @@ import com.ivanfranchin.orderapi.security.CustomUserDetails;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserDeletionNotAllowedException;
 import com.ivanfranchin.orderapi.user.UserNotFoundException;
 import com.ivanfranchin.orderapi.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -148,13 +149,34 @@ class UserControllerTest {
     // -- DELETE /api/users/{username} --
 
     @Test
-    @WithMockUser(username = "admin", authorities = "ADMIN")
     void deleteUser_returns204WhenFoundAsAdmin() throws Exception {
-        User user = buildUser("alice", "USER");
-        when(userService.validateAndGetUserByUsername("alice")).thenReturn(user);
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
+        User alice = buildUser("alice", "USER");
+        when(userService.validateAndGetUserByUsername("alice")).thenReturn(alice);
 
-        mockMvc.perform(delete("/api/users/alice"))
+        mockMvc.perform(delete("/api/users/alice").with(user(adminDetails)))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteUser_returns400WhenAdminDeletesOwnAccount() throws Exception {
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
+        User admin = buildUser("admin", "ADMIN");
+        when(userService.validateAndGetUserByUsername("admin")).thenReturn(admin);
+
+        mockMvc.perform(delete("/api/users/admin").with(user(adminDetails)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteUser_returns400WhenDeletingLastAdmin() throws Exception {
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
+        User otherAdmin = buildUser("other-admin", "ADMIN");
+        when(userService.validateAndGetUserByUsername("other-admin")).thenReturn(otherAdmin);
+        when(userService.countAdmins()).thenReturn(1L);
+
+        mockMvc.perform(delete("/api/users/other-admin").with(user(adminDetails)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

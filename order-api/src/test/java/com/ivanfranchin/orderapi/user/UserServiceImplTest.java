@@ -141,6 +141,15 @@ class UserServiceImplTest {
         verify(userRepository).save(user);
     }
 
+    // -- countAdmins --
+
+    @Test
+    void countAdmins_delegatesToRepository() {
+        when(userRepository.countByRole("ADMIN")).thenReturn(2L);
+
+        assertThat(userService.countAdmins()).isEqualTo(2L);
+    }
+
     // -- deleteUser --
 
     @Test
