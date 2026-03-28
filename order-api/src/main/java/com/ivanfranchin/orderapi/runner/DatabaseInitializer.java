@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.runner;
 
 import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private List<User> getUsers() {
         return List.of(
-                new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
-                new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER));
+                new User("admin", "admin", "Admin", "admin@mycompany.com", Role.ADMIN),
+                new User("user", "user", "User", "user@mycompany.com", Role.USER));
     }
 }

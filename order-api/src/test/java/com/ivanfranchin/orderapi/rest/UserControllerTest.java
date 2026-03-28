@@ -1,6 +1,7 @@
 package com.ivanfranchin.orderapi.rest;
 
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.User;
@@ -42,20 +43,20 @@ class UserControllerTest {
     @MockitoBean
     private TokenProvider tokenProvider;
 
-    private User buildUser(String username, String role) {
+    private User buildUser(String username, Role role) {
         User user = new User(username, "pass", "Test User", username + "@example.com", role);
         user.setId(1L);
         return user;
     }
 
-    private CustomUserDetails buildCustomUserDetails(String username, String role) {
+    private CustomUserDetails buildCustomUserDetails(String username, Role role) {
         return new CustomUserDetails(
                 1L,
                 username,
                 "pass",
                 "Test User",
                 username + "@example.com",
-                List.of(new SimpleGrantedAuthority(role))
+                List.of(new SimpleGrantedAuthority(role.name()))
         );
     }
 
@@ -63,8 +64,8 @@ class UserControllerTest {
 
     @Test
     void getMe_returns200AsUser() throws Exception {
-        CustomUserDetails userDetails = buildCustomUserDetails("user", "USER");
-        User user = buildUser("user", "USER");
+        CustomUserDetails userDetails = buildCustomUserDetails("user", Role.USER);
+        User user = buildUser("user", Role.USER);
         when(userService.validateAndGetUserByUsername("user")).thenReturn(user);
 
         mockMvc.perform(get("/api/users/me").with(user(userDetails)))
@@ -74,8 +75,8 @@ class UserControllerTest {
 
     @Test
     void getMe_returns200AsAdmin() throws Exception {
-        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
-        User admin = buildUser("admin", "ADMIN");
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", Role.ADMIN);
+        User admin = buildUser("admin", Role.ADMIN);
         when(userService.validateAndGetUserByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(get("/api/users/me").with(user(adminDetails)))
@@ -94,8 +95,8 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
     void getUsers_returns200AsAdmin() throws Exception {
-        User user1 = buildUser("alice", "USER");
-        User user2 = buildUser("bob", "USER");
+        User user1 = buildUser("alice", Role.USER);
+        User user2 = buildUser("bob", Role.USER);
         when(userService.getUsers()).thenReturn(List.of(user1, user2));
 
         mockMvc.perform(get("/api/users"))
@@ -121,7 +122,7 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
     void getUser_returns200WhenFoundAsAdmin() throws Exception {
-        User user = buildUser("alice", "USER");
+        User user = buildUser("alice", Role.USER);
         when(userService.validateAndGetUserByUsername("alice")).thenReturn(user);
 
         mockMvc.perform(get("/api/users/alice"))
@@ -150,8 +151,8 @@ class UserControllerTest {
 
     @Test
     void deleteUser_returns204WhenFoundAsAdmin() throws Exception {
-        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
-        User alice = buildUser("alice", "USER");
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", Role.ADMIN);
+        User alice = buildUser("alice", Role.USER);
         when(userService.validateAndGetUserByUsername("alice")).thenReturn(alice);
 
         mockMvc.perform(delete("/api/users/alice").with(user(adminDetails)))
@@ -160,8 +161,8 @@ class UserControllerTest {
 
     @Test
     void deleteUser_returns400WhenAdminDeletesOwnAccount() throws Exception {
-        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
-        User admin = buildUser("admin", "ADMIN");
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", Role.ADMIN);
+        User admin = buildUser("admin", Role.ADMIN);
         when(userService.validateAndGetUserByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(delete("/api/users/admin").with(user(adminDetails)))
@@ -170,8 +171,8 @@ class UserControllerTest {
 
     @Test
     void deleteUser_returns400WhenDeletingLastAdmin() throws Exception {
-        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
-        User otherAdmin = buildUser("other-admin", "ADMIN");
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", Role.ADMIN);
+        User otherAdmin = buildUser("other-admin", Role.ADMIN);
         when(userService.validateAndGetUserByUsername("other-admin")).thenReturn(otherAdmin);
         when(userService.countAdmins()).thenReturn(1L);
 

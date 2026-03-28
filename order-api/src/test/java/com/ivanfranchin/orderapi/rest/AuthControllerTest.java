@@ -3,6 +3,7 @@ package com.ivanfranchin.orderapi.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.User;
@@ -96,7 +97,7 @@ class AuthControllerTest {
         SignUpRequest request = new SignUpRequest("newuser", "password", "New User", "new@example.com");
         when(userService.hasUserWithUsername("newuser")).thenReturn(false);
         when(userService.hasUserWithEmail("new@example.com")).thenReturn(false);
-        when(userService.saveUser(any(User.class))).thenReturn(new User("newuser", "encoded", "New User", "new@example.com", "USER"));
+        when(userService.saveUser(any(User.class))).thenReturn(new User("newuser", "encoded", "New User", "new@example.com", Role.USER));
         Authentication auth = new UsernamePasswordAuthenticationToken("newuser", "password", List.of());
         when(authenticationManager.authenticate(any())).thenReturn(auth);
         when(tokenProvider.generate(any(Authentication.class))).thenReturn("new-jwt-token");

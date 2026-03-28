@@ -1,5 +1,6 @@
 package com.ivanfranchin.orderapi.user;
 
+import com.ivanfranchin.orderapi.security.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,8 +28,8 @@ class UserServiceImplTest {
 
     @Test
     void getUsers_returnsAllUsers() {
-        User user1 = new User("alice", "pass", "Alice", "alice@example.com", "USER");
-        User user2 = new User("bob", "pass", "Bob", "bob@example.com", "ADMIN");
+        User user1 = new User("alice", "pass", "Alice", "alice@example.com", Role.USER);
+        User user2 = new User("bob", "pass", "Bob", "bob@example.com", Role.ADMIN);
         when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(List.of(user1, user2));
 
         List<User> result = userService.getUsers();
@@ -58,7 +59,7 @@ class UserServiceImplTest {
 
     @Test
     void getUserByUsername_returnsUserWhenFound() {
-        User user = new User("alice", "pass", "Alice", "alice@example.com", "USER");
+        User user = new User("alice", "pass", "Alice", "alice@example.com", Role.USER);
         when(userRepository.findByUsername("alice")).thenReturn(Optional.of(user));
 
         Optional<User> result = userService.getUserByUsername("alice");
@@ -111,7 +112,7 @@ class UserServiceImplTest {
 
     @Test
     void validateAndGetUserByUsername_returnsUserWhenFound() {
-        User user = new User("alice", "pass", "Alice", "alice@example.com", "USER");
+        User user = new User("alice", "pass", "Alice", "alice@example.com", Role.USER);
         when(userRepository.findByUsername("alice")).thenReturn(Optional.of(user));
 
         User result = userService.validateAndGetUserByUsername("alice");
@@ -132,7 +133,7 @@ class UserServiceImplTest {
 
     @Test
     void saveUser_delegatesToRepositoryAndReturnsUser() {
-        User user = new User("alice", "pass", "Alice", "alice@example.com", "USER");
+        User user = new User("alice", "pass", "Alice", "alice@example.com", Role.USER);
         when(userRepository.save(user)).thenReturn(user);
 
         User result = userService.saveUser(user);
@@ -145,7 +146,7 @@ class UserServiceImplTest {
 
     @Test
     void countAdmins_delegatesToRepository() {
-        when(userRepository.countByRole("ADMIN")).thenReturn(2L);
+        when(userRepository.countByRole(Role.ADMIN)).thenReturn(2L);
 
         assertThat(userService.countAdmins()).isEqualTo(2L);
     }
@@ -154,7 +155,7 @@ class UserServiceImplTest {
 
     @Test
     void deleteUser_delegatesToRepository() {
-        User user = new User("alice", "pass", "Alice", "alice@example.com", "USER");
+        User user = new User("alice", "pass", "Alice", "alice@example.com", Role.USER);
 
         userService.deleteUser(user);
 

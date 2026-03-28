@@ -3,7 +3,7 @@ package com.ivanfranchin.orderapi.rest;
 import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.rest.dto.UserDto;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.user.UserDeletionNotAllowedException;
 import com.ivanfranchin.orderapi.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +58,7 @@ public class UserController {
         if (currentUser.getUsername().equals(username)) {
             throw new UserDeletionNotAllowedException("You cannot delete your own account");
         }
-        if (SecurityConfig.ADMIN.equals(user.getRole()) && userService.countAdmins() == 1) {
+        if (Role.ADMIN.equals(user.getRole()) && userService.countAdmins() == 1) {
             throw new UserDeletionNotAllowedException("Cannot delete the last admin account");
         }
         userService.deleteUser(user);

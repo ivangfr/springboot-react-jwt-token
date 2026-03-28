@@ -3,7 +3,7 @@ package com.ivanfranchin.orderapi.rest;
 import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
 import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
 import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.DuplicatedUserInfoException;
 import com.ivanfranchin.orderapi.user.User;
@@ -69,7 +69,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(signUpRequest.password()));
         user.setName(signUpRequest.name());
         user.setEmail(signUpRequest.email());
-        user.setRole(SecurityConfig.USER);
+        user.setRole(Role.USER);
         return user;
     }
 }

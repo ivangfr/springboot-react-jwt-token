@@ -1,5 +1,6 @@
 package com.ivanfranchin.orderapi.user;
 
+import com.ivanfranchin.orderapi.security.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
-    long countByRole(String role);
+    long countByRole(Role role);
 }

@@ -20,9 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    public static final String ADMIN = "ADMIN";
-    public static final String USER = "USER";
-
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
     @Bean
@@ -34,11 +31,11 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority(ADMIN, USER)
-                        .requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(ADMIN, USER)
-                        .requestMatchers(HttpMethod.GET, "/api/orders").hasAuthority(ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/api/orders/**").hasAuthority(ADMIN)
-                        .requestMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/orders").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/orders/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/users", "/api/users/**").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/public/**", "/auth/**").permitAll()
                         .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())

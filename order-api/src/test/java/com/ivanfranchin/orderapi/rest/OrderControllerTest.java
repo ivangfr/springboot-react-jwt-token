@@ -6,6 +6,7 @@ import com.ivanfranchin.orderapi.order.OrderNotFoundException;
 import com.ivanfranchin.orderapi.order.OrderService;
 import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.User;
@@ -55,7 +56,7 @@ class OrderControllerTest {
     @MockitoBean
     private TokenProvider tokenProvider;
 
-    private User buildUser(String username, String role) {
+    private User buildUser(String username, Role role) {
         User user = new User(username, "pass", "Test User", username + "@example.com", role);
         user.setId(1L);
         return user;
@@ -69,14 +70,14 @@ class OrderControllerTest {
         return order;
     }
 
-    private CustomUserDetails buildCustomUserDetails(String username, String role) {
+    private CustomUserDetails buildCustomUserDetails(String username, Role role) {
         return new CustomUserDetails(
                 1L,
                 username,
                 "pass",
                 "Test User",
                 username + "@example.com",
-                List.of(new SimpleGrantedAuthority(role))
+                List.of(new SimpleGrantedAuthority(role.name()))
         );
     }
 
@@ -85,7 +86,7 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
     void getOrders_returns200AsAdmin() throws Exception {
-        User user = buildUser("admin", "ADMIN");
+        User user = buildUser("admin", Role.ADMIN);
         Order order = buildOrder("id-1", "Buy iPhone", user);
         when(orderService.getOrders()).thenReturn(List.of(order));
 
@@ -98,7 +99,7 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
     void getOrders_withTextParam_returns200AsAdmin() throws Exception {
-        User user = buildUser("admin", "ADMIN");
+        User user = buildUser("admin", Role.ADMIN);
         Order order = buildOrder("id-1", "Buy iPhone", user);
         when(orderService.getOrdersContainingText("iphone")).thenReturn(List.of(order));
 
@@ -124,8 +125,8 @@ class OrderControllerTest {
 
     @Test
     void createOrder_returns201AsAdmin() throws Exception {
-        User user = buildUser("admin", "ADMIN");
-        CustomUserDetails adminDetails = buildCustomUserDetails("admin", "ADMIN");
+        User user = buildUser("admin", Role.ADMIN);
+        CustomUserDetails adminDetails = buildCustomUserDetails("admin", Role.ADMIN);
         CreateOrderRequest request = new CreateOrderRequest("Buy two iPhones");
         Order savedOrder = buildOrder(UUID.randomUUID().toString(), "Buy two iPhones", user);
 
@@ -142,8 +143,8 @@ class OrderControllerTest {
 
     @Test
     void createOrder_returns201AsUser() throws Exception {
-        User user = buildUser("user", "USER");
-        CustomUserDetails userDetails = buildCustomUserDetails("user", "USER");
+        User user = buildUser("user", Role.USER);
+        CustomUserDetails userDetails = buildCustomUserDetails("user", Role.USER);
         CreateOrderRequest request = new CreateOrderRequest("Buy MacBook");
         Order savedOrder = buildOrder(UUID.randomUUID().toString(), "Buy MacBook", user);
 
@@ -184,7 +185,7 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = "ADMIN")
     void deleteOrder_returns204WhenFoundAsAdmin() throws Exception {
-        User user = buildUser("admin", "ADMIN");
+        User user = buildUser("admin", Role.ADMIN);
         String id = UUID.randomUUID().toString();
         Order order = buildOrder(id, "Buy iPhone", user);
         when(orderService.validateAndGetOrder(id)).thenReturn(order);
