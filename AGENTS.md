@@ -3,7 +3,7 @@
 ## Project Overview
 
 Full-stack monorepo with:
-- **`order-api/`** — Spring Boot 4.0.3 REST API (Java 25, PostgreSQL, JWT auth)
+- **`order-api/`** — Spring Boot 4.0.5 REST API (Java 25, PostgreSQL, JWT auth)
 - **`order-ui/`** — React 19 SPA (JavaScript, Vite 8, Axios, Mantine)
 
 Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backend uses domain-grouped packaging; the frontend uses feature-grouped folders.
@@ -103,7 +103,7 @@ npm run lint -- --fix
 - **Optional<T>** used for nullable service lookups; `validateAndGet{Entity}By{Key}()` methods throw on empty
 - **Ordered repository queries**: use Spring Data derived query methods for deterministic ordering — e.g., `findAllByOrderByUsernameAsc()` in `UserRepository`, `findAllByOrderByCreatedAtDesc()` in `OrderRepository`. Do not rely on `findAll()` where order matters.
 - **JWT errors**: each exception type caught individually, logged with `@Slf4j`, returns `Optional.empty()`
-- **`DatabaseInitializer`** (`CommandLineRunner` in `runner/`) seeds two default users on first startup if the DB is empty: `admin`/`admin` (`ADMIN` role) and `user`/`user` (`USER` role). The schema is recreated on every startup (`ddl-auto: create`).
+- **`DatabaseInitializer`** (`CommandLineRunner` in `runner/`) seeds two default users on every startup: `admin`/`admin` (`ADMIN` role) and `user`/`user` (`USER` role). Because `ddl-auto: create` drops and recreates the schema on every boot, the user count is always 0 at startup, so seeding always runs.
 
 ### Frontend
 
@@ -198,13 +198,13 @@ npm run lint -- --fix
 
 ### Backend (JUnit 5 + Spring Test)
 - Use `@WebMvcTest` for controller tests with `MockMvc` (no full context)
-- Use `@DataJpaTest` for repository tests (embedded/test-container DB)
+- Use `@DataJpaTest` for repository tests (embedded/test-container DB) — no repository tests exist yet; add them here when needed
 - Use `@SpringBootTest` only for true integration tests (requires Postgres)
 - Mock dependencies with `@MockitoBean` (Spring Boot 4+ replacement for `@MockBean`)
 - Use `@WithMockUser` from Spring Security Test for authenticated endpoint tests
 
 ### Frontend (Vitest + React Testing Library)
-- Place test files as `ComponentName.test.js` co-located with the component
+- Place test files as `ComponentName.test.jsx` (for components) or `UtilityName.test.js` (for non-JSX utilities) co-located with the component
 - Use `@testing-library/user-event` for simulating user interactions
 - Use `@testing-library/jest-dom` matchers (`toBeInTheDocument`, `toHaveValue`, etc.)
 - Mock `OrderApi.js` calls with `vi.mock('../misc/OrderApi')`

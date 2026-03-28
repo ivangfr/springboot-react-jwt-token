@@ -21,7 +21,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userService.getUsers().isEmpty()) {
+        if (userService.countUsers() > 0) {
             return;
         }
         getUsers().forEach(user -> {
@@ -31,7 +31,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         log.info("Database initialized");
     }
 
-    private List<User> getUsers() {
+    private static List<User> getUsers() {
         return List.of(
                 new User("admin", "admin", "Admin", "admin@mycompany.com", Role.ADMIN),
                 new User("user", "user", "User", "user@mycompany.com", Role.USER));

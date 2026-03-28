@@ -28,9 +28,10 @@ public class Order {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     public Order(String description) {
@@ -42,6 +43,8 @@ public class Order {
         if (id == null) {
             id = UUID.randomUUID().toString();
         }
-        createdAt = Instant.now();
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
     }
 }
