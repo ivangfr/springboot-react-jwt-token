@@ -9,6 +9,7 @@ import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.security.SecurityConfig;
 import com.ivanfranchin.orderapi.security.TokenProvider;
 import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserNotFoundException;
 import com.ivanfranchin.orderapi.user.UserService;
 
 import tools.jackson.databind.ObjectMapper;
@@ -181,6 +182,21 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void createOrder_returns404WhenUserDeletedMidFlight() throws Exception {
+        CustomUserDetails ghostUser = buildCustomUserDetails("ghost", Role.USER);
+        CreateOrderRequest request = new CreateOrderRequest("Buy iPhone");
+
+        when(userService.validateAndGetUserByUsername("ghost"))
+                .thenThrow(new UserNotFoundException("User with username ghost not found"));
+
+        mockMvc.perform(post("/api/orders")
+                        .with(user(ghostUser))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
     }
 
     // -- DELETE /api/orders/{id} --
