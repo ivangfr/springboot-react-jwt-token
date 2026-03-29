@@ -1,7 +1,17 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 
-if ! command -v jq &>/dev/null; then
-  printf 'error: jq is required but not found in PATH. Install it (e.g. brew install jq) and re-run.\n' >&2
+for cmd in curl jq; do
+  if ! command -v "${cmd}" > /dev/null 2>&1; then
+    printf 'error: %s is required but not found in PATH.\n' "${cmd}" >&2
+    exit 1
+  fi
+done
+
+BASE_URL="${BASE_URL:-localhost:8080}"
+
+if ! curl -sf --max-time 3 "${BASE_URL}/public/numberOfUsers" > /dev/null 2>&1; then
+  printf 'error: Cannot reach %s — is the order-api running?\n' "${BASE_URL}" >&2
   exit 1
 fi
 
@@ -17,79 +27,101 @@ typeset -A order_get_orders
 typeset -A order_create_order
 typeset -A order_delete_order
 
-ADMIN_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)
-USER_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/authenticate -H 'Content-Type: application/json' -d '{"username": "user", "password": "user"}' | jq -r .accessToken)
-USER2_ACCESS_TOKEN=$(curl -s -X POST localhost:8080/auth/signup -H 'Content-Type: application/json' -d '{"username": "user2", "password": "user2", "name": "User2", "email": "user2@mycompany.com"}' | jq -r .accessToken)
+ADMIN_ACCESS_TOKEN=$(curl -s -X POST "${BASE_URL}/auth/authenticate" -H 'Content-Type: application/json' -d '{"username": "admin", "password": "admin"}' | jq -r .accessToken)
+if [[ -z "${ADMIN_ACCESS_TOKEN}" || "${ADMIN_ACCESS_TOKEN}" == "null" ]]; then
+  printf 'error: failed to obtain admin access token — is the API running at %s?\n' "${BASE_URL}" >&2
+  exit 1
+fi
 
-public_number_of_users[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/public/numberOfUsers)
-public_number_of_users[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/public/numberOfUsers)
-public_number_of_users[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/public/numberOfUsers)
+USER_ACCESS_TOKEN=$(curl -s -X POST "${BASE_URL}/auth/authenticate" -H 'Content-Type: application/json' -d '{"username": "user", "password": "user"}' | jq -r .accessToken)
+if [[ -z "${USER_ACCESS_TOKEN}" || "${USER_ACCESS_TOKEN}" == "null" ]]; then
+  printf 'error: failed to obtain user access token — is the API running at %s?\n' "${BASE_URL}" >&2
+  exit 1
+fi
 
-public_number_of_orders[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/public/numberOfOrders)
-public_number_of_orders[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/public/numberOfOrders)
-public_number_of_orders[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/public/numberOfOrders)
+curl -s -X DELETE "${BASE_URL}/api/users/user2" \
+  -H "Authorization: Bearer ${ADMIN_ACCESS_TOKEN}" \
+  -o /dev/null || true
 
-user_get_me[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/api/users/me)
-user_get_me[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users/me)
-user_get_me[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users/me)
+USER2_ACCESS_TOKEN=$(curl -s -X POST "${BASE_URL}/auth/signup" -H 'Content-Type: application/json' -d '{"username": "user2", "password": "user2", "name": "User2", "email": "user2@mycompany.com"}' | jq -r .accessToken)
+if [[ -z "${USER2_ACCESS_TOKEN}" || "${USER2_ACCESS_TOKEN}" == "null" ]]; then
+  printf 'error: failed to obtain user2 access token\n' >&2
+  exit 1
+fi
 
-user_get_users[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/api/users)
-user_get_users[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users)
-user_get_users[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users)
+public_number_of_users[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/public/numberOfUsers")
+public_number_of_users[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/public/numberOfUsers")
+public_number_of_users[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/public/numberOfUsers")
 
-user_get_user[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/api/users/user)
-user_get_user[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users/user2)
-user_get_user[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/users/user2)
+public_number_of_orders[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/public/numberOfOrders")
+public_number_of_orders[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/public/numberOfOrders")
+public_number_of_orders[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/public/numberOfOrders")
 
-user_delete_user[without_creds]=$(curl -w %{http_code} -s -o /dev/null -X DELETE localhost:8080/api/users/user2)
-user_delete_user[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X DELETE localhost:8080/api/users/user2)
-user_delete_user[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE localhost:8080/api/users/user2)
+user_get_me[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/api/users/me")
+user_get_me[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/api/users/me")
+user_get_me[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/api/users/me")
 
-order_get_orders[without_creds]=$(curl -w %{http_code} -s -o /dev/null localhost:8080/api/orders)
-order_get_orders[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/orders)
-order_get_orders[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" localhost:8080/api/orders)
+user_get_users[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/api/users")
+user_get_users[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/api/users")
+user_get_users[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/api/users")
 
-order_create_order[without_creds]=$(curl -w %{http_code} -s -o /dev/null -X POST localhost:8080/api/orders -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
-order_create_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X POST localhost:8080/api/orders -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
-USER_ORDER_ID=$(curl -s -H "Authorization: Bearer $USER_ACCESS_TOKEN" localhost:8080/api/users/me | jq -r '.orders[0].id')
-order_create_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X POST localhost:8080/api/orders -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
+user_get_user[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/api/users/user")
+user_get_user[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/api/users/user2")
+user_get_user[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/api/users/user2")
 
-order_delete_order[without_creds]=$(curl -w %{http_code} -s -o /dev/null -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
-order_delete_order[user_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
-order_delete_order[admin_creds]=$(curl -w %{http_code} -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE localhost:8080/api/orders/${USER_ORDER_ID})
+user_delete_user[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null -X DELETE "${BASE_URL}/api/users/user2")
+user_delete_user[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X DELETE "${BASE_URL}/api/users/user2")
+user_delete_user[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE "${BASE_URL}/api/users/user2")
+
+order_get_orders[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null "${BASE_URL}/api/orders")
+order_get_orders[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/api/orders")
+order_get_orders[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" "${BASE_URL}/api/orders")
+
+order_create_order[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null -X POST "${BASE_URL}/api/orders" -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
+order_create_order[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X POST "${BASE_URL}/api/orders" -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
+USER_ORDER_ID=$(curl -s -H "Authorization: Bearer $USER_ACCESS_TOKEN" "${BASE_URL}/api/users/me" | jq -r '.orders[0].id')
+if [[ -z "${USER_ORDER_ID}" || "${USER_ORDER_ID}" == "null" ]]; then
+  printf 'error: failed to obtain user order ID — no orders found for user\n' >&2
+  exit 1
+fi
+order_create_order[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X POST "${BASE_URL}/api/orders" -H "Content-Type: application/json" -d '{"description": "Buy three iPods"}')
+
+order_delete_order[without_creds]=$(curl -w "%{http_code}" -s -o /dev/null -X DELETE "${BASE_URL}/api/orders/${USER_ORDER_ID}")
+order_delete_order[user_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $USER_ACCESS_TOKEN" -X DELETE "${BASE_URL}/api/orders/${USER_ORDER_ID}")
+order_delete_order[admin_creds]=$(curl -w "%{http_code}" -s -o /dev/null -H "Authorization: Bearer $ADMIN_ACCESS_TOKEN" -X DELETE "${BASE_URL}/api/orders/${USER_ORDER_ID}")
 
 printf "\n"
 printf "%s\n" "POST auth/authenticate"
 printf "%s\n" "======================"
 printf "%s\n" "admin access token"
 printf "%s\n" "------------------"
-printf "%s\n" ${ADMIN_ACCESS_TOKEN}
+printf "%s\n" "${ADMIN_ACCESS_TOKEN}"
 printf "\n"
 printf "%s\n" "user access token"
 printf "%s\n" "-----------------"
-printf "%s\n" ${USER_ACCESS_TOKEN}
+printf "%s\n" "${USER_ACCESS_TOKEN}"
 printf "\n"
 printf "%s\n" "POST auth/signup"
 printf "%s\n" "================"
 printf "%s\n" "user2 access token"
 printf "%s\n" "------------------"
-printf "%s\n" ${USER2_ACCESS_TOKEN}
+printf "%s\n" "${USER2_ACCESS_TOKEN}"
 printf "\n"
 printf "%s\n" "Authorization"
 printf "%s\n" "============="
 printf "%25s | %13s | %11s | %12s |\n" "Endpoints" "without token" "user token" "admin token"
 printf "%25s + %13s + %11s + %12s |\n" "-------------------------" "-------------" "-----------" "------------"
-printf "%25s | %13s | %11s | %12s |\n" "GET public/numberOfUsers" ${public_number_of_users[without_creds]} ${public_number_of_users[user_creds]} ${public_number_of_users[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "GET public/numberOfOrders" ${public_number_of_orders[without_creds]} ${public_number_of_orders[user_creds]} ${public_number_of_orders[admin_creds]}
+printf "%25s | %13s | %11s | %12s |\n" "GET public/numberOfUsers" "${public_number_of_users[without_creds]}" "${public_number_of_users[user_creds]}" "${public_number_of_users[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "GET public/numberOfOrders" "${public_number_of_orders[without_creds]}" "${public_number_of_orders[user_creds]}" "${public_number_of_orders[admin_creds]}"
 printf "%25s + %13s + %11s + %12s |\n" "........................." "............." "..........." "............"
-printf "%25s | %13s | %11s | %12s |\n" "GET /api/users/me" ${user_get_me[without_creds]} ${user_get_me[user_creds]} ${user_get_me[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "GET /api/users" ${user_get_users[without_creds]} ${user_get_users[user_creds]} ${user_get_users[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "GET /api/users/user2" ${user_get_user[without_creds]} ${user_get_user[user_creds]} ${user_get_user[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/users/user2" ${user_delete_user[without_creds]} ${user_delete_user[user_creds]} ${user_delete_user[admin_creds]}
+printf "%25s | %13s | %11s | %12s |\n" "GET /api/users/me" "${user_get_me[without_creds]}" "${user_get_me[user_creds]}" "${user_get_me[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "GET /api/users" "${user_get_users[without_creds]}" "${user_get_users[user_creds]}" "${user_get_users[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "GET /api/users/user2" "${user_get_user[without_creds]}" "${user_get_user[user_creds]}" "${user_get_user[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/users/user2" "${user_delete_user[without_creds]}" "${user_delete_user[user_creds]}" "${user_delete_user[admin_creds]}"
 printf "%25s + %13s + %11s + %12s |\n" "........................." "............." "..........." "............"
-printf "%25s | %13s | %11s | %12s |\n" "GET /api/orders" ${order_get_orders[without_creds]} ${order_get_orders[user_creds]} ${order_get_orders[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "POST /api/orders" ${order_create_order[without_creds]} ${order_create_order[user_creds]} ${order_create_order[admin_creds]}
-printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/orders/{id}" ${order_delete_order[without_creds]} ${order_delete_order[user_creds]} ${order_delete_order[admin_creds]}
+printf "%25s | %13s | %11s | %12s |\n" "GET /api/orders" "${order_get_orders[without_creds]}" "${order_get_orders[user_creds]}" "${order_get_orders[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "POST /api/orders" "${order_create_order[without_creds]}" "${order_create_order[user_creds]}" "${order_create_order[admin_creds]}"
+printf "%25s | %13s | %11s | %12s |\n" "DELETE /api/orders/{id}" "${order_delete_order[without_creds]}" "${order_delete_order[user_creds]}" "${order_delete_order[admin_creds]}"
 printf "%72s\n" "------------------------------------------------------------------------"
 printf " [200] Success -  [201] Created -  [204] No Content -  [401] Unauthorized -  [403] Forbidden"
 printf "\n"
