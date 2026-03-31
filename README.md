@@ -1,6 +1,9 @@
 # springboot-react-jwt-token
 
-The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) application called `order-api` and a font-end [React](https://react.dev/) application called `order-ui`. Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ivan.franchin-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ivan.franchin)
+
+The goal of this project is to implement an application called `order-app` to manage orders. For it, we will implement a back-end [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) application called `order-api` and a front-end [React](https://react.dev/) application called `order-ui`. Besides, we will use [`JWT Authentication`](https://en.wikipedia.org/wiki/JSON_Web_Token) to secure both applications.
 
 ## Proof-of-Concepts & Articles
 
@@ -15,7 +18,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 
 ## Project Diagram
 
-![project-diagram](documentation/project-diagram.jpeg)
+![project-diagram](documentation/project-diagram.png)
 
 ## Applications
 
@@ -49,7 +52,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   
   In order to access the application, a `user` or `admin` must log in using his/her `username` and `password`. All the requests coming from `order-ui` to secured endpoints in `order-api` include the JWT access token. This token is generated when the `user` or `admin` logs in.
   
-  `order-ui` uses [`Semantic UI React`](https://react.semantic-ui.com/) as a CSS-styled framework.
+  `order-ui` uses [`Mantine`](https://mantine.dev/) as a UI component library, with [`Tabler Icons`](https://tabler.io/icons) for icons.
 
 ## Prerequisites
 
@@ -90,6 +93,26 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   - Run the `npm` command below to start the application:
     ```bash
     npm start
+    ```
+
+## Running Tests
+
+- **order-api**
+
+  - Open a terminal and navigate to the `springboot-react-jwt-token/order-api` folder;
+
+  - Run all tests:
+    ```bash
+    ./mvnw clean test
+    ```
+
+- **order-ui**
+
+  - Open a terminal and navigate to the `springboot-react-jwt-token/order-ui` folder;
+
+  - Run all tests:
+    ```bash
+    npm test
     ```
 
 ## Applications URLs
@@ -249,13 +272,13 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
             GET /api/users/me |           401 |         200 |          200 |
                GET /api/users |           401 |         403 |          200 |
          GET /api/users/user2 |           401 |         403 |          200 |
-      DELETE /api/users/user2 |           401 |         403 |          200 |
+      DELETE /api/users/user2 |           401 |         403 |          204 |
     ......................... + ............. + ........... + ............ |
               GET /api/orders |           401 |         403 |          200 |
              POST /api/orders |           401 |         201 |          201 |
-      DELETE /api/orders/{id} |           401 |         403 |          200 |
+      DELETE /api/orders/{id} |           401 |         403 |          204 |
     ------------------------------------------------------------------------
-     [200] Success -  [201] Created -  [401] Unauthorized -  [403] Forbidden
+     [200] Success -  [201] Created -  [204] No Content -  [401] Unauthorized -  [403] Forbidden
     ```
 
 ## Util Commands
@@ -290,6 +313,20 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
   ncu -u
   npm install
   ```
+
+## How to optimize GIFs and PNGs in documentation folder
+
+\[**Medium**\] [**How I Reduce GIF and Screenshot Sizes for My Technical Articles on macOS**](https://medium.com/itnext/how-i-reduce-gif-and-screenshot-sizes-for-my-technical-articles-on-macos-7fea331afc68)
+
+## Support
+
+If you find this useful, consider buying me a coffee:
+
+<a href="https://buymeacoffee.com/ivan.franchin"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
 
 ## References
 

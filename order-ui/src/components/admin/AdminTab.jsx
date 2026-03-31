@@ -1,5 +1,5 @@
-import React from 'react'
-import { Tab } from 'semantic-ui-react'
+import { Tabs, Box, LoadingOverlay } from '@mantine/core'
+import { IconUsers, IconDeviceLaptop } from '@tabler/icons-react'
 import UserTable from './UserTable'
 import OrderTable from './OrderTable'
 
@@ -8,11 +8,16 @@ function AdminTab(props) {
   const { isUsersLoading, users, userUsernameSearch, handleDeleteUser, handleSearchUser } = props
   const { isOrdersLoading, orders, orderDescription, orderTextSearch, handleCreateOrder, handleDeleteOrder, handleSearchOrder } = props
 
-  const panes = [
-    {
-      menuItem: { key: 'users', icon: 'users', content: 'Users' },
-      render: () => (
-        <Tab.Pane loading={isUsersLoading}>
+  return (
+    <Tabs defaultValue='users' mt='md'>
+      <Tabs.List>
+        <Tabs.Tab value='users' leftSection={<IconUsers size={16} />}>Users</Tabs.Tab>
+        <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16} />}>Orders</Tabs.Tab>
+      </Tabs.List>
+
+      <Tabs.Panel value='users' pt='md'>
+        <Box pos='relative'>
+          <LoadingOverlay visible={isUsersLoading} />
           <UserTable
             users={users}
             userUsernameSearch={userUsernameSearch}
@@ -20,15 +25,15 @@ function AdminTab(props) {
             handleDeleteUser={handleDeleteUser}
             handleSearchUser={handleSearchUser}
           />
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: { key: 'orders', icon: 'laptop', content: 'Orders' },
-      render: () => (
-        <Tab.Pane loading={isOrdersLoading}>
+        </Box>
+      </Tabs.Panel>
+
+      <Tabs.Panel value='orders' pt='md'>
+        <Box pos='relative'>
+          <LoadingOverlay visible={isOrdersLoading} />
           <OrderTable
             orders={orders}
+            isOrdersLoading={isOrdersLoading}
             orderDescription={orderDescription}
             orderTextSearch={orderTextSearch}
             handleInputChange={handleInputChange}
@@ -36,13 +41,9 @@ function AdminTab(props) {
             handleDeleteOrder={handleDeleteOrder}
             handleSearchOrder={handleSearchOrder}
           />
-        </Tab.Pane>
-      )
-    }
-  ]
-
-  return (
-    <Tab menu={{ attached: 'top' }} panes={panes} />
+        </Box>
+      </Tabs.Panel>
+    </Tabs>
   )
 }
 

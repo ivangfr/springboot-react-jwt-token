@@ -14,22 +14,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class TokenProvider {
 
+    public static final String TOKEN_TYPE = "JWT";
+    public static final String TOKEN_ISSUER = "order-api";
+    public static final String TOKEN_AUDIENCE = "order-app";
+
     @Value("${app.jwt.secret}")
     private String jwtSecret;
 
     @Value("${app.jwt.expiration.minutes}")
-    private Long jwtExpirationMinutes;
+    private long jwtExpirationMinutes;
 
     public String generate(Authentication authentication) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
@@ -37,9 +41,9 @@ public class TokenProvider {
         List<String> roles = user.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .toList();
 
-        byte[] signingKey = jwtSecret.getBytes();
+        byte[] signingKey = jwtSecret.getBytes(StandardCharsets.UTF_8);
 
         Instant now = Instant.now();
 
@@ -63,7 +67,7 @@ public class TokenProvider {
 
     public Optional<Jws<Claims>> validateTokenAndGetJws(String token) {
         try {
-            byte[] signingKey = jwtSecret.getBytes();
+            byte[] signingKey = jwtSecret.getBytes(StandardCharsets.UTF_8);
 
             Jws<Claims> jws = Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(signingKey))
@@ -85,7 +89,4 @@ public class TokenProvider {
         return Optional.empty();
     }
 
-    public static final String TOKEN_TYPE = "JWT";
-    public static final String TOKEN_ISSUER = "order-api";
-    public static final String TOKEN_AUDIENCE = "order-app";
 }

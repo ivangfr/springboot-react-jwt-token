@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Container } from 'semantic-ui-react'
+import { Container } from '@mantine/core'
 import OrderTable from './OrderTable'
 import { useAuth } from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
@@ -12,34 +12,23 @@ function UserPage() {
   const isUser = user.data.rol[0] === 'USER'
 
   const [userMe, setUserMe] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [orderDescription, setOrderDescription] = useState('')
 
   useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true)
+    fetchUserMeData()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-      try {
-        const response = await orderApi.getUserMe(user)
-        setUserMe(response.data)
-      } catch (error) {
-        handleLogError(error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  const handleInputChange = (e, { name, value }) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
     if (name === 'orderDescription') {
       setOrderDescription(value)
     }
   }
 
-  const handleCreateOrder = async () => {
-    let trimmedDescription = orderDescription.trim()
+  const handleCreateOrder = async (e) => {
+    e.preventDefault()
+    const trimmedDescription = orderDescription.trim()
     if (!trimmedDescription) {
       return
     }
@@ -56,7 +45,6 @@ function UserPage() {
 
   const fetchUserMeData = async () => {
     setIsLoading(true)
-
     try {
       const response = await orderApi.getUserMe(user)
       setUserMe(response.data)

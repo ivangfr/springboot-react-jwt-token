@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.runner;
 
 import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.security.SecurityConfig;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -22,18 +21,19 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userService.getUsers().isEmpty()) {
+        if (userService.countUsers() > 0) {
             return;
         }
-        USERS.forEach(user -> {
+        getUsers().forEach(user -> {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
         });
         log.info("Database initialized");
     }
 
-    private static final List<User> USERS = Arrays.asList(
-            new User("admin", "admin", "Admin", "admin@mycompany.com", SecurityConfig.ADMIN),
-            new User("user", "user", "User", "user@mycompany.com", SecurityConfig.USER)
-    );
+    private static List<User> getUsers() {
+        return List.of(
+                new User("admin", "admin", "Admin", "admin@mycompany.com", Role.ADMIN),
+                new User("user", "user", "User", "user@mycompany.com", Role.USER));
+    }
 }

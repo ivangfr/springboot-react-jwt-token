@@ -17,6 +17,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public long countOrders() {
+        return orderRepository.count();
+    }
+
+    @Override
     public List<Order> getOrdersContainingText(String text) {
         return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(text, text);
     }
@@ -24,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order validateAndGetOrder(String id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(String.format("Order with id %s not found", id)));
+                .orElseThrow(() -> new OrderNotFoundException("Order with id %s not found".formatted(id)));
     }
 
     @Override

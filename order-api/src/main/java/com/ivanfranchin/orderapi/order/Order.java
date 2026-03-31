@@ -1,7 +1,7 @@
 package com.ivanfranchin.orderapi.order;
 
 import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.rest.dto.CreateOrderRequest;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -23,12 +24,14 @@ public class Order {
     @Id
     private String id;
 
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     public Order(String description) {
@@ -37,10 +40,11 @@ public class Order {
 
     @PrePersist
     public void onPrePersist() {
-        createdAt = Instant.now();
-    }
-
-    public static Order from(CreateOrderRequest createOrderRequest) {
-        return new Order(createOrderRequest.description());
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+        }
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
     }
 }

@@ -1,12 +1,13 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
 import com.ivanfranchin.orderapi.order.Order;
+import com.ivanfranchin.orderapi.security.Role;
 import com.ivanfranchin.orderapi.user.User;
 
 import java.time.Instant;
 import java.util.List;
 
-public record UserDto(Long id, String username, String name, String email, String role, List<OrderDto> orders) {
+public record UserDto(Long id, String username, String name, String email, Role role, List<OrderDto> orders) {
 
     public record OrderDto(String id, String description, Instant createdAt) {
 

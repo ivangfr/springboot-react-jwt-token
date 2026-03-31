@@ -3,19 +3,22 @@ package com.ivanfranchin.orderapi.rest;
 import com.ivanfranchin.orderapi.user.User;
 import com.ivanfranchin.orderapi.rest.dto.UserDto;
 import com.ivanfranchin.orderapi.security.CustomUserDetails;
+import com.ivanfranchin.orderapi.security.Role;
+import com.ivanfranchin.orderapi.user.UserDeletionNotAllowedException;
 import com.ivanfranchin.orderapi.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ivanfranchin.orderapi.config.SwaggerConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -37,7 +40,7 @@ public class UserController {
     public List<UserDto> getUsers() {
         return userService.getUsers().stream()
                 .map(UserDto::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -47,10 +50,17 @@ public class UserController {
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{username}")
-    public UserDto deleteUser(@PathVariable String username) {
+    public void deleteUser(@PathVariable String username,
+                           @AuthenticationPrincipal CustomUserDetails currentUser) {
         User user = userService.validateAndGetUserByUsername(username);
+        if (currentUser.getUsername().equals(username)) {
+            throw new UserDeletionNotAllowedException("You cannot delete your own account");
+        }
+        if (Role.ADMIN.equals(user.getRole()) && userService.countAdmins() == 1) {
+            throw new UserDeletionNotAllowedException("Cannot delete the last admin account");
+        }
         userService.deleteUser(user);
-        return UserDto.from(user);
     }
 }

@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.ivanfranchin.orderapi.config.SwaggerConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -43,7 +42,7 @@ public class OrderController {
         List<Order> orders = (text == null) ? orderService.getOrders() : orderService.getOrdersContainingText(text);
         return orders.stream()
                 .map(OrderDto::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
@@ -52,17 +51,16 @@ public class OrderController {
     public OrderDto createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
                                 @Valid @RequestBody CreateOrderRequest createOrderRequest) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        Order order = Order.from(createOrderRequest);
-        order.setId(UUID.randomUUID().toString());
+        Order order = createOrderRequest.toDomain();
         order.setUser(user);
         return OrderDto.from(orderService.saveOrder(order));
     }
 
     @Operation(security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public OrderDto deleteOrders(@PathVariable UUID id) {
+    public void deleteOrder(@PathVariable UUID id) {
         Order order = orderService.validateAndGetOrder(id.toString());
         orderService.deleteOrder(order);
-        return OrderDto.from(order);
     }
 }

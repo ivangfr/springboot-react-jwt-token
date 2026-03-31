@@ -1,5 +1,6 @@
 package com.ivanfranchin.orderapi.user;
 
+import com.ivanfranchin.orderapi.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByOrderByUsernameAsc();
+    }
+
+    @Override
+    public long countUsers() {
+        return userRepository.count();
+    }
+
+    @Override
+    public long countAdmins() {
+        return userRepository.countByRole(Role.ADMIN);
     }
 
     @Override
@@ -35,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User validateAndGetUserByUsername(String username) {
         return getUserByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User with username %s not found", username)));
+                .orElseThrow(() -> new UserNotFoundException("User with username %s not found".formatted(username)));
     }
 
     @Override
