@@ -1,18 +1,38 @@
 package com.ivanfranchin.orderapi.order;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-public interface OrderService {
+@RequiredArgsConstructor
+@Service
+public class OrderService {
 
-    List<Order> getOrders();
+    private final OrderRepository orderRepository;
 
-    long countOrders();
+    public List<Order> getOrders() {
+        return orderRepository.findAllByOrderByCreatedAtDesc();
+    }
 
-    List<Order> getOrdersContainingText(String text);
+    public long countOrders() {
+        return orderRepository.count();
+    }
 
-    Order validateAndGetOrder(String id);
+    public List<Order> getOrdersContainingText(String text) {
+        return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(text, text);
+    }
 
-    Order saveOrder(Order order);
+    public Order validateAndGetOrder(String id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order with id %s not found".formatted(id)));
+    }
 
-    void deleteOrder(Order order);
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public void deleteOrder(Order order) {
+        orderRepository.delete(order);
+    }
 }

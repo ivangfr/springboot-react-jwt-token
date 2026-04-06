@@ -12,16 +12,17 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderServiceImplTest {
+class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
 
     @InjectMocks
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     // -- getOrders --
 
@@ -34,6 +35,7 @@ class OrderServiceImplTest {
         List<Order> result = orderService.getOrders();
 
         assertThat(result).hasSize(2).containsExactly(o1, o2);
+        verifyNoMoreInteractions(orderRepository);
     }
 
     @Test
@@ -43,6 +45,7 @@ class OrderServiceImplTest {
         List<Order> result = orderService.getOrders();
 
         assertThat(result).isEmpty();
+        verifyNoMoreInteractions(orderRepository);
     }
 
     // -- countOrders --
@@ -52,6 +55,7 @@ class OrderServiceImplTest {
         when(orderRepository.count()).thenReturn(7L);
 
         assertThat(orderService.countOrders()).isEqualTo(7L);
+        verifyNoMoreInteractions(orderRepository);
     }
 
     // -- getOrdersContainingText --
@@ -65,6 +69,7 @@ class OrderServiceImplTest {
         List<Order> result = orderService.getOrdersContainingText("iphone");
 
         assertThat(result).hasSize(1).containsExactly(order);
+        verifyNoMoreInteractions(orderRepository);
     }
 
     @Test
@@ -75,6 +80,7 @@ class OrderServiceImplTest {
         List<Order> result = orderService.getOrdersContainingText("xyz");
 
         assertThat(result).isEmpty();
+        verifyNoMoreInteractions(orderRepository);
     }
 
     // -- validateAndGetOrder --
@@ -87,6 +93,7 @@ class OrderServiceImplTest {
         Order result = orderService.validateAndGetOrder("abc-123");
 
         assertThat(result).isEqualTo(order);
+        verifyNoMoreInteractions(orderRepository);
     }
 
     @Test
@@ -96,6 +103,7 @@ class OrderServiceImplTest {
         assertThatThrownBy(() -> orderService.validateAndGetOrder("missing"))
                 .isInstanceOf(OrderNotFoundException.class)
                 .hasMessageContaining("missing");
+        verifyNoMoreInteractions(orderRepository);
     }
 
     // -- saveOrder --
@@ -109,6 +117,7 @@ class OrderServiceImplTest {
 
         assertThat(result).isEqualTo(order);
         verify(orderRepository).save(order);
+        verifyNoMoreInteractions(orderRepository);
     }
 
     // -- deleteOrder --
@@ -120,5 +129,6 @@ class OrderServiceImplTest {
         orderService.deleteOrder(order);
 
         verify(orderRepository).delete(order);
+        verifyNoMoreInteractions(orderRepository);
     }
 }

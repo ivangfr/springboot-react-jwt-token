@@ -99,7 +99,7 @@ npm run lint -- --fix
   - `DuplicatedUserInfoException` (`409 CONFLICT`)
   - `UserDeletionNotAllowedException` (`400 BAD_REQUEST`) — guards self-deletion and last-admin deletion
   - `OrderNotFoundException` (`404 NOT_FOUND`)
-- **Service layer** always has an interface + `ServiceImpl` implementation (`UserService` / `UserServiceImpl`)
+- **Service layer** is a simple class (`UserService`, `OrderService`) — no interface needed for single implementation
 - **Optional<T>** used for nullable service lookups; `validateAndGet{Entity}By{Key}()` methods throw on empty
 - **Ordered repository queries**: use Spring Data derived query methods for deterministic ordering — e.g., `findAllByOrderByUsernameAsc()` in `UserRepository`, `findAllByOrderByCreatedAtDesc()` in `OrderRepository`. Do not rely on `findAll()` where order matters.
 - **JWT errors**: each exception type caught individually, logged with `@Slf4j`, returns `Optional.empty()`
@@ -122,7 +122,7 @@ npm run lint -- --fix
 ### Java
 
 **Naming conventions:**
-- Classes: `PascalCase` — `OrderServiceImpl`, `TokenAuthenticationFilter`
+- Classes: `PascalCase` — `UserService`, `OrderService`, `TokenAuthenticationFilter`
 - Methods/fields: `camelCase` — `validateAndGetUserByUsername`, `jwtExpirationMinutes`
 - Constants: `UPPER_SNAKE_CASE` — `TOKEN_TYPE`, `BEARER_KEY_SECURITY_SCHEME`
 - Packages: all lowercase — `com.ivanfranchin.orderapi.order`
@@ -202,6 +202,7 @@ npm run lint -- --fix
 - Use `@SpringBootTest` only for true integration tests (requires Postgres)
 - Mock dependencies with `@MockitoBean` (Spring Boot 4+ replacement for `@MockBean`)
 - Use `@WithMockUser` from Spring Security Test for authenticated endpoint tests
+- Always verify no unexpected interactions with `verifyNoMoreInteractions()` in service unit tests
 
 ### Frontend (Vitest + React Testing Library)
 - Place test files as `ComponentName.test.jsx` (for components) or `UtilityName.test.js` (for non-JSX utilities) co-located with the component
