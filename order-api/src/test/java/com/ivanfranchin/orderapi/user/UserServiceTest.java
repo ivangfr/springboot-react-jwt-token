@@ -13,16 +13,17 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserServiceImpl userService;
+    private UserService userService;
 
     // -- getUsers --
 
@@ -35,6 +36,7 @@ class UserServiceImplTest {
         List<User> result = userService.getUsers();
 
         assertThat(result).hasSize(2).containsExactly(user1, user2);
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -44,6 +46,7 @@ class UserServiceImplTest {
         List<User> result = userService.getUsers();
 
         assertThat(result).isEmpty();
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- countUsers --
@@ -53,6 +56,7 @@ class UserServiceImplTest {
         when(userRepository.count()).thenReturn(5L);
 
         assertThat(userService.countUsers()).isEqualTo(5L);
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- getUserByUsername --
@@ -65,6 +69,7 @@ class UserServiceImplTest {
         Optional<User> result = userService.getUserByUsername("alice");
 
         assertThat(result).isPresent().contains(user);
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -74,6 +79,7 @@ class UserServiceImplTest {
         Optional<User> result = userService.getUserByUsername("unknown");
 
         assertThat(result).isEmpty();
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- hasUserWithUsername --
@@ -83,6 +89,7 @@ class UserServiceImplTest {
         when(userRepository.existsByUsername("alice")).thenReturn(true);
 
         assertThat(userService.hasUserWithUsername("alice")).isTrue();
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -90,6 +97,7 @@ class UserServiceImplTest {
         when(userRepository.existsByUsername("ghost")).thenReturn(false);
 
         assertThat(userService.hasUserWithUsername("ghost")).isFalse();
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- hasUserWithEmail --
@@ -99,6 +107,7 @@ class UserServiceImplTest {
         when(userRepository.existsByEmail("alice@example.com")).thenReturn(true);
 
         assertThat(userService.hasUserWithEmail("alice@example.com")).isTrue();
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -106,6 +115,7 @@ class UserServiceImplTest {
         when(userRepository.existsByEmail("ghost@example.com")).thenReturn(false);
 
         assertThat(userService.hasUserWithEmail("ghost@example.com")).isFalse();
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- validateAndGetUserByUsername --
@@ -118,6 +128,7 @@ class UserServiceImplTest {
         User result = userService.validateAndGetUserByUsername("alice");
 
         assertThat(result).isEqualTo(user);
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -127,6 +138,7 @@ class UserServiceImplTest {
         assertThatThrownBy(() -> userService.validateAndGetUserByUsername("ghost"))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("ghost");
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- saveUser --
@@ -140,6 +152,7 @@ class UserServiceImplTest {
 
         assertThat(result).isEqualTo(user);
         verify(userRepository).save(user);
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- countAdmins --
@@ -149,6 +162,7 @@ class UserServiceImplTest {
         when(userRepository.countByRole(Role.ADMIN)).thenReturn(2L);
 
         assertThat(userService.countAdmins()).isEqualTo(2L);
+        verifyNoMoreInteractions(userRepository);
     }
 
     // -- deleteUser --
@@ -160,5 +174,6 @@ class UserServiceImplTest {
         userService.deleteUser(user);
 
         verify(userRepository).delete(user);
+        verifyNoMoreInteractions(userRepository);
     }
 }
