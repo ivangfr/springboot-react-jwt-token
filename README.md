@@ -59,6 +59,7 @@ On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-C
 - [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [`Java 25`](https://www.oracle.com/java/technologies/downloads/#java25) or higher;
 - A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
+- [`Bash 4.0`](https://www.gnu.org/software/bash/) or higher (macOS ships with Bash 3.2; install via `brew install bash`)
 - [`jq`](https://jqlang.github.io/jq/)
 
 ## Start Environment
