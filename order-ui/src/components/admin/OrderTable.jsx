@@ -2,19 +2,35 @@ import { Grid, Group, TextInput, ActionIcon, Table } from '@mantine/core'
 import { IconSearch, IconTrash } from '@tabler/icons-react'
 import OrderForm from '../misc/OrderForm'
 
-function OrderTable({ orders, isOrdersLoading, orderDescription, orderTextSearch, handleInputChange, handleCreateOrder, handleDeleteOrder, handleSearchOrder }) {
+function OrderTable({
+  orders,
+  isOrdersLoading,
+  orderDescription,
+  orderTextSearch,
+  handleInputChange,
+  handleCreateOrder,
+  handleDeleteOrder,
+  handleSearchOrder
+}) {
   let orderList
   if (orders.length === 0) {
     orderList = (
       <Table.Tr key='no-order'>
-        <Table.Td colSpan={5} ta='center'>No order</Table.Td>
+        <Table.Td colSpan={5} ta='center'>
+          No order
+        </Table.Td>
       </Table.Tr>
     )
   } else {
-    orderList = orders.map(order => (
+    orderList = orders.map((order) => (
       <Table.Tr key={order.id}>
         <Table.Td>
-          <ActionIcon color='red' variant='light' size='sm' onClick={() => handleDeleteOrder(order.id)}>
+          <ActionIcon
+            color='red'
+            variant='light'
+            size='sm'
+            onClick={() => handleDeleteOrder(order.id)}
+          >
             <IconTrash size={14} />
           </ActionIcon>
         </Table.Td>

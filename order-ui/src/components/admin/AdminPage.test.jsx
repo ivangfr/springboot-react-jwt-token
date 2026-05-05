@@ -1,5 +1,10 @@
 import { screen, waitFor } from '@testing-library/react'
-import { render, makeAdminUser, makeToken, seedLocalStorage } from '../../test-utils'
+import {
+  render,
+  makeAdminUser,
+  makeToken,
+  seedLocalStorage
+} from '../../test-utils'
 import AdminPage from './AdminPage'
 import { orderApi } from '../misc/OrderApi'
 
@@ -13,7 +18,12 @@ beforeEach(() => {
 describe('AdminPage', () => {
   it('redirects to / when the stored user is not ADMIN', () => {
     // Seed a USER role — AdminPage checks rol[0] === 'ADMIN'
-    const userData = { sub: 'bob', rol: ['USER'], name: 'Bob', exp: Math.floor(Date.now() / 1000) + 3600 }
+    const userData = {
+      sub: 'bob',
+      rol: ['USER'],
+      name: 'Bob',
+      exp: Math.floor(Date.now() / 1000) + 3600
+    }
     const user = { data: userData, accessToken: makeToken(userData) }
     seedLocalStorage(user)
 
@@ -22,7 +32,9 @@ describe('AdminPage', () => {
 
     render(<AdminPage />, { initialRoute: '/adminpage' })
     // AdminPage renders <Navigate to='/' /> immediately — Users tab should not appear
-    expect(screen.queryByRole('tab', { name: /users/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('tab', { name: /users/i })
+    ).not.toBeInTheDocument()
   })
 
   it('loads and displays the admin tabs when user is ADMIN', async () => {
@@ -40,9 +52,17 @@ describe('AdminPage', () => {
 
   it('fetches users and orders on mount', async () => {
     seedLocalStorage(makeAdminUser())
-    orderApi.getUsers.mockResolvedValue({ data: [
-      { id: 1, username: 'alice', name: 'Alice', email: 'alice@example.com', role: 'USER' },
-    ]})
+    orderApi.getUsers.mockResolvedValue({
+      data: [
+        {
+          id: 1,
+          username: 'alice',
+          name: 'Alice',
+          email: 'alice@example.com',
+          role: 'USER'
+        }
+      ]
+    })
     orderApi.getOrders.mockResolvedValue({ data: [] })
 
     render(<AdminPage />)
@@ -57,15 +77,29 @@ describe('AdminPage', () => {
   it('shows loading overlays while fetching and hides them after', async () => {
     seedLocalStorage(makeAdminUser())
     let resolveUsers, resolveOrders
-    orderApi.getUsers.mockReturnValue(new Promise(r => { resolveUsers = r }))
-    orderApi.getOrders.mockReturnValue(new Promise(r => { resolveOrders = r }))
+    orderApi.getUsers.mockReturnValue(
+      new Promise((r) => {
+        resolveUsers = r
+      })
+    )
+    orderApi.getOrders.mockReturnValue(
+      new Promise((r) => {
+        resolveOrders = r
+      })
+    )
 
     const { container } = render(<AdminPage />)
 
-    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+    expect(
+      container.querySelector('.mantine-LoadingOverlay-root')
+    ).toBeInTheDocument()
 
     resolveUsers({ data: [] })
     resolveOrders({ data: [] })
-    await waitFor(() => expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument())
+    await waitFor(() =>
+      expect(
+        container.querySelector('.mantine-LoadingOverlay-root')
+      ).not.toBeInTheDocument()
+    )
   })
 })

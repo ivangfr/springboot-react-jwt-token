@@ -17,7 +17,7 @@ function makeProps(overrides = {}) {
     handleDeleteOrder: vi.fn(),
     handleSearchOrder: vi.fn(),
     handleInputChange: vi.fn(),
-    ...overrides,
+    ...overrides
   }
 }
 
@@ -36,7 +36,13 @@ describe('AdminTab', () => {
 
   it('renders user rows in the Users tab', () => {
     const users = [
-      { id: 1, username: 'alice', name: 'Alice', email: 'alice@example.com', role: 'USER' },
+      {
+        id: 1,
+        username: 'alice',
+        name: 'Alice',
+        email: 'alice@example.com',
+        role: 'USER'
+      }
     ]
     render(<AdminTab {...makeProps({ users })} />)
     expect(screen.getByText('alice')).toBeInTheDocument()
@@ -44,7 +50,12 @@ describe('AdminTab', () => {
 
   it('renders order rows in the Orders tab', () => {
     const orders = [
-      { id: 'o1', user: { username: 'alice' }, createdAt: '2024-01-01', description: 'Test order' },
+      {
+        id: 'o1',
+        user: { username: 'alice' },
+        createdAt: '2024-01-01',
+        description: 'Test order'
+      }
     ]
     render(<AdminTab {...makeProps({ orders })} />)
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
@@ -52,13 +63,21 @@ describe('AdminTab', () => {
   })
 
   it('shows the users loading overlay when isUsersLoading is true', () => {
-    const { container } = render(<AdminTab {...makeProps({ isUsersLoading: true })} />)
-    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+    const { container } = render(
+      <AdminTab {...makeProps({ isUsersLoading: true })} />
+    )
+    expect(
+      container.querySelector('.mantine-LoadingOverlay-root')
+    ).toBeInTheDocument()
   })
 
   it('shows the orders loading overlay when isOrdersLoading is true', () => {
-    const { container } = render(<AdminTab {...makeProps({ isOrdersLoading: true })} />)
+    const { container } = render(
+      <AdminTab {...makeProps({ isOrdersLoading: true })} />
+    )
     fireEvent.click(screen.getByRole('tab', { name: /orders/i }))
-    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+    expect(
+      container.querySelector('.mantine-LoadingOverlay-root')
+    ).toBeInTheDocument()
   })
 })

@@ -11,9 +11,16 @@ describe('parseJwt', () => {
 
   it('decodes a valid JWT payload', () => {
     // Build a real base64url token the same way test-utils does
-    const payload = { sub: 'alice', rol: ['USER'], name: 'Alice', exp: 9999999999 }
+    const payload = {
+      sub: 'alice',
+      rol: ['USER'],
+      name: 'Alice',
+      exp: 9999999999
+    }
     const body = btoa(JSON.stringify(payload))
-      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
     const token = `header.${body}.sig`
 
     const result = parseJwt(token)

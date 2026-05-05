@@ -1,6 +1,11 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { render, makeRegularUser, seedLocalStorage, makeToken } from '../../test-utils'
+import {
+  render,
+  makeRegularUser,
+  seedLocalStorage,
+  makeToken
+} from '../../test-utils'
 import Signup from './Signup'
 import { orderApi } from '../misc/OrderApi'
 
@@ -11,11 +16,18 @@ beforeEach(() => {
   localStorage.clear()
 })
 
-async function fillForm({ username = 'alice', password = 'secret', name = 'Alice', email = 'alice@example.com' } = {}) {
-  if (username) await userEvent.type(screen.getByLabelText('Username'), username)
-  if (password) await userEvent.type(screen.getByLabelText('Password'), password)
-  if (name)     await userEvent.type(screen.getByLabelText('Name'), name)
-  if (email)    await userEvent.type(screen.getByLabelText('Email'), email)
+async function fillForm({
+  username = 'alice',
+  password = 'secret',
+  name = 'Alice',
+  email = 'alice@example.com'
+} = {}) {
+  if (username)
+    await userEvent.type(screen.getByLabelText('Username'), username)
+  if (password)
+    await userEvent.type(screen.getByLabelText('Password'), password)
+  if (name) await userEvent.type(screen.getByLabelText('Name'), name)
+  if (email) await userEvent.type(screen.getByLabelText('Email'), email)
 }
 
 describe('Signup', () => {
@@ -46,7 +58,7 @@ describe('Signup', () => {
 
   it('shows conflict message on 409 response', async () => {
     orderApi.signup.mockRejectedValue({
-      response: { data: { status: 409, message: 'Username already in use' } },
+      response: { data: { status: 409, message: 'Username already in use' } }
     })
     render(<Signup />)
     await fillForm()
@@ -61,9 +73,9 @@ describe('Signup', () => {
       response: {
         data: {
           status: 400,
-          errors: [{ defaultMessage: 'Email must be valid' }],
-        },
-      },
+          errors: [{ defaultMessage: 'Email must be valid' }]
+        }
+      }
     })
     render(<Signup />)
     await fillForm()
@@ -75,8 +87,15 @@ describe('Signup', () => {
 
   it('stores user in localStorage on successful signup', async () => {
     const futureExp = Math.floor(Date.now() / 1000) + 3600
-    const payload = { sub: 'alice', rol: ['USER'], name: 'Alice', exp: futureExp }
-    orderApi.signup.mockResolvedValue({ data: { accessToken: makeToken(payload) } })
+    const payload = {
+      sub: 'alice',
+      rol: ['USER'],
+      name: 'Alice',
+      exp: futureExp
+    }
+    orderApi.signup.mockResolvedValue({
+      data: { accessToken: makeToken(payload) }
+    })
 
     render(<Signup />)
     await fillForm()

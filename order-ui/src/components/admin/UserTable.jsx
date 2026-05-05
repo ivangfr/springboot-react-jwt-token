@@ -1,16 +1,24 @@
 import { Group, TextInput, ActionIcon, Table } from '@mantine/core'
 import { IconSearch, IconTrash } from '@tabler/icons-react'
 
-function UserTable({ users, userUsernameSearch, handleInputChange, handleDeleteUser, handleSearchUser }) {
+function UserTable({
+  users,
+  userUsernameSearch,
+  handleInputChange,
+  handleDeleteUser,
+  handleSearchUser
+}) {
   let userList
   if (users.length === 0) {
     userList = (
       <Table.Tr key='no-user'>
-        <Table.Td colSpan={6} ta='center'>No user</Table.Td>
+        <Table.Td colSpan={6} ta='center'>
+          No user
+        </Table.Td>
       </Table.Tr>
     )
   } else {
-    userList = users.map(user => (
+    userList = users.map((user) => (
       <Table.Tr key={user.id}>
         <Table.Td>
           <ActionIcon

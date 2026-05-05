@@ -5,14 +5,32 @@ import OrderTable from './OrderTable'
 
 function AdminTab(props) {
   const { handleInputChange } = props
-  const { isUsersLoading, users, userUsernameSearch, handleDeleteUser, handleSearchUser } = props
-  const { isOrdersLoading, orders, orderDescription, orderTextSearch, handleCreateOrder, handleDeleteOrder, handleSearchOrder } = props
+  const {
+    isUsersLoading,
+    users,
+    userUsernameSearch,
+    handleDeleteUser,
+    handleSearchUser
+  } = props
+  const {
+    isOrdersLoading,
+    orders,
+    orderDescription,
+    orderTextSearch,
+    handleCreateOrder,
+    handleDeleteOrder,
+    handleSearchOrder
+  } = props
 
   return (
     <Tabs defaultValue='users' mt='md'>
       <Tabs.List>
-        <Tabs.Tab value='users' leftSection={<IconUsers size={16} />}>Users</Tabs.Tab>
-        <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16} />}>Orders</Tabs.Tab>
+        <Tabs.Tab value='users' leftSection={<IconUsers size={16} />}>
+          Users
+        </Tabs.Tab>
+        <Tabs.Tab value='orders' leftSection={<IconDeviceLaptop size={16} />}>
+          Orders
+        </Tabs.Tab>
       </Tabs.List>
 
       <Tabs.Panel value='users' pt='md'>

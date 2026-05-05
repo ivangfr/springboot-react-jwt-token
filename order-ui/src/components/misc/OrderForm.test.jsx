@@ -7,7 +7,7 @@ function makeProps(overrides = {}) {
     orderDescription: '',
     handleInputChange: vi.fn(),
     handleCreateOrder: vi.fn(),
-    ...overrides,
+    ...overrides
   }
 }
 
@@ -31,15 +31,21 @@ describe('OrderForm', () => {
     const handleInputChange = vi.fn()
     render(<OrderForm {...makeProps({ handleInputChange })} />)
     fireEvent.change(screen.getByPlaceholderText('Description *'), {
-      target: { value: 'New order' },
+      target: { value: 'New order' }
     })
     expect(handleInputChange).toHaveBeenCalledTimes(1)
   })
 
   it('calls handleCreateOrder when the form is submitted', () => {
     const handleCreateOrder = vi.fn()
-    render(<OrderForm {...makeProps({ orderDescription: 'Test', handleCreateOrder })} />)
-    fireEvent.submit(screen.getByRole('button', { name: /create/i }).closest('form'))
+    render(
+      <OrderForm
+        {...makeProps({ orderDescription: 'Test', handleCreateOrder })}
+      />
+    )
+    fireEvent.submit(
+      screen.getByRole('button', { name: /create/i }).closest('form')
+    )
     expect(handleCreateOrder).toHaveBeenCalledTimes(1)
   })
 })

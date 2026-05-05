@@ -1,6 +1,11 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { render, makeRegularUser, seedLocalStorage, makeToken } from '../../test-utils'
+import {
+  render,
+  makeRegularUser,
+  seedLocalStorage,
+  makeToken
+} from '../../test-utils'
 import Login from './Login'
 import { orderApi } from '../misc/OrderApi'
 
@@ -40,8 +45,15 @@ describe('Login', () => {
 
   it('calls userLogin and clears fields on successful authentication', async () => {
     const futureExp = Math.floor(Date.now() / 1000) + 3600
-    const payload = { sub: 'alice', rol: ['USER'], name: 'Alice', exp: futureExp }
-    orderApi.authenticate.mockResolvedValue({ data: { accessToken: makeToken(payload) } })
+    const payload = {
+      sub: 'alice',
+      rol: ['USER'],
+      name: 'Alice',
+      exp: futureExp
+    }
+    orderApi.authenticate.mockResolvedValue({
+      data: { accessToken: makeToken(payload) }
+    })
 
     render(<Login />)
 

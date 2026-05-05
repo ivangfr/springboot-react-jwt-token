@@ -3,8 +3,8 @@
 ## Project Overview
 
 Full-stack monorepo with:
-- **`order-api/`** — Spring Boot 4.0.5 REST API (Java 25, PostgreSQL, JWT auth)
-- **`order-ui/`** — React 19 SPA (JavaScript, Vite 8, Axios, Mantine)
+- **`order-api/`** — Spring Boot 4.0.6 REST API (Java 25, PostgreSQL, JWT auth)
+- **`order-ui/`** — React 19 SPA (JavaScript, Vite 8, Axios, Mantine v9.1.1)
 
 Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backend uses domain-grouped packaging; the frontend uses feature-grouped folders.
 
@@ -16,7 +16,7 @@ Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backe
 
 ```bash
 # Start the application (requires Postgres — see docker-compose.yml)
-docker compose up -d               # start Postgres 18.0
+docker compose up -d               # start Postgres 18.3
 ./mvnw clean spring-boot:run       # run the API on :8080
 
 # Build
@@ -64,10 +64,16 @@ npm run lint
 
 # Lint and auto-fix safe issues
 npm run lint -- --fix
+
+# Format source files
+npm run format
+
+# Check formatting
+npm run format:check
 ```
 
 > ESLint is configured via `eslint.config.js` (flat config) using `@eslint/js` recommended as a base,
-> plus `eslint-plugin-react` and `eslint-plugin-react-hooks`. No Prettier config exists.
+> plus `eslint-plugin-react`, `eslint-plugin-react-hooks`, and `eslint-config-prettier`. Prettier is configured via `.prettierrc`.
 
 > **Note:** Test files (`ComponentName.test.js` / `ComponentName.test.jsx`) are co-located with every component. New tests should use `@testing-library/react` + `@testing-library/user-event` (both already installed). `setupTests.js` registers `@testing-library/jest-dom` matchers via `expect.extend()` and mocks `matchMedia` and `localStorage` for Mantine compatibility.
 
@@ -109,7 +115,7 @@ npm run lint -- --fix
 
 - **Function components with hooks only** — no class components anywhere
 - **Routing**: React Router v7 (`react-router-dom ^7`) with `<BrowserRouter>`, `<Routes>/<Route>`, and `<Navigate>`; unmatched paths redirect to `/`
-- **UI library**: Mantine v8 (`@mantine/core`, `@mantine/hooks`) — requires `matchMedia` mock in tests (provided by `setupTests.js`)
+- **UI library**: Mantine v9.1.1 (`@mantine/core`, `@mantine/hooks`) — requires `matchMedia` mock in tests (provided by `setupTests.js`)
 - **Centralized API layer**: all Axios calls live in `src/components/misc/OrderApi.js`
 - **Auth state** managed via React Context in `src/components/context/AuthContext.jsx` (use `useAuth()` hook)
 - **Error handling**: always call `handleLogError(error)` from `src/components/misc/Helpers.js` in catch blocks; set `isError` state for UI feedback
@@ -165,7 +171,7 @@ npm run lint -- --fix
 - 2-space indentation
 - Single quotes for all string literals (including JSX attributes)
 - Arrow functions for handlers; named `function` declarations for components
-- No Prettier is configured — match the style of the file being edited
+- Prettier is configured via `.prettierrc`; use `npm run format` to format files. Follow the existing style of the file being edited.
 
 **Imports (order by convention):**
 1. React (`import React from 'react'`)

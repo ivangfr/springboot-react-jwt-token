@@ -4,7 +4,7 @@ import OrderTable from './OrderTable'
 
 const mockOrders = [
   { id: 'o1', createdAt: '2024-01-01', description: 'Buy coffee' },
-  { id: 'o2', createdAt: '2024-01-02', description: 'Buy tea' },
+  { id: 'o2', createdAt: '2024-01-02', description: 'Buy tea' }
 ]
 
 function makeProps(overrides = {}) {
@@ -14,7 +14,7 @@ function makeProps(overrides = {}) {
     orderDescription: '',
     handleInputChange: vi.fn(),
     handleCreateOrder: vi.fn(),
-    ...overrides,
+    ...overrides
   }
 }
 
@@ -48,12 +48,20 @@ describe('user/OrderTable', () => {
   })
 
   it('shows the loading overlay when isLoading is true', () => {
-    const { container } = render(<OrderTable {...makeProps({ isLoading: true })} />)
-    expect(container.querySelector('.mantine-LoadingOverlay-root')).toBeInTheDocument()
+    const { container } = render(
+      <OrderTable {...makeProps({ isLoading: true })} />
+    )
+    expect(
+      container.querySelector('.mantine-LoadingOverlay-root')
+    ).toBeInTheDocument()
   })
 
   it('does not show the loading overlay when isLoading is false', () => {
-    const { container } = render(<OrderTable {...makeProps({ isLoading: false })} />)
-    expect(container.querySelector('.mantine-LoadingOverlay-root')).not.toBeInTheDocument()
+    const { container } = render(
+      <OrderTable {...makeProps({ isLoading: false })} />
+    )
+    expect(
+      container.querySelector('.mantine-LoadingOverlay-root')
+    ).not.toBeInTheDocument()
   })
 })

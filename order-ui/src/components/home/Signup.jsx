@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
-import { TextInput, PasswordInput, Button, Paper, Stack, Alert, Anchor, Center, Box } from '@mantine/core'
+import {
+  TextInput,
+  PasswordInput,
+  Button,
+  Paper,
+  Stack,
+  Alert,
+  Anchor,
+  Center,
+  Box
+} from '@mantine/core'
 import { IconInfoCircle } from '@tabler/icons-react'
 import { useAuth } from '../context/AuthContext'
 import { orderApi } from '../misc/OrderApi'
@@ -94,13 +104,17 @@ function Signup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <Button type='submit' color='violet' fullWidth>Sign Up</Button>
+              <Button type='submit' color='violet' fullWidth>
+                Sign Up
+              </Button>
             </Stack>
           </Paper>
         </form>
         <Paper withBorder p='sm' radius='md' mt='sm' ta='center' shadow='sm'>
           Already have an account?{' '}
-          <Anchor component={NavLink} to='/login' c='violet'>Login</Anchor>
+          <Anchor component={NavLink} to='/login' c='violet'>
+            Login
+          </Anchor>
         </Paper>
         {isError && (
           <Alert color='red' variant='light' mt='sm' icon={<IconInfoCircle />}>

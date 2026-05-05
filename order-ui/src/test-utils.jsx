@@ -7,20 +7,29 @@ import { AuthProvider } from './components/context/AuthContext'
 // The signature segment is a placeholder — OrderApi/AuthContext only decode
 // the payload (middle) segment, so the signature is never verified in tests.
 export function makeToken(payload) {
-  const header  = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
-  const body    = btoa(JSON.stringify(payload))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+  const body = btoa(JSON.stringify(payload))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
   return `${header}.${body}.fakesig`
 }
 
 // Pre-built user fixtures. exp is always relative to the current time so
 // tests don't break when run in the future.
-const futureExp  = () => Math.floor(Date.now() / 1000) + 3600
+const futureExp = () => Math.floor(Date.now() / 1000) + 3600
 const expiredExp = () => Math.floor(Date.now() / 1000) - 3600
 
 export function makeAdminUser() {
-  const data = { sub: 'admin', rol: ['ADMIN'], name: 'Admin User', exp: futureExp() }
+  const data = {
+    sub: 'admin',
+    rol: ['ADMIN'],
+    name: 'Admin User',
+    exp: futureExp()
+  }
   return { data, accessToken: makeToken(data) }
 }
 
@@ -46,9 +55,7 @@ function renderWithProviders(ui, { initialRoute = '/' } = {}) {
     return (
       <MantineProvider>
         <MemoryRouter initialEntries={[initialRoute]}>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </MemoryRouter>
       </MantineProvider>
     )

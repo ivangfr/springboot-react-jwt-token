@@ -2,16 +2,24 @@ import { Grid, Group, Title, Box, LoadingOverlay, Table } from '@mantine/core'
 import { IconDeviceLaptop } from '@tabler/icons-react'
 import OrderForm from '../misc/OrderForm'
 
-function OrderTable({ orders, isLoading, orderDescription, handleInputChange, handleCreateOrder }) {
+function OrderTable({
+  orders,
+  isLoading,
+  orderDescription,
+  handleInputChange,
+  handleCreateOrder
+}) {
   let orderList
   if (!orders || orders.length === 0) {
     orderList = (
       <Table.Tr key='no-order'>
-        <Table.Td colSpan={3} ta='center'>No order</Table.Td>
+        <Table.Td colSpan={3} ta='center'>
+          No order
+        </Table.Td>
       </Table.Tr>
     )
   } else {
-    orderList = orders.map(order => (
+    orderList = orders.map((order) => (
       <Table.Tr key={order.id}>
         <Table.Td>{order.id}</Table.Td>
         <Table.Td>{order.createdAt}</Table.Td>

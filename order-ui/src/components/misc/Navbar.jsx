@@ -21,16 +21,49 @@ function Navbar() {
     <AppShell.Header p='sm' bg='violet'>
       <Group justify='space-between' h='100%'>
         <Group>
-          <Text fw={700} size='lg' c='white'>Order-UI</Text>
-          <Anchor component={Link} to='/' c='white'>Home</Anchor>
-          {isAdmin && <Anchor component={Link} to='/adminpage' c='white'>AdminPage</Anchor>}
-          {isUser && <Anchor component={Link} to='/userpage' c='white'>UserPage</Anchor>}
+          <Text fw={700} size='lg' c='white'>
+            Order-UI
+          </Text>
+          <Anchor component={Link} to='/' c='white'>
+            Home
+          </Anchor>
+          {isAdmin && (
+            <Anchor component={Link} to='/adminpage' c='white'>
+              AdminPage
+            </Anchor>
+          )}
+          {isUser && (
+            <Anchor component={Link} to='/userpage' c='white'>
+              UserPage
+            </Anchor>
+          )}
         </Group>
         <Group>
-          {!isAuthenticated && <Anchor component={Link} to='/login' c='white'>Login</Anchor>}
-          {!isAuthenticated && <Anchor component={Link} to='/signup' c='white'>Sign Up</Anchor>}
-          {isAuthenticated && <Text size='sm' c='white'>Hi {userName}</Text>}
-          {isAuthenticated && <Button variant='white' color='violet' size='sm' onClick={handleLogout}>Logout</Button>}
+          {!isAuthenticated && (
+            <Anchor component={Link} to='/login' c='white'>
+              Login
+            </Anchor>
+          )}
+          {!isAuthenticated && (
+            <Anchor component={Link} to='/signup' c='white'>
+              Sign Up
+            </Anchor>
+          )}
+          {isAuthenticated && (
+            <Text size='sm' c='white'>
+              Hi {userName}
+            </Text>
+          )}
+          {isAuthenticated && (
+            <Button
+              variant='white'
+              color='violet'
+              size='sm'
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          )}
         </Group>
       </Group>
     </AppShell.Header>

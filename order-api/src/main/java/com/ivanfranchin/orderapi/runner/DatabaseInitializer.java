@@ -1,39 +1,43 @@
 package com.ivanfranchin.orderapi.runner;
 
-import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.security.Role;
-import com.ivanfranchin.orderapi.user.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.ivanfranchin.orderapi.security.Role;
+import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
-    private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void run(String... args) {
-        if (userService.countUsers() > 0) {
-            return;
-        }
-        getUsers().forEach(user -> {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.saveUser(user);
-        });
-        log.info("Database initialized");
+  @Override
+  public void run(String... args) {
+    if (userService.countUsers() > 0) {
+      return;
     }
+    getUsers()
+        .forEach(
+            user -> {
+              user.setPassword(passwordEncoder.encode(user.getPassword()));
+              userService.saveUser(user);
+            });
+    log.info("Database initialized");
+  }
 
-    private static List<User> getUsers() {
-        return List.of(
-                new User("admin", "admin", "Admin", "admin@mycompany.com", Role.ADMIN),
-                new User("user", "user", "User", "user@mycompany.com", Role.USER));
-    }
+  private static List<User> getUsers() {
+    return List.of(
+        new User("admin", "admin", "Admin", "admin@mycompany.com", Role.ADMIN),
+        new User("user", "user", "User", "user@mycompany.com", Role.USER));
+  }
 }

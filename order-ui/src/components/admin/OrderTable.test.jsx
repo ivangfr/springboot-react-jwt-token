@@ -3,8 +3,18 @@ import { render } from '../../test-utils'
 import OrderTable from './OrderTable'
 
 const mockOrders = [
-  { id: 'o1', user: { username: 'alice' }, createdAt: '2024-01-01', description: 'First order' },
-  { id: 'o2', user: { username: 'bob'   }, createdAt: '2024-01-02', description: 'Second order' },
+  {
+    id: 'o1',
+    user: { username: 'alice' },
+    createdAt: '2024-01-01',
+    description: 'First order'
+  },
+  {
+    id: 'o2',
+    user: { username: 'bob' },
+    createdAt: '2024-01-02',
+    description: 'Second order'
+  }
 ]
 
 function makeProps(overrides = {}) {
@@ -16,7 +26,7 @@ function makeProps(overrides = {}) {
     handleCreateOrder: vi.fn(),
     handleDeleteOrder: vi.fn(),
     handleSearchOrder: vi.fn(),
-    ...overrides,
+    ...overrides
   }
 }
 
@@ -42,7 +52,9 @@ describe('admin/OrderTable', () => {
 
   it('calls handleDeleteOrder with the correct order id when delete is clicked', () => {
     const handleDeleteOrder = vi.fn()
-    render(<OrderTable {...makeProps({ orders: mockOrders, handleDeleteOrder })} />)
+    render(
+      <OrderTable {...makeProps({ orders: mockOrders, handleDeleteOrder })} />
+    )
     fireEvent.click(getDeleteButtonInRow('First order'))
     expect(handleDeleteOrder).toHaveBeenCalledWith('o1')
   })
@@ -50,7 +62,9 @@ describe('admin/OrderTable', () => {
   it('calls handleSearchOrder when search form is submitted', () => {
     const handleSearchOrder = vi.fn((e) => e.preventDefault())
     render(<OrderTable {...makeProps({ handleSearchOrder })} />)
-    fireEvent.submit(screen.getByPlaceholderText('Search by Id or Description').closest('form'))
+    fireEvent.submit(
+      screen.getByPlaceholderText('Search by Id or Description').closest('form')
+    )
     expect(handleSearchOrder).toHaveBeenCalledTimes(1)
   })
 

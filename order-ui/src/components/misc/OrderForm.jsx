@@ -1,7 +1,12 @@
 import { Group, TextInput, Button } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 
-function OrderForm({ orderDescription, handleInputChange, handleCreateOrder, isLoading }) {
+function OrderForm({
+  orderDescription,
+  handleInputChange,
+  handleCreateOrder,
+  isLoading
+}) {
   const createBtnDisabled = isLoading || orderDescription.trim() === ''
   return (
     <form onSubmit={handleCreateOrder}>
