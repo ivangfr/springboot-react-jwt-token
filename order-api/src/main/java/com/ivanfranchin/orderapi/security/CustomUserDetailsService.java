@@ -1,17 +1,14 @@
 package com.ivanfranchin.orderapi.security;
 
+import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserService;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.user.UserService;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service

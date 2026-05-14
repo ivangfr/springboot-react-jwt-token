@@ -1,15 +1,13 @@
 package com.ivanfranchin.orderapi;
 
+import com.ivanfranchin.orderapi.order.OrderService;
+import com.ivanfranchin.orderapi.security.TokenProvider;
+import com.ivanfranchin.orderapi.user.UserService;
 import javax.sql.DataSource;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-
-import com.ivanfranchin.orderapi.order.OrderService;
-import com.ivanfranchin.orderapi.security.TokenProvider;
-import com.ivanfranchin.orderapi.user.UserService;
 
 @SpringBootTest(
     properties = {

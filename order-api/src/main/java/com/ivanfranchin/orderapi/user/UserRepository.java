@@ -1,11 +1,9 @@
 package com.ivanfranchin.orderapi.user;
 
+import com.ivanfranchin.orderapi.security.Role;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.ivanfranchin.orderapi.security.Role;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 

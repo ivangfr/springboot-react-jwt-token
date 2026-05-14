@@ -1,8 +1,7 @@
 package com.ivanfranchin.orderapi.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ivanfranchin.orderapi.order.Order;
+import com.ivanfranchin.orderapi.security.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,10 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
-import com.ivanfranchin.orderapi.order.Order;
-import com.ivanfranchin.orderapi.security.Role;
-
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

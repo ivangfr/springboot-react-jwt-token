@@ -1,7 +1,15 @@
 package com.ivanfranchin.orderapi.rest;
 
+import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
+import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
+import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
+import com.ivanfranchin.orderapi.security.Role;
+import com.ivanfranchin.orderapi.security.TokenProvider;
+import com.ivanfranchin.orderapi.user.DuplicatedUserInfoException;
+import com.ivanfranchin.orderapi.user.User;
+import com.ivanfranchin.orderapi.user.UserService;
 import jakarta.validation.Valid;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,17 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ivanfranchin.orderapi.rest.dto.AuthResponse;
-import com.ivanfranchin.orderapi.rest.dto.LoginRequest;
-import com.ivanfranchin.orderapi.rest.dto.SignUpRequest;
-import com.ivanfranchin.orderapi.security.Role;
-import com.ivanfranchin.orderapi.security.TokenProvider;
-import com.ivanfranchin.orderapi.user.DuplicatedUserInfoException;
-import com.ivanfranchin.orderapi.user.User;
-import com.ivanfranchin.orderapi.user.UserService;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController

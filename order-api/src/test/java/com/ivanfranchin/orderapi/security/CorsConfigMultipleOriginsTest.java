@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+import com.ivanfranchin.orderapi.order.OrderService;
+import com.ivanfranchin.orderapi.rest.PublicController;
+import com.ivanfranchin.orderapi.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -16,10 +19,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.ivanfranchin.orderapi.order.OrderService;
-import com.ivanfranchin.orderapi.rest.PublicController;
-import com.ivanfranchin.orderapi.user.UserService;
 
 @WebMvcTest(PublicController.class)
 @Import({SecurityConfig.class, CorsConfig.class})

@@ -1,8 +1,7 @@
 package com.ivanfranchin.orderapi.rest.dto;
 
-import java.time.Instant;
-
 import com.ivanfranchin.orderapi.order.Order;
+import java.time.Instant;
 
 public record OrderDto(String id, String description, UserDto user, Instant createdAt) {
 
