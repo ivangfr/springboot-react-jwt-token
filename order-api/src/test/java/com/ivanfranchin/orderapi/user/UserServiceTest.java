@@ -11,18 +11,20 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.ivanfranchin.orderapi.security.Role;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@Import(UserService.class)
 class UserServiceTest {
 
-  @Mock private UserRepository userRepository;
+  @MockitoBean private UserRepository userRepository;
 
-  @InjectMocks private UserService userService;
+  @Autowired private UserService userService;
 
   // -- getUsers --
 
@@ -35,6 +37,7 @@ class UserServiceTest {
     List<User> result = userService.getUsers();
 
     assertThat(result).hasSize(2).containsExactly(user1, user2);
+    verify(userRepository).findAllByOrderByUsernameAsc();
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -45,6 +48,7 @@ class UserServiceTest {
     List<User> result = userService.getUsers();
 
     assertThat(result).isEmpty();
+    verify(userRepository).findAllByOrderByUsernameAsc();
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -55,6 +59,7 @@ class UserServiceTest {
     when(userRepository.count()).thenReturn(5L);
 
     assertThat(userService.countUsers()).isEqualTo(5L);
+    verify(userRepository).count();
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -68,6 +73,7 @@ class UserServiceTest {
     Optional<User> result = userService.getUserByUsername("alice");
 
     assertThat(result).isPresent().contains(user);
+    verify(userRepository).findByUsername("alice");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -78,6 +84,7 @@ class UserServiceTest {
     Optional<User> result = userService.getUserByUsername("unknown");
 
     assertThat(result).isEmpty();
+    verify(userRepository).findByUsername("unknown");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -88,6 +95,7 @@ class UserServiceTest {
     when(userRepository.existsByUsername("alice")).thenReturn(true);
 
     assertThat(userService.hasUserWithUsername("alice")).isTrue();
+    verify(userRepository).existsByUsername("alice");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -96,6 +104,7 @@ class UserServiceTest {
     when(userRepository.existsByUsername("ghost")).thenReturn(false);
 
     assertThat(userService.hasUserWithUsername("ghost")).isFalse();
+    verify(userRepository).existsByUsername("ghost");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -106,6 +115,7 @@ class UserServiceTest {
     when(userRepository.existsByEmail("alice@example.com")).thenReturn(true);
 
     assertThat(userService.hasUserWithEmail("alice@example.com")).isTrue();
+    verify(userRepository).existsByEmail("alice@example.com");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -114,6 +124,7 @@ class UserServiceTest {
     when(userRepository.existsByEmail("ghost@example.com")).thenReturn(false);
 
     assertThat(userService.hasUserWithEmail("ghost@example.com")).isFalse();
+    verify(userRepository).existsByEmail("ghost@example.com");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -127,6 +138,7 @@ class UserServiceTest {
     User result = userService.validateAndGetUserByUsername("alice");
 
     assertThat(result).isEqualTo(user);
+    verify(userRepository).findByUsername("alice");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -137,6 +149,7 @@ class UserServiceTest {
     assertThatThrownBy(() -> userService.validateAndGetUserByUsername("ghost"))
         .isInstanceOf(UserNotFoundException.class)
         .hasMessageContaining("ghost");
+    verify(userRepository).findByUsername("ghost");
     verifyNoMoreInteractions(userRepository);
   }
 
@@ -161,6 +174,7 @@ class UserServiceTest {
     when(userRepository.countByRole(Role.ADMIN)).thenReturn(2L);
 
     assertThat(userService.countAdmins()).isEqualTo(2L);
+    verify(userRepository).countByRole(Role.ADMIN);
     verifyNoMoreInteractions(userRepository);
   }
 

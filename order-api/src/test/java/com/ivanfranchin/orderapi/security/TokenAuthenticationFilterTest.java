@@ -15,27 +15,29 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@Import(TokenAuthenticationFilter.class)
 class TokenAuthenticationFilterTest {
 
-  @Mock private UserDetailsService userDetailsService;
+  @MockitoBean private UserDetailsService userDetailsService;
 
-  @Mock private TokenProvider tokenProvider;
+  @MockitoBean private TokenProvider tokenProvider;
 
-  private TokenAuthenticationFilter filter;
+  @Autowired private TokenAuthenticationFilter filter;
 
   @BeforeEach
   void setUp() {
-    filter = new TokenAuthenticationFilter(userDetailsService, tokenProvider);
     SecurityContextHolder.clearContext();
   }
 

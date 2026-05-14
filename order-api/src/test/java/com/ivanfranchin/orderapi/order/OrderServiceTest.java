@@ -11,16 +11,18 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@Import(OrderService.class)
 class OrderServiceTest {
 
-  @Mock private OrderRepository orderRepository;
+  @MockitoBean private OrderRepository orderRepository;
 
-  @InjectMocks private OrderService orderService;
+  @Autowired private OrderService orderService;
 
   // -- getOrders --
 
@@ -33,6 +35,7 @@ class OrderServiceTest {
     List<Order> result = orderService.getOrders();
 
     assertThat(result).hasSize(2).containsExactly(o1, o2);
+    verify(orderRepository).findAllByOrderByCreatedAtDesc();
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -43,6 +46,7 @@ class OrderServiceTest {
     List<Order> result = orderService.getOrders();
 
     assertThat(result).isEmpty();
+    verify(orderRepository).findAllByOrderByCreatedAtDesc();
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -53,6 +57,7 @@ class OrderServiceTest {
     when(orderRepository.count()).thenReturn(7L);
 
     assertThat(orderService.countOrders()).isEqualTo(7L);
+    verify(orderRepository).count();
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -68,6 +73,8 @@ class OrderServiceTest {
     List<Order> result = orderService.getOrdersContainingText("iphone");
 
     assertThat(result).hasSize(1).containsExactly(order);
+    verify(orderRepository)
+        .findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt("iphone", "iphone");
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -80,6 +87,8 @@ class OrderServiceTest {
     List<Order> result = orderService.getOrdersContainingText("xyz");
 
     assertThat(result).isEmpty();
+    verify(orderRepository)
+        .findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt("xyz", "xyz");
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -93,6 +102,7 @@ class OrderServiceTest {
     Order result = orderService.validateAndGetOrder("abc-123");
 
     assertThat(result).isEqualTo(order);
+    verify(orderRepository).findById("abc-123");
     verifyNoMoreInteractions(orderRepository);
   }
 
@@ -103,6 +113,7 @@ class OrderServiceTest {
     assertThatThrownBy(() -> orderService.validateAndGetOrder("missing"))
         .isInstanceOf(OrderNotFoundException.class)
         .hasMessageContaining("missing");
+    verify(orderRepository).findById("missing");
     verifyNoMoreInteractions(orderRepository);
   }
 
