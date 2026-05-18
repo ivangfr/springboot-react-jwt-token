@@ -11,7 +11,7 @@
     <groupId>com.ivanfranchin</groupId>
     <artifactId>order-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-	<name/>
+	<name>order-api</name>
 	<description/>
     <url/>
     <licenses>
