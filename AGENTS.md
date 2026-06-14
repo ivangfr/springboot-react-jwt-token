@@ -15,7 +15,7 @@ Authentication is stateless JWT (10-minute expiry, no refresh tokens). The backe
 ### Backend (`order-api/`)
 
 ```bash
-# Start the application (requires Postgres — see docker-compose.yml)
+# Start the application (requires Postgres — see compose.yaml)
 docker compose up -d               # start Postgres 18.3
 ./mvnw clean spring-boot:run       # run the API on :8080
 
@@ -225,7 +225,7 @@ npm run format:check
 
 - **API base URL**: `order-ui/src/Constants.js` — `config.url.API_BASE_URL`; uses `import.meta.env.DEV` to switch between `http://localhost:8080` (dev) and a production URL (prod)
 - **JWT secret & expiry**: `order-api/src/main/resources/application.yml` — `app.jwt.*`
-- **Postgres connection**: `application.yml` — `spring.datasource.*`; matches the `docker-compose.yml` service
+- **Postgres connection**: `application.yml` — `spring.datasource.*`; matches the `compose.yaml` service
 - **CORS**: `order-api/.../security/CorsConfig.java` — add new allowed origins to `app.cors.allowed-origins` in `application.yml`; `CorsConfig.java` reads this value at startup via `@Value`
 - **Swagger UI**: available at `http://localhost:8080/swagger-ui.html` when running locally
 - **Security routes**: `SecurityConfig.java` — add new public/protected endpoint matchers here
