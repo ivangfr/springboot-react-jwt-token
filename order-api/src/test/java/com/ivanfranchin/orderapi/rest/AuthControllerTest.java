@@ -27,7 +27,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @WebMvcTest(AuthController.class)
 @Import(SecurityConfig.class)
@@ -35,7 +35,7 @@ class AuthControllerTest {
 
   @Autowired private MockMvc mockMvc;
 
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @MockitoBean private UserService userService;
 
@@ -60,7 +60,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.accessToken").value("test-jwt-token"));
   }
@@ -73,7 +73,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());
   }
 
@@ -85,7 +85,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());
   }
 
@@ -106,7 +106,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.accessToken").value("new-jwt-token"));
   }
@@ -121,7 +121,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isConflict());
   }
 
@@ -136,7 +136,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isConflict());
   }
 
@@ -152,7 +152,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isConflict());
   }
 
@@ -164,7 +164,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());
   }
 
@@ -176,7 +176,7 @@ class AuthControllerTest {
         .perform(
             post("/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());
   }
 }

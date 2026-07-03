@@ -33,7 +33,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @WebMvcTest(OrderController.class)
 @Import(SecurityConfig.class)
@@ -41,7 +41,7 @@ class OrderControllerTest {
 
   @Autowired private MockMvc mockMvc;
 
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @MockitoBean private OrderService orderService;
 
@@ -132,7 +132,7 @@ class OrderControllerTest {
             post("/api/orders")
                 .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.description").value("Buy two iPhones"));
   }
@@ -152,7 +152,7 @@ class OrderControllerTest {
             post("/api/orders")
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.description").value("Buy MacBook"));
   }
@@ -166,7 +166,7 @@ class OrderControllerTest {
         .perform(
             post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest());
   }
 
@@ -178,7 +178,7 @@ class OrderControllerTest {
         .perform(
             post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isUnauthorized());
   }
 
@@ -195,7 +195,7 @@ class OrderControllerTest {
             post("/api/orders")
                 .with(user(ghostUser))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(jsonMapper.writeValueAsString(request)))
         .andExpect(status().isNotFound());
   }
 
